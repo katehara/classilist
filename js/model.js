@@ -6,7 +6,10 @@ function Model (data){
 	this.probs = getProbs(this.headers , this.nCols);
 	this.target = getTarget(this.headers , this.nCols);
 	this.predicted = getPredicted(this.headers , this.nCols);
-	this.classes = getClasses(data , this.target);
+	this.classNames = getClassNames(data , this.target);
+	this.confusionMatrix = getConfusionMatrix(data, this.classNames, this.target, this.predicted);
+	this.classes = getClassInfo(this.confusionMatrix, this.classNames);
+	// , this.classNames, this.target, this.predicted);
 
 
 
@@ -78,14 +81,70 @@ function getPredicted(names , n){
 }
 
 // get all distinc classes from target column
-function getClasses(data , k){
+function getClassNames(data , target){
 	var unique = {};
 	var distinct = [];
 	for( var i in data ){
-		if( typeof(unique[data[i][k]]) == "undefined"){
-			distinct.push(data[i][k]);
+		if( typeof(unique[data[i][target]]) == "undefined"){
+			distinct.push(data[i][target]);
 		}
-		unique[data[i][k]] = 0;
+		unique[data[i][target]] = 0;
 	}
+	distinct.sort(function (a,b) { return a.localeCompare(b);});
 	return distinct;
+}
+
+//get array of class objects having all respective details
+function getClassInfo(mat , cnames){
+	cInfo = []
+	for(i in cnames){
+		var cl = new Class(mat , cnames[i], cnames);
+		cInfo.push(cl);
+	}
+	return cInfo;
+}
+
+// get confusion matrix
+function getConfusionMatrix(data, classNames, target, predicted) {
+	classmap = {};
+	cl = classNames.length;
+	mat = zeros(cl , cl);
+	// console.log(mat);
+	for( i=0;i<cl;i++){
+		classmap[classNames[i]] = i;
+	}
+	// console.log(classmap);
+	for(i=0;i<data.length;i++){ 
+		aclass = data[i][target]; 
+		pclass = data[i][predicted]; 
+		aind = classmap[aclass]; 
+		pind = classmap[pclass]; 
+		(mat[aind][pind])++;
+	}
+	// console.log(mat);
+	return mat;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// helpers
+
+// create 2d zero matrix for initialization of confusion matrix
+function zeros(r , c){
+    var array = new Array(r)
+    for(i=0;i<r;i++) array[i] = new Array(c).fill(0);
+    return array;
 }
