@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+
+	var centralPane = d3.select(".central-pane");
 		
 	d3.csv("data/rapidminer.csv", function (error, data) {
 
@@ -10,6 +12,9 @@ $(document).ready(function(){
 		// console.log(model.predicted);
 		// console.log(model.classNames);
 		// console.log(model.confusionMatrix);
+
+		var  hist = model.getHistograms(); 
+		// console.log(hist);
 
 	});
 

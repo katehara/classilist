@@ -8,9 +8,30 @@ function Model (data){
 	this.predicted = getPredicted(this.headers , this.nCols);
 	this.classNames = getClassNames(data , this.target);
 	this.confusionMatrix = getConfusionMatrix(data, this.classNames, this.target, this.predicted);
-	this.classes = getClassInfo(this.confusionMatrix, this.classNames);
 	// , this.classNames, this.target, this.predicted);
 
+	this.getClasses = function(){
+
+		cInfo = []
+		for(i in this.classNames){
+			var cl = new Class(data , this.classNames[i], this.target, this.predicted);
+			cInfo.push(cl);
+		}
+		// console.log(cInfo[0].table);
+
+		return cInfo;
+	};
+
+	this.getHistograms = function() {
+		histograms = [];
+		classes = this.getClasses();
+		for(i in classes){
+			// console.log(classes[]);
+			histograms.push(classes[i].histogram);
+		}
+		// console.log(histograms);
+		return histograms;
+	}
 
 
 
@@ -95,14 +116,7 @@ function getClassNames(data , target){
 }
 
 //get array of class objects having all respective details
-function getClassInfo(mat , cnames){
-	cInfo = []
-	for(i in cnames){
-		var cl = new Class(mat , cnames[i], cnames);
-		cInfo.push(cl);
-	}
-	return cInfo;
-}
+
 
 // get confusion matrix
 function getConfusionMatrix(data, classNames, target, predicted) {
