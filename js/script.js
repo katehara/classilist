@@ -13,8 +13,8 @@ $(document).ready(function(){
 		// console.log(model.classNames);
 		// console.log(model.confusionMatrix);
 
-		var  hist = model.getHistograms(); 
-		// console.log(hist);
+		// var  hist = model.getHistograms(); 
+		// console.log(data);
 
 	});
 

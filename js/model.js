@@ -1,38 +1,21 @@
 function Model (data){
 
-	this.headers = getColumns(data);
-	this.nCols = getNCols(this.headers);
-	this.features = getFeatures(this.headers , this.nCols);
-	this.probs = getProbs(this.headers , this.nCols);
-	this.target = getTarget(this.headers , this.nCols);
-	this.predicted = getPredicted(this.headers , this.nCols);
-	this.classNames = getClassNames(data , this.target);
-	this.confusionMatrix = getConfusionMatrix(data, this.classNames, this.target, this.predicted);
-	// , this.classNames, this.target, this.predicted);
+	headers = getColumns(data);
+	nCols = getNCols(headers);
+	features = getFeatures(headers , nCols);
+	probs = getProbs(headers , nCols);
+	target = getTarget(headers , nCols);
+	predicted = getPredicted(headers , nCols);
+	classNames = getClassNames(data , target);
+	confusionMatrix = getConfusionMatrix(data, classNames, target, predicted);
+	defaultBin = 10;
+	histData = [];
 
-	this.getClasses = function(){
+	labelData(data, classNames, target, predicted);
+	prepareData(data, classNames, defaultBin, histData);
+	// console.log(histData);
 
-		cInfo = []
-		for(i in this.classNames){
-			var cl = new Class(data , this.classNames[i], this.target, this.predicted);
-			cInfo.push(cl);
-		}
-		// console.log(cInfo[0].table);
-
-		return cInfo;
-	};
-
-	this.getHistograms = function() {
-		histograms = [];
-		classes = this.getClasses();
-		for(i in classes){
-			// console.log(classes[]);
-			histograms.push(classes[i].histogram);
-		}
-		// console.log(histograms);
-		return histograms;
-	}
-
+	
 
 
 
@@ -55,6 +38,62 @@ function Model (data){
 
 }
 
+prepareData = function(data, classes, bins, allData){
+	binSize = 1/bins;
+	binValues = getBinValues(bins);
+	for(i in classes){
+		name = "L-"+classes[i];
+		prob = "P-"+classes[i];
+		preparedData = [];
+		for(j in binValues){
+			preparedData.push({
+				probability : binValues[j],
+				tn : 0,
+				tp : 0,
+				fn : 0,
+				fp : 0,
+			});
+		}
+		// console.log(preparedData);
+		for(j in data){
+			for(k in preparedData){
+				if(data[j][prob] < preparedData[k].probability){
+					preparedData[k][data[j][name].toLowerCase()]++;
+					break;
+				}
+			}
+		}
+		// console.log(name);
+		allData.push(preparedData);
+	}
+}
+
+getBinValues = function(bins){
+	array = [];
+	k = 1/bins;
+	num=0;
+	for(i=1;i<=bins;i++){
+		num = i*k;
+		num = Math.round((num + 0.00001) * 100) / 100;
+		array.push(num);
+	}
+	return array;
+}
+
+labelData = function(data, classNames, target, predicted){
+	for(j in classNames){
+		name = classNames[j];
+		// console.log(name);
+		for(i in data){
+
+			if(data[i][target] == name && data[i][predicted] == name) data[i]["L-"+name] = "TP";
+			else if(data[i][target] != name && data[i][predicted] == name) data[i]["L-"+name] = "FP";
+			else if(data[i][target] == name && data[i][predicted] != name) data[i]["L-"+name] = "FN";
+			else if(data[i][target] != name && data[i][predicted] != name) data[i]["L-"+name] = "TN";
+
+		}
+	}
+}
 
 // get column names
 function getColumns(data){
