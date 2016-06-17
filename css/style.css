@@ -2,3 +2,26 @@ html, body {
 	height : 100%;
 }
 
+.axis {
+	z-index: 999;
+}
+
+.bar-tp {
+	fill : steelblue;
+	z-index: 0;
+}
+
+.bar-fp {
+	fill : red;
+	z-index: 0;
+}
+
+.bar-fn {
+	fill : orange;
+	z-index: 0;
+}
+
+.bar-tn {
+	fill : yellow;
+	z-index: 0;
+}

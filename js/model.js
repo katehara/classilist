@@ -17,6 +17,8 @@ function Model (data, pane){
 
 	labelData(data, classNames, target, predicted);
 	prepareData(data, classNames, defaultBin, histData, max);
+		// console.log(histData);
+
 	makeHistograms(histData, classNames, pane, Math.max(max.left , max.right));
 
 	

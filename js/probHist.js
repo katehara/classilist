@@ -7,13 +7,18 @@ makeHistograms = function(histData, classes, pane, scl){
   w = pane.node().getBoundingClientRect().width;
 
   for(i in histData){
-    probabilityHistogram(histData[i], 300, 200, scl , pane);
+    probabilityHistogram(histData[i], classes[i], 300, 200, scl , pane);
   }
 }
 
 // make a probability histogram
-function probabilityHistogram(data, w, h, scl , pane){
-  // console.log(scl);
+function probabilityHistogram(data, name, w, h, scl , pane){
+  // console.log(name);
+  classtp = name + " bar-tp";
+  classtn = name + " bar-tn";
+  classfp = name + " bar-fp";
+  classfn = name + " bar-fn";
+
   var margin = {
     top: 20,
     right: 20,
@@ -58,6 +63,46 @@ function probabilityHistogram(data, w, h, scl , pane){
             .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  
+
+    console.log(data[0]);
+
+  var tp = svg.append("g").selectAll(".bar-tp")
+            .data(data)
+            .enter().append("rect")
+            .attr("class" , classtp)
+            .attr("x" , function(d){return x(0);})
+            .attr("y" , function(d){return y(d.probability);})
+            .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
+            .attr("height" , function(d){return y.rangeBand()});
+
+  var fp = svg.append("g").selectAll(".bar-fp")
+            .data(data)
+            .enter().append("rect")
+            .attr("class" , classfp)
+            .attr("x" , function(d){return x(d.tp);})
+            .attr("y" , function(d){return y(d.probability);})
+            .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
+            .attr("height" , function(d){return y.rangeBand()});
+
+  var fn = svg.append("g").selectAll(".bar-fn")
+            .data(data)
+            .enter().append("rect")
+            .attr("class" , classfn)
+            .attr("x" , function(d){return x(-d.fn);})
+            .attr("y" , function(d){return y(d.probability);})
+            .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
+            .attr("height" , function(d){return y.rangeBand()});
+
+  var tn = svg.append("g").selectAll(".bar-tn")
+            .data(data)
+            .enter().append("rect")
+            .attr("class" , classtn)
+            .attr("x" , function(d){return x(-d.fn-d.tn);})
+            .attr("y" , function(d){return y(d.probability);})
+            .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+            .attr("height" , function(d){return y.rangeBand()});
+
   svg.append("g")
     .attr("class" , "x axis")
     .attr("transform" , "translate(0," + height + ")")
@@ -67,8 +112,8 @@ function probabilityHistogram(data, w, h, scl , pane){
     .attr("class" , "y axis")
     .attr("transform" , "translate(" + x(0) +",0)")
     .call(yAxis);
+  
 
-  var tp = ()
 
 
 
@@ -85,6 +130,7 @@ prepareData = function(data, classes, bins, allData, max){
   for(i in classes){
     name = "L-"+classes[i];
     prob = "P-"+classes[i];
+
     preparedData = [];
     for(j in binValues){
       preparedData.push({
@@ -95,13 +141,17 @@ prepareData = function(data, classes, bins, allData, max){
         fp : 0,
       });
     }
-    // console.log(preparedData);
+    //console.log(preparedData);
     for(j in data){
       for(k in preparedData){
-        if(data[j][prob] < preparedData[k].probability){
+        // console.log(data[j]);
+        // console.log(prob);
+        // console.log(data[j][prob]);
+        if(data[j][prob] < preparedData[k].probability){ 
           preparedData[k][data[j][name].toLowerCase()]++;
           break;
         }
+
       }
     }
     // console.log(name);
