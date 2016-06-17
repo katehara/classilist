@@ -1,4 +1,4 @@
-function Model (data){
+function Model (data, pane){
 
 	headers = getColumns(data);
 	nCols = getNCols(headers);
@@ -10,10 +10,14 @@ function Model (data){
 	confusionMatrix = getConfusionMatrix(data, classNames, target, predicted);
 	defaultBin = 10;
 	histData = [];
+	max = {
+		right : 0,
+		left : 0
+	}
 
 	labelData(data, classNames, target, predicted);
-	prepareData(data, classNames, defaultBin, histData);
-	// console.log(histData);
+	prepareData(data, classNames, defaultBin, histData, max);
+	makeHistograms(histData, classNames, pane, Math.max(max.left , max.right));
 
 	
 
@@ -38,47 +42,9 @@ function Model (data){
 
 }
 
-prepareData = function(data, classes, bins, allData){
-	binSize = 1/bins;
-	binValues = getBinValues(bins);
-	for(i in classes){
-		name = "L-"+classes[i];
-		prob = "P-"+classes[i];
-		preparedData = [];
-		for(j in binValues){
-			preparedData.push({
-				probability : binValues[j],
-				tn : 0,
-				tp : 0,
-				fn : 0,
-				fp : 0,
-			});
-		}
-		// console.log(preparedData);
-		for(j in data){
-			for(k in preparedData){
-				if(data[j][prob] < preparedData[k].probability){
-					preparedData[k][data[j][name].toLowerCase()]++;
-					break;
-				}
-			}
-		}
-		// console.log(name);
-		allData.push(preparedData);
-	}
-}
 
-getBinValues = function(bins){
-	array = [];
-	k = 1/bins;
-	num=0;
-	for(i=1;i<=bins;i++){
-		num = i*k;
-		num = Math.round((num + 0.00001) * 100) / 100;
-		array.push(num);
-	}
-	return array;
-}
+
+
 
 labelData = function(data, classNames, target, predicted){
 	for(j in classNames){
