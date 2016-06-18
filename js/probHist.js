@@ -25,7 +25,7 @@ function probabilityHistogram(data, name, w, h, scl , pane){
     bottom: 30,
     left: 30
   },
-  width = Math.max(200,w) - margin.left - margin.right,
+  width = Math.max(300,w) - margin.left - margin.right,
   height = Math.max(200,h) - margin.top - margin.bottom;
   // pad = -10;
 
@@ -53,13 +53,15 @@ function probabilityHistogram(data, name, w, h, scl , pane){
               .scale(y)
               .orient("left")
               .ticks(data.length)
-              .tickSize(1)
+              .tickSize(-1)
               .tickPadding(6);
 
 
   var svg = pane.append("svg")
             .attr("width" , w)
             .attr("height" , h)
+            // .attr("preserveAspectRatio","xMinYMin meet")
+            // .attr("viewBox","0 0 " + w +" " + h )
             .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 

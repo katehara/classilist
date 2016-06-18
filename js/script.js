@@ -3,7 +3,7 @@ $(document).ready(function(){
 
 	var centralPane = d3.select(".central-pane");
 		
-	d3.csv("data/rapidminer2.csv", function (error, data) {
+	d3.csv("data/rapidminer.csv", function (error, data) {
 
 		var model = new Model(data, centralPane);
 		// console.log(model.features);
