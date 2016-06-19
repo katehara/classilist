@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="js/d3.v3.min.js"></script>
 		<link href='https://fonts.googleapis.com/css?family=Roboto:100' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
+		<link rel="stylesheet" type="text/css" href="css/nouislider.min.css"></link>
 		<link rel="stylesheet" type="text/css" href="css/style.css"></link>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -15,17 +16,107 @@
 	</head>
 
 	<body>
+	<nav>
+	    <div class="nav-wrapper">
+	      <!-- <a href="#!" class="brand-logo">Logo</a> -->
+	      <a href="#" data-activates="side-menu" class="button-collapse"><i class="material-icons">menu</i></a>
+	      <ul class="right hide-on-med-and-down">
+	        <li><a href="#">About</a></li>
+	        <li><a href="#">How To's</a></li>
+	        <li><a href="#">Documentation</a></li>
+	        <li><a href="#">People</a></li>
+	      </ul>
+	      <ul class="side-nav" id="side-menu">
+	        <li><a href="#">About</a></li>
+	        <li><a href="#">How To's</a></li>
+	        <li><a href="#">Documentation</a></li>
+	        <li><a href="#">People</a></li>
+	      </ul>
+	    </div>
+	  </nav>
 
 	<div class = "row">
-		<div class = "left-pane col s6 m3"></div>
-		<div class="central-pane col s12 m6 offset-m3"></div>
+		<div class = "left-pane col s6 m3">
+			<ul class="collapsible" data-collapsible="expandable">
+			    <li>
+			      	<div class="collapsible-header active">
+			      		<i class="material-icons rotate90">equalizer</i>
+			      		Data Options
+			      	</div>
+			      	<div class="collapsible-body">
+				      	<p>Turn off to remove from visualization</p>
+				      	<form>
+				      	<div class="row">
+				      	<div class="switch col s12 m6">
+						    <label>
+						      TP
+						      <input class="switch-tp" type="checkbox" checked>
+						      <span class="lever"></span>
+						    </label>
+	  					</div>
+	  					<div class="switch col s12 m6">
+						    <label>
+						      FP
+						      <input class="switch-fp" type="checkbox" checked>
+						      <span class="lever"></span>
+						    </label>
+	  					</div>
+	  					<div class="switch col s12 m6">
+						    <label>
+						      TN
+						      <input class="switch-tn" type="checkbox" checked>
+						      <span class="lever"></span>
+						    </label>
+	  					</div>
+	  					<div class="switch col s12 m6">
+						    <label>
+						      FN
+						      <input class="switch-fn" type="checkbox" checked>
+						      <span class="lever"></span>
+						    </label>
+	  					</div>
+	  					</div>
+	  					</form>
+  					</div>
+			    </li>
+			    <li>
+			      	<div class="collapsible-header active">
+			      		<i class="material-icons rotate-45">shuffle</i>
+			      		Axis Options
+	      			</div>
+			      	<div class="collapsible-body">
+			      		<p>Slide to rescale</p>
+		      			<label>Probability Range</label>
+		      			<div id="probability-zoom"></div>
+		      			<label>Rebin</label>
+		      			<div id="rebin"></div>
+		      			<div class = "apply-axis center">
+			      			<a class="reset tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="left" data-delay="25" data-tooltip="Reset"><i class="material-icons">replay</i></a>
+			      			<a class="apply tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="right" data-delay="25" data-tooltip="Apply"><i class="material-icons">done_all</i></a>
+		      			</div>
+			      	</div>
+			    </li>
+			    <li>
+			      	<div class="collapsible-header active">
+			      		<i class="material-icons rotate90">swap_calls</i>
+			      		Visualization Options
+			      	</div>
+			      	<div class="collapsible-body">
+			      		<p>Switch visualization</p>
+		      		</div>
+			    </li>
+			  </ul>
+
+		</div>
+		<div class="central-pane col s12 m6"></div>
 		<div class = "right-pane col s6 m3"></div>
 	</div>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
-
+		<script type="text/javascript" src="js/nouislider.min.js" ></script>
+		<script type="text/javascript" src="js/wNumb.js" ></script>
 		<script type="text/javascript" src="js/probHist.js" ></script>		
 		<!-- <script type="text/javascript" src="js/class.js" ></script> -->
 		<script type="text/javascript" src="js/model.js" ></script>

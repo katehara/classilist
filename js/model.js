@@ -21,27 +21,6 @@ function Model (data, pane){
 
 	makeHistograms(histData, classNames, pane, Math.max(max.left , max.right));
 
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

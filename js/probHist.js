@@ -7,13 +7,14 @@ makeHistograms = function(histData, classes, pane, scl){
   w = pane.node().getBoundingClientRect().width;
 
   for(i in histData){
-    probabilityHistogram(histData[i], classes[i], 300, 200, scl , pane);
+    probabilityHistogram(histData[i], classes[i], (w-30)/3, 200, scl , pane);
   }
 }
 
 // make a probability histogram
 function probabilityHistogram(data, name, w, h, scl , pane){
-  // console.log(name);
+  console.log(Math.max(w,200));
+  // w=200;
   classtp = name + " bar-tp";
   classtn = name + " bar-tn";
   classfp = name + " bar-fp";
@@ -25,10 +26,10 @@ function probabilityHistogram(data, name, w, h, scl , pane){
     bottom: 30,
     left: 30
   },
-  width = Math.max(300,w) - margin.left - margin.right,
+  width = Math.max(200,w) - margin.left - margin.right,
   height = Math.max(200,h) - margin.top - margin.bottom;
   // pad = -10;
-
+  console.log(width + "   " + height);
 
   var x = d3.scale.linear()
           .domain([-scl , scl])
@@ -58,8 +59,8 @@ function probabilityHistogram(data, name, w, h, scl , pane){
 
 
   var svg = pane.append("svg")
-            .attr("width" , w)
-            .attr("height" , h)
+            .attr("width" , width + margin.left + margin.right)
+            .attr("height" , height + margin.top + margin.bottom)
             // .attr("preserveAspectRatio","xMinYMin meet")
             // .attr("viewBox","0 0 " + w +" " + h )
             .append("g")
@@ -67,7 +68,7 @@ function probabilityHistogram(data, name, w, h, scl , pane){
 
   
 
-    console.log(data[0]);
+    // console.log(data[0]);
 
   var tp = svg.append("g").selectAll(".bar-tp")
             .data(data)

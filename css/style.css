@@ -2,26 +2,158 @@ html, body {
 	height : 100%;
 }
 
-.axis {
+nav {
+	color : #fff;
+	background-color: #5e35b1;
+}
+
+.rotate90 {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.collapsible-header {
+	background-color: #5e35b1;
+	color : #fff;
+}
+
+.collapsible-body {
+	padding-left: 2em;
+	padding-right: 2em;
+	background-color: #ede7f6;
+}
+
+.collapsible-body p {
+	font-size: .7em;
+	opacity : 0.5;
+	padding : .3em;
+}
+
+.collapsible-body .switch {
+	padding : .5em;
+}
+
+label {
+	color : #5e35b1;
+	padding : 0 auto;
+}
+
+.switch label input[type=checkbox]:checked+.lever:after {
+	background-color: #d1c4e9;
+}
+
+.switch label input[type=checkbox]:checked+.lever {
+	background-color: #5e35b1;
+}
+
+
+.rotate-45 {
+	-webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+#probability-zoom , #rebin{
+	margin : 1em auto;
+}
+
+.noUi-horizontal {
+    height: .5em;
+}
+
+.noUi-handle:after, .noUi-handle:before {
+	display: none;
+}
+
+.noUi-horizontal .noUi-handle {
+	-webkit-box-shadow: 0 1px 3px 1px rgba(0,0,0,0.4);
+	-moz-box-shadow: 0 1px 3px 1px rgba(0,0,0,0.4);
+	box-shadow: 0 1px 3px 1px rgba(0,0,0,0.4);
+	border-width: 0;
+	background-color : #d1c4e9;
+	border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+    left: -8px;
+    top: -9px;
+}
+
+.noUi-connect {
+	background: #5e35b1;
+}
+
+.noUi-target {
+	border-color: #5e35b1;
+}
+
+.noUi-horizontal .noUi-handle-lower .noUi-tooltip , .noUi-horizontal .noUi-handle-upper .noUi-tooltip{
+    background-color: rgba(255,255,255,0);
+	border-radius: 50%;
+	border-width: 0;
+	padding: 0;
+	font-size: .7em;
+    bottom: 0;
+    left: .1em;
+    top: .4em;
+}
+
+#rebin.noUi-horizontal .noUi-handle-lower .noUi-tooltip {
+	top : .2em;
+	left : .5em;
+	font-size: .8em;
+}
+
+.btn-floating {
+	margin : 0.5em 2em;
+}
+
+.material-tooltip {
+	color : #5e35b1;
+	font-size: .7em;
+}
+
+.backdrop {
+	background-color: rgba(255,255,255,0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+svg .axis {
 	z-index: 999;
 }
 
-.bar-tp {
+svg .bar-tp {
 	fill : steelblue;
 	z-index: 0;
 }
 
-.bar-fp {
+svg .bar-fp {
 	fill : red;
 	z-index: 0;
 }
 
-.bar-fn {
+svg .bar-fn {
 	fill : orange;
 	z-index: 0;
 }
 
-.bar-tn {
+svg .bar-tn {
 	fill : yellow;
 	z-index: 0;
 }
