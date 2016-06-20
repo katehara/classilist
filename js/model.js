@@ -1,25 +1,20 @@
-function Model (data, pane){
+function Model (data){
 
-	headers = getColumns(data);
-	nCols = getNCols(headers);
-	features = getFeatures(headers , nCols);
-	probs = getProbs(headers , nCols);
-	target = getTarget(headers , nCols);
-	predicted = getPredicted(headers , nCols);
-	classNames = getClassNames(data , target);
-	confusionMatrix = getConfusionMatrix(data, classNames, target, predicted);
-	defaultBin = 10;
-	histData = [];
-	max = {
-		right : 0,
-		left : 0
-	}
+	this.data = data;
+	this.headers = getColumns(this.data);
+	this.nCols = getNCols(this.headers);
+	this.features = getFeatures(this.headers , this.nCols);
+	this.probs = getProbs(this.headers , this.nCols);
+	this.target = getTarget(this.headers , this.nCols);
+	this.predicted = getPredicted(this.headers , this.nCols);
+	this.classNames = getClassNames(this.data , this.target);
+	// this.confusionMatrix = getConfusionMatrix(data, classNames, target, predicted);
+	labeledData = labelData(this.data, this.classNames, this.target, this.predicted);
+	// console.log(labeledData);
 
-	labelData(data, classNames, target, predicted);
-	prepareData(data, classNames, defaultBin, histData, max);
-		// console.log(histData);
+	// prepareData(data, classNames, defaultBin, histData, max);
 
-	makeHistograms(histData, classNames, pane, Math.max(max.left , max.right));
+	// makeHistograms(histData, classNames, pane, Math.max(max.left , max.right));
 
 }
 
@@ -27,7 +22,7 @@ function Model (data, pane){
 
 
 
-labelData = function(data, classNames, target, predicted){
+function labelData(data, classNames, target, predicted){
 	for(j in classNames){
 		name = classNames[j];
 		// console.log(name);
@@ -40,6 +35,7 @@ labelData = function(data, classNames, target, predicted){
 
 		}
 	}
+	return data;
 }
 
 // get column names
@@ -105,39 +101,25 @@ function getClassNames(data , target){
 
 
 // get confusion matrix
-function getConfusionMatrix(data, classNames, target, predicted) {
-	classmap = {};
-	cl = classNames.length;
-	mat = zeros(cl , cl);
-	// console.log(mat);
-	for( i=0;i<cl;i++){
-		classmap[classNames[i]] = i;
-	}
-	// console.log(classmap);
-	for(i=0;i<data.length;i++){ 
-		aclass = data[i][target]; 
-		pclass = data[i][predicted]; 
-		aind = classmap[aclass]; 
-		pind = classmap[pclass]; 
-		(mat[aind][pind])++;
-	}
-	// console.log(mat);
-	return mat;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// function getConfusionMatrix(data, classNames, target, predicted) {
+// 	classmap = {};
+// 	cl = classNames.length;
+// 	mat = zeros(cl , cl);
+// 	// console.log(mat);
+// 	for( i=0;i<cl;i++){
+// 		classmap[classNames[i]] = i;
+// 	}
+// 	// console.log(classmap);
+// 	for(i=0;i<data.length;i++){ 
+// 		aclass = data[i][target]; 
+// 		pclass = data[i][predicted]; 
+// 		aind = classmap[aclass]; 
+// 		pind = classmap[pclass]; 
+// 		(mat[aind][pind])++;
+// 	}
+// 	// console.log(mat);
+// 	return mat;
+// }
 
 
 // helpers

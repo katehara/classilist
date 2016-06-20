@@ -49,6 +49,22 @@ label {
 	background-color: #5e35b1;
 }
 
+.switch label input[type=checkbox]:checked+.lever.tp {
+	background-color: #00c853;
+}
+
+.switch label input[type=checkbox]:checked+.lever.fp {
+	background-color: #ffc400;
+}
+
+.switch label input[type=checkbox]:checked+.lever.fn {
+	background-color: #f44336;
+}
+
+.switch label input[type=checkbox]:checked+.lever.tn {
+	background-color: #00b0ff;
+}
+
 
 .rotate-45 {
 	-webkit-transform: rotate(-45deg);
@@ -132,28 +148,64 @@ label {
 
 
 
+.main-visual {
+	width : 100%;
+}
+
+.probability-histograms svg {
+	margin: 1em 0.2em;
+	border : 1px solid #5e35b1;
+	border-radius: 3px;
+	background-color: #ede7f6;
+}
 
 
-svg .axis {
-	z-index: 999;
+.tick text {
+	font-size: .6em;
 }
 
 svg .bar-tp {
-	fill : steelblue;
-	z-index: 0;
+	fill : #00c853;
 }
 
 svg .bar-fp {
-	fill : red;
-	z-index: 0;
+	fill : #ffc400;
 }
 
 svg .bar-fn {
-	fill : orange;
-	z-index: 0;
+	fill : #f44336;
 }
 
 svg .bar-tn {
-	fill : yellow;
-	z-index: 0;
+	fill : #00b0ff;
+}
+
+.d3-tip {
+	text-align: center;
+  line-height: 1;
+  font-size: 0.7em;
+  padding: .3em ;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 5px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
 }
