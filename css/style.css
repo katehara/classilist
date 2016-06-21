@@ -175,7 +175,6 @@ svg .bar-fp {
 svg .bar-fn {
 	fill : #f44336;
 }
-
 svg .bar-tn {
 	fill : #00b0ff;
 }
@@ -197,7 +196,7 @@ svg .bar-tn {
   font-size: 10px;
   width: 100%;
   line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(0, 0, 0, 0.5);
   content: "\25BC";
   position: absolute;
   text-align: center;

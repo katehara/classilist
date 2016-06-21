@@ -12,8 +12,15 @@ function ProbHist(model , pane) {
 
   // pane = pane;
 
-  this.probBegin = 0.00;
-  this.probEnd = 1.00;
+  this.dataOptions = {
+    tp : true,
+    tn : true,
+    fp : true,
+    fn : true
+  }
+  this.probLimits = [0.00 , 1.00];
+  // this.probBegin = 0.00;
+  // this.probEnd = 1.00;
   this.bins = 10;
   this.histData = [];
   this.max = {
@@ -21,22 +28,77 @@ function ProbHist(model , pane) {
     left : 0
   }
 
+  w=(pane.node().getBoundingClientRect().width - 30)/3;
+  var margin = {
+    top: 20,
+    right: 20,
+    bottom: 30,
+    left: 30
+  },
+  width = Math.max(200,w) - margin.left - margin.right,
+  height = Math.max(200,w) - margin.top - margin.bottom;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // prepare bin boundaries acc to no of bins
   this.getBinValues = function(){
     bins = this.bins;
     array = [];
-    k = (this.probEnd - this.probBegin)/bins;
+    k = (this.probLimits[1] - this.probLimits[0])/bins;
     num=0;
     for(i=1;i<=bins;i++){
       num = i*k;
-      num = Math.round((this.probBegin + num) * 100) / 100;
+      num = Math.round((this.probLimits[0] + num) * 100) / 100;
       array.push( num);
     }
     return array;
   }
 
-console.log(this.getBinValues());
+// console.log(this.getBinValues());
 
   // prepare histogram data into bins and assign it to property -> histData[]
   this.prepareData = function(){
@@ -69,7 +131,9 @@ console.log(this.getBinValues());
           // console.log(prob);
           // console.log(data[j][prob]);
           if(data[j][prob] < preparedData[k].probability){ 
-            preparedData[k][data[j][name].toLowerCase()]++;
+            if(this.dataOptions[data[j][name].toLowerCase()])
+              preparedData[k][data[j][name].toLowerCase()]++;
+            
             break;
           }
 
@@ -86,34 +150,25 @@ console.log(this.getBinValues());
 
   // make all probibility histograms
   this.makeHistograms = function(){
-    scl = Math.max(this.max.left , this.max.right);
-    h = pane.node().getBoundingClientRect().height;
-    w = pane.node().getBoundingClientRect().width;
-
+    pane.selectAll("*").remove();
     for(i in this.histData){
-      this.probabilityHistogram(this.histData[i], this.classNames[i], (w-30)/3, 200, scl);
+      this.probabilityHistogram(this.histData[i], this.classNames[i]);
     }
   }
 
 
 
   // make a probability histogram
-  this.probabilityHistogram = function(data, name, w, h, scl){
-    console.log(Math.max(w,200));
-    // w=200;
+  this.probabilityHistogram = function(data, name){
+    // console.log(Math.max(w,200));
+    
+    scl = Math.max(this.max.left , this.max.right);
     classtp = name + " bar-tp";
     classtn = name + " bar-tn";
     classfp = name + " bar-fp";
     classfn = name + " bar-fn";
-
-    var margin = {
-      top: 20,
-      right: 20,
-      bottom: 30,
-      left: 30
-    },
-    width = Math.max(200,w) - margin.left - margin.right,
-    height = Math.max(200,h) - margin.top - margin.bottom;
+    
+    
     // pad = -10;
     // console.log(width + "   " + height);
 
@@ -165,18 +220,16 @@ console.log(this.getBinValues());
     var yAxis = d3.svg.axis()
                 .scale(y)
                 .orient("left")
-                .tickValues(y.domain().filter(function(d,i){ return !(i%(this.bins/10)); } ))
+                .tickValues(y.domain().filter(function(d,i){ console.log(d + " " + i%(this.bins/10) );return !Math.floor((i%(this.bins/10))); } ))
                 .tickSize(0)
                 .tickPadding(3);
 
-                var yAxis2 = d3.svg.axis()
+    var yAxis2 = d3.svg.axis()
                 .scale(y)
                 .orient("left")
                 .tickFormat("")
                 .tickSize(-1);
-                // .ticks(data.length)
-                // .tickSize(0)
-                // .tickPadding(6);
+                
 
 
     var svg = pane.append("svg")
@@ -240,7 +293,7 @@ console.log(this.getBinValues());
               .on('mouseout', tipTN.hide);
 
     svg.append("g")
-      .attr("class" , "x axis")
+      .attr("class" , name + " x axis")
       .attr("transform" , "translate(0," + height + ")")
       .call(xAxis)
       .selectAll("text")  
@@ -250,13 +303,13 @@ console.log(this.getBinValues());
             .attr("transform", "rotate(-90)" );
 
     svg.append("g")
-      .attr("class" , "y axis")
+      .attr("class" , name + " y axis")
       .attr("transform" , "translate(0,0)")
       // .attr("transform" , "translate(" + x(0) +",0)")
       .call(yAxis);
 
     svg.append("g")
-      .attr("class" , "y axis")
+      .attr("class" , name + " y axis2")
       // .attr("transform" , "translate(0,0)")
       .attr("transform" , "translate(" + x(0) +",0)")
       .call(yAxis2);
@@ -271,8 +324,137 @@ console.log(this.getBinValues());
 
   }
 
-this.prepareData();
-this.makeHistograms();
+  this.prepareData();
+  this.makeHistograms();
+
+
+
+
+
+
+  this.updateSwitch = function(){
+
+    this.prepareData();
+    // this.makeHistograms();
+    // console.log(this.histData)
+    scl = Math.max(this.max.left , this.max.right);
+
+    var x = d3.scale.linear()
+            .domain([-scl , scl])
+            .rangeRound([0, width]);
+
+    var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .tickSize(1)
+                .tickFormat(function(d){ return Math.abs(d);});
+
+
+
+
+
+    var transitionSwitch = pane.transition().duration(500);
+
+    transitionSwitch.selectAll(".x.axis")
+              .call(xAxis)
+              .selectAll("text")  
+                  .style("text-anchor", "end")
+                  .attr("dx", "-.8em")
+                  .attr("dy", ".15em")
+                  .attr("transform", "rotate(-90)" );
+
+    for(i in this.histData){
+
+        d = this.histData[i];
+        name = this.classNames[0];
+        var trans = pane.transition().duration(5000);
+
+
+        trans.selectAll("."+name+".bar-tp").data(d)
+        .attr("x" , function(d){return x(0);})
+              // .attr("y" , function(d){return y(d.probability);})
+              .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));});
+
+
+
+        tpBars = d3.selectAll(".bar-tp")
+              .transition().duration(500)
+              .attr("x" , function(d){return x(0);})
+              .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));});
+              
+    }
+
+  }
+
+  this.applySettings = function(bins , probs){
+    this.probLimits = probs.map(Number);
+    this.bins = Number(bins);
+
+    console.log(this.bins);
+    console.log(this.probLimits);
+
+    this.prepareData();
+
+    scl = Math.max(this.max.left , this.max.right);
+
+    var x = d3.scale.linear()
+            .domain([-scl , scl])
+            .rangeRound([0, width]);
+
+    var y = d3.scale.ordinal()
+            .domain(this.histData[0].map(function(d){ return d.probability;}))
+            .rangeRoundBands([0, height] , 0.1);
+
+    var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .tickSize(1)
+                .tickFormat(function(d){ return Math.abs(d);});
+
+                // .tickFormat(d3.format)
+    
+    var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickValues(y.domain().filter(function(d,i){ return !(i%(this.bins/10)); } ))
+                .tickSize(0)
+                .tickPadding(3);
+
+    var yAxis2 = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickFormat("")
+                .tickSize(-1);
+
+    var transitionSwitch = pane.transition().duration(500);
+
+    // transitionSwitch.selectAll(".x.axis")
+    //           .call(xAxis)
+    //           .selectAll("text")  
+    //               .style("text-anchor", "end")
+    //               .attr("dx", "-.8em")
+    //               .attr("dy", ".15em")
+    //               .attr("transform", "rotate(-90)" );
+
+    // transitionSwitch.selectAll(".y.axis")
+    //             .call(yAxis)
+
+    // transitionSwitch.selectAll(".y.axis2")
+    //             .call(yAxis2)
+
+    this.makeHistograms();
+
+
+
+
+
+  }
+
+
+
+
+
+
 
 
 }// end of class

@@ -5,7 +5,7 @@ $(document).ready(function(){
 	var centralPane = d3.select(".central-pane");
 	var probabilitySlider = document.getElementById('probability-zoom');
 	  noUiSlider.create(probabilitySlider, {
-	   start: [0.01, 1],
+	   start: [0.00, 1],
 	   behaviour: 'drag-tap',
 	   connect: true,
 	   tooltips : true,
@@ -52,29 +52,37 @@ $(document).ready(function(){
 
 
 		d3.select(".switch-tp").on("change", function(d){
-			console.log(this.checked);
+			probHist.dataOptions.tp = this.checked;
+			probHist.updateSwitch();
 		});
 
 		d3.select(".switch-fp").on("change", function(d){
-			console.log(this.checked);
+			probHist.dataOptions.fp = this.checked;
+			probHist.updateSwitch();
 		});
 
 		d3.select(".switch-tn").on("change", function(d){
-			console.log(this.checked);
+			probHist.dataOptions.tn = this.checked;
+			probHist.updateSwitch();
 		});
 
 		d3.select(".switch-fn").on("change", function(d){
-			console.log(this.checked);
+			probHist.dataOptions.fn = this.checked;
+			probHist.updateSwitch();
 		});
 
 		d3.select(".reset").on("click" , function(){
-			binSlider.noUiSlider.set(10);
-			probabilitySlider.noUiSlider.set([0.01 , 1.00]);
+			bins = 10;
+			probs = [0.00 , 1.00];
+			binSlider.noUiSlider.set(bins);
+			probabilitySlider.noUiSlider.set(probs);
+			probHist.applySettings(bins , probs);
 		});
 
 		d3.select(".apply").on("click" , function(){
 			bins = binSlider.noUiSlider.get();
 			probs = probabilitySlider.noUiSlider.get();
+			probHist.applySettings(bins , probs);
 		});
 
 	});
