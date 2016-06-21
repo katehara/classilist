@@ -408,7 +408,7 @@ function ProbHist(model , pane) {
 
 
 
-      
+
 
         newd = this.histData[i];
         name = this.classNames[i];
@@ -533,7 +533,10 @@ function ProbHist(model , pane) {
                       .data(newd, function(d , i){return d.probability;});
 
 
-        recttp.enter().append("rect").attr("class" , classtp);
+        recttp.enter().append("rect")
+              .attr("class" , classtp)
+              .on('mouseover', tipTP.show)
+              .on('mouseout', tipTP.hide);
 
         recttp.transition()
                       .duration(1000)
@@ -542,8 +545,7 @@ function ProbHist(model , pane) {
                       .attr("y" , function(d){return y(d.probability);})
                       .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
                       .attr("height" , function(d){return y.rangeBand()});
-                      // .on('mouseover', tipTP.show)
-                      // .on('mouseout', tipTP.hide);
+                      
 
         recttp.exit().remove();
 
@@ -552,7 +554,10 @@ function ProbHist(model , pane) {
                       .data(newd, function(d , i){return d.probability;});
 
 
-        recttn.enter().append("rect").attr("class" , classtn);
+        recttn.enter().append("rect")
+               .attr("class" , classtn)
+               .on('mouseover', tipTN.show)
+                .on('mouseout', tipTN.hide);
 
         recttn.transition()
                       .duration(1000)
@@ -570,7 +575,10 @@ function ProbHist(model , pane) {
                       .selectAll("."+newname+".bar-fn")
                       .data(newd, function(d , i){return d.probability;});
 
-        rectfn.enter().append("rect").attr("class" , classfn);
+        rectfn.enter().append("rect")
+              .attr("class" , classfn)
+              .on('mouseover', tipFN.show)
+              .on('mouseout', tipFN.hide);
 
 
         rectfn.transition()
@@ -589,7 +597,10 @@ function ProbHist(model , pane) {
                       .selectAll("."+newname+".bar-fp")
                       .data(newd, function(d , i){return d.probability;});
 
-        rectfp.enter().append("rect").attr("class" , classfp);
+        rectfp.enter().append("rect")
+              .attr("class" , classfp)
+              .on('mouseover', tipFP.show)
+              .on('mouseout', tipFP.hide);
 
         rectfp.transition()
                       .duration(1000)
@@ -598,8 +609,7 @@ function ProbHist(model , pane) {
                       .attr("y" , function(d){return y(d.probability);})
                       .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
                       .attr("height" , function(d){return y.rangeBand()});
-                      // .on('mouseover', tipFP.show)
-                      // .on('mouseout', tipFP.hide);
+                      
 
         rectfp.exit().remove();
 
