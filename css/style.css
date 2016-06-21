@@ -159,6 +159,10 @@ label {
 	background-color: #ede7f6;
 }
 
+.probability-histograms rect:hover {
+	stroke : black; 
+}
+
 
 .tick text {
 	font-size: .6em;

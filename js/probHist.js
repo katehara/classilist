@@ -28,7 +28,7 @@ function ProbHist(model , pane) {
     left : 0
   }
 
-  w=(pane.node().getBoundingClientRect().width - 30)/3;
+   w=(pane.node().getBoundingClientRect().width - 30)/3;
   var margin = {
     top: 20,
     right: 20,
@@ -38,49 +38,38 @@ function ProbHist(model , pane) {
   width = Math.max(200,w) - margin.left - margin.right,
   height = Math.max(200,w) - margin.top - margin.bottom;
 
+  d3.selection.prototype.moveToFront = function() {  
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+      });
+    };
 
+  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  var tipTP = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+              return "<span>Probability:</span> <span>" + d.probability + "</span><br><span>TP:</span> <span>" + d.tp + "</span>";
+            })
+  var tipFP = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+              return "<span>Probability:</span> <span>" + d.probability + "</span><br><span>FP:</span> <span>" + d.fp + "</span>";
+            })
+  var tipFN = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+              return "<span>Probability:</span> <span>" + d.probability + "</span><br><span>FN:</span> <span>" + d.fn + "</span>";
+            })
+  var tipTN = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+              return "<span>Probability:</span> <span>" + d.probability + "</span><br><span>TN:</span> <span>" + d.tn + "</span>";
+            })
 
 
 
@@ -106,10 +95,12 @@ function ProbHist(model , pane) {
     classes = this.classNames;
     bins = this.bins;
     this.histData = [];
+    // console.log(this.histData);
 
     this.max.right = this.max.left = 0;
     binSize = 1/bins;
     binValues = this.getBinValues();
+
     for(i in classes){
       name = "L-"+classes[i];
       prob = "P-"+classes[i];
@@ -124,7 +115,6 @@ function ProbHist(model , pane) {
           fp : 0,
         });
       }
-      //console.log(preparedData);
       for(j in data){
         for(k in preparedData){
           // console.log(data[j]);
@@ -133,12 +123,17 @@ function ProbHist(model , pane) {
           if(data[j][prob] < preparedData[k].probability){ 
             if(this.dataOptions[data[j][name].toLowerCase()])
               preparedData[k][data[j][name].toLowerCase()]++;
+
+              // console.log(this.dataOptions[data[j][name].toLowerCase()]);
+              // console.log(preparedData[k][data[j][name].toLowerCase()]);
             
             break;
           }
 
         }
       }
+            // console.log(preparedData);
+
       // console.log(name);
       this.histData.push(preparedData);
       this.max.left = Math.max(this.max.left, d3.max(preparedData , function(d){return (d.tn+d.fn);} ));
@@ -160,6 +155,18 @@ function ProbHist(model , pane) {
 
   // make a probability histogram
   this.probabilityHistogram = function(data, name){
+
+
+  //   w=(pane.node().getBoundingClientRect().width - 30)/3;
+  // var margin = {
+  //   top: 20,
+  //   right: 20,
+  //   bottom: 30,
+  //   left: 30
+  // },
+  // width = Math.max(200,w) - margin.left - margin.right,
+  // height = Math.max(200,w) - margin.top - margin.bottom;
+  
     // console.log(Math.max(w,200));
     
     scl = Math.max(this.max.left , this.max.right);
@@ -167,10 +174,9 @@ function ProbHist(model , pane) {
     classtn = name + " bar-tn";
     classfp = name + " bar-fp";
     classfn = name + " bar-fn";
-    
-    
+       
     // pad = -10;
-    // console.log(width + "   " + height);
+    console.log(width + "   " + height);
 
     var x = d3.scale.linear()
             .domain([-scl , scl])
@@ -180,30 +186,8 @@ function ProbHist(model , pane) {
             .domain(data.map(function(d){ return d.probability;}))
             .rangeRoundBands([0, height] , 0.1);
 
-    var tipTP = d3.tip()
-              .attr('class', 'd3-tip')
-              .offset([-10, 0])
-              .html(function(d) {
-                return "<span>Probability:</span> <span>" + d.probability + "</span><br><span>TP:</span> <span>" + d.tp + "</span>";
-              })
-    var tipFP = d3.tip()
-              .attr('class', 'd3-tip')
-              .offset([-10, 0])
-              .html(function(d) {
-                return "<span>Probability:</span> <span>" + d.probability + "</span><br><span>FP:</span> <span>" + d.fp + "</span>";
-              })
-    var tipFN = d3.tip()
-              .attr('class', 'd3-tip')
-              .offset([-10, 0])
-              .html(function(d) {
-                return "<span>Probability:</span> <span>" + d.probability + "</span><br><span>FN:</span> <span>" + d.fn + "</span>";
-              })
-    var tipTN = d3.tip()
-              .attr('class', 'd3-tip')
-              .offset([-10, 0])
-              .html(function(d) {
-                return "<span>Probability:</span> <span>" + d.probability + "</span><br><span>TN:</span> <span>" + d.tn + "</span>";
-              })
+    // console.log(y(2));
+    //             console.log(y(3));
 
 
     // console.log(x(6));
@@ -220,7 +204,11 @@ function ProbHist(model , pane) {
     var yAxis = d3.svg.axis()
                 .scale(y)
                 .orient("left")
-                .tickValues(y.domain().filter(function(d,i){ console.log(d + " " + i%(this.bins/10) );return !Math.floor((i%(this.bins/10))); } ))
+                .tickValues(y.domain().filter(function(d,i){ 
+                      if(this.bins <= 15) return true;
+
+                      return !(i%(2)); } ))
+                // .tickValues(y.domain().filter(function(d,i){ console.log(d + " " + i%(this.bins/10) );return !Math.floor((i%(this.bins/10))); } ))
                 .tickSize(0)
                 .tickPadding(3);
 
@@ -233,6 +221,7 @@ function ProbHist(model , pane) {
 
 
     var svg = pane.append("svg")
+              .attr("class" , "svg-"+name)
               .attr("width" , width + margin.left + margin.right)
               .attr("height" , height + margin.top + margin.bottom)
               // .attr("preserveAspectRatio","xMinYMin meet")
@@ -248,8 +237,8 @@ function ProbHist(model , pane) {
 
       // console.log(data[0]);
 
-    var tp = svg.append("g").selectAll(".bar-tp")
-              .data(data)
+    var tp = svg/*.append("g")*/.selectAll("."+name + ".bar-tp")
+              .data(data, function(d , i){return d.probability;})
               .enter().append("rect")
               .attr("class" , classtp)
               .attr("x" , function(d){return x(0);})
@@ -259,8 +248,8 @@ function ProbHist(model , pane) {
               .on('mouseover', tipTP.show)
               .on('mouseout', tipTP.hide);
 
-    var fp = svg.append("g").selectAll(".bar-fp")
-              .data(data)
+    var fp = svg/*.append("g")*/.selectAll("."+name + ".bar-fp")
+              .data(data, function(d , i){return d.probability;})
               .enter().append("rect")
               .attr("class" , classfp)
               .attr("x" , function(d){return x(d.tp);})
@@ -270,8 +259,8 @@ function ProbHist(model , pane) {
               .on('mouseover', tipFP.show)
               .on('mouseout', tipFP.hide);
 
-    var fn = svg.append("g").selectAll(".bar-fn")
-              .data(data)
+    var fn = svg/*.append("g")*/.selectAll("."+name + ".bar-fn")
+              .data(data, function(d , i){return d.probability;})
               .enter().append("rect")
               .attr("class" , classfn)
               .attr("x" , function(d){return x(-d.fn);})
@@ -281,8 +270,8 @@ function ProbHist(model , pane) {
               .on('mouseover', tipFN.show)
               .on('mouseout', tipFN.hide);
 
-    var tn = svg.append("g").selectAll(".bar-tn")
-              .data(data)
+    var tn = svg/*.append("g")*/.selectAll("."+name + ".bar-tn")
+              .data(data, function(d , i){return d.probability;})
               .enter().append("rect")
               .attr("class" , classtn)
               .attr("x" , function(d){return x(-d.fn-d.tn);})
@@ -334,6 +323,8 @@ function ProbHist(model , pane) {
 
   this.updateSwitch = function(){
 
+    
+
     this.prepareData();
     // this.makeHistograms();
     // console.log(this.histData)
@@ -349,13 +340,38 @@ function ProbHist(model , pane) {
                 .tickSize(1)
                 .tickFormat(function(d){ return Math.abs(d);});
 
+     var y = d3.scale.ordinal()
+                .domain(newd.map(function(d){ return d.probability;}))
+                .rangeRoundBands([0, height] , 0.1);
+
+                // console.log(y(.2));
+                // console.log(y(.3));
+
+  
+        
+        var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left")
+                    .tickValues(y.domain().filter(function(d,i){ 
+                      if(this.bins <= 15) return true;
+
+                      return !(i%(2)); } ))
+                    .tickSize(0)
+                    .tickPadding(3);
+
+        var yAxis2 = d3.svg.axis()
+                    .scale(y)
+                    .orient("left")
+                    .tickFormat("")
+                    .tickSize(-1);
 
 
 
 
-    var transitionSwitch = pane.transition().duration(500);
 
-    transitionSwitch.selectAll(".x.axis")
+    var transitionScale = pane.transition().duration(500);
+
+    transitionScale.selectAll(".x.axis")
               .call(xAxis)
               .selectAll("text")  
                   .style("text-anchor", "end")
@@ -365,96 +381,330 @@ function ProbHist(model , pane) {
 
     for(i in this.histData){
 
-        d = this.histData[i];
-        name = this.classNames[0];
-        var trans = pane.transition().duration(5000);
+       var y = d3.scale.ordinal()
+                .domain(newd.map(function(d){ return d.probability;}))
+                .rangeRoundBands([0, height] , 0.1);
+
+                // console.log(y(.2));
+                // console.log(y(.3));
+
+  
+        
+        var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left")
+                    .tickValues(y.domain().filter(function(d,i){ 
+                      if(this.bins <= 15) return true;
+
+                      return !(i%(2)); } ))
+                    .tickSize(0)
+                    .tickPadding(3);
+
+        var yAxis2 = d3.svg.axis()
+                    .scale(y)
+                    .orient("left")
+                    .tickFormat("")
+                    .tickSize(-1);
 
 
-        trans.selectAll("."+name+".bar-tp").data(d)
-        .attr("x" , function(d){return x(0);})
-              // .attr("y" , function(d){return y(d.probability);})
-              .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));});
+
+      
+
+        newd = this.histData[i];
+        name = this.classNames[i];
+
+        pane.selectAll("."+name+".bar-tp").data(newd);
+        pane.selectAll("."+name+".bar-tn").data(newd);
+        pane.selectAll("."+name+".bar-fn").data(newd);
+        pane.selectAll("."+name+".bar-fp").data(newd);
 
 
+        var trans = pane.transition().duration(500);
 
-        tpBars = d3.selectAll(".bar-tp")
-              .transition().duration(500)
+        trans.selectAll("."+name+".bar-tp")
               .attr("x" , function(d){return x(0);})
-              .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));});
-              
+                      .attr("y" , function(d){return y(d.probability);})
+                      .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
+                      .attr("height" , function(d){return y.rangeBand()});
+
+        trans.selectAll("."+name+".bar-fp")
+              .attr("x" , function(d){return x(d.tp);})
+                      .attr("y" , function(d){return y(d.probability);})
+                      .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
+                      .attr("height" , function(d){return y.rangeBand()});
+
+        trans.selectAll("."+name+".bar-fn")
+              .attr("x" , function(d){return x(-d.fn);})
+                      .attr("y" , function(d){return y(d.probability);})
+                      .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
+                      .attr("height" , function(d){return y.rangeBand()});
+
+        trans.selectAll("."+name+".bar-tn")
+              .attr("x" , function(d){return x(-d.fn-d.tn);})
+                      .attr("y" , function(d){return y(d.probability);})
+                      .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+                      .attr("height" , function(d){return y.rangeBand()});
+
+
+
+
     }
 
   }
 
   this.applySettings = function(bins , probs){
-    this.probLimits = probs.map(Number);
-    this.bins = Number(bins);
+    if(this.probLimits != probs.map(Number)) this.probLimits = probs.map(Number);
+    if(this.bins != Number(bins))this.bins = Number(bins);
 
-    console.log(this.bins);
-    console.log(this.probLimits);
+   
+  
+
+    
+    
+    // console.log(this.bins);
+    // console.log(this.probLimits);
 
     this.prepareData();
 
     scl = Math.max(this.max.left , this.max.right);
 
-    var x = d3.scale.linear()
-            .domain([-scl , scl])
-            .rangeRound([0, width]);
-
-    var y = d3.scale.ordinal()
-            .domain(this.histData[0].map(function(d){ return d.probability;}))
-            .rangeRoundBands([0, height] , 0.1);
-
-    var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom")
-                .tickSize(1)
-                .tickFormat(function(d){ return Math.abs(d);});
-
-                // .tickFormat(d3.format)
     
-    var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left")
-                .tickValues(y.domain().filter(function(d,i){ return !(i%(this.bins/10)); } ))
-                .tickSize(0)
-                .tickPadding(3);
 
-    var yAxis2 = d3.svg.axis()
-                .scale(y)
-                .orient("left")
-                .tickFormat("")
-                .tickSize(-1);
 
-    var transitionSwitch = pane.transition().duration(500);
+    for(i in this.histData){
 
-    // transitionSwitch.selectAll(".x.axis")
-    //           .call(xAxis)
-    //           .selectAll("text")  
-    //               .style("text-anchor", "end")
-    //               .attr("dx", "-.8em")
-    //               .attr("dy", ".15em")
-    //               .attr("transform", "rotate(-90)" );
+     
 
-    // transitionSwitch.selectAll(".y.axis")
-    //             .call(yAxis)
+        newd = this.histData[i];
+        newname = this.classNames[i];
 
-    // transitionSwitch.selectAll(".y.axis2")
-    //             .call(yAxis2)
+         classtp = newname + " bar-tp";
+    classtn = newname + " bar-tn";
+    classfp = newname + " bar-fp";
+    classfn = newname + " bar-fn";
 
-    this.makeHistograms();
+
+    // console.log(width + "   " + height);
+
+
+        var x = d3.scale.linear()
+                .domain([-scl , scl])
+                .rangeRound([0, width]);
 
 
 
+        var y = d3.scale.ordinal()
+                .domain(newd.map(function(d){ return d.probability;}))
+                .rangeRoundBands([0, height] , 0.1);
 
+                // console.log(y(.2));
+                // console.log(y(.3));
+
+        var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom")
+                    .tickSize(1)
+                    .tickFormat(function(d){ return Math.abs(d);});
+
+                    // .tickFormat(d3.format)
+        
+        var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left")
+                    .tickValues(y.domain().filter(function(d,i){ 
+                      if(this.bins <= 15) return true;
+
+                      return !(i%(2)); } ))
+                    .tickSize(0)
+                    .tickPadding(3);
+
+        var yAxis2 = d3.svg.axis()
+                    .scale(y)
+                    .orient("left")
+                    .tickFormat("")
+                    .tickSize(-1);
+
+        
+
+
+
+        var recttp = pane.select(".svg-"+newname).select("g")
+                      .selectAll("."+newname+".bar-tp")
+                      .data(newd, function(d , i){return d.probability;});
+
+
+        recttp.enter().append("rect").attr("class" , classtp);
+
+        recttp.transition()
+                      .duration(1000)
+                      
+                      .attr("x" , function(d){return x(0);})
+                      .attr("y" , function(d){return y(d.probability);})
+                      .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
+                      .attr("height" , function(d){return y.rangeBand()});
+                      // .on('mouseover', tipTP.show)
+                      // .on('mouseout', tipTP.hide);
+
+        recttp.exit().remove();
+
+        var recttn = pane.select(".svg-"+newname).select("g")
+                      .selectAll("."+newname+".bar-tn")
+                      .data(newd, function(d , i){return d.probability;});
+
+
+        recttn.enter().append("rect").attr("class" , classtn);
+
+        recttn.transition()
+                      .duration(1000)
+                      
+                      .attr("x" , function(d){return x(-d.fn-d.tn);})
+                      .attr("y" , function(d){return y(d.probability);})
+                      .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+                      .attr("height" , function(d){return y.rangeBand()});
+                      // .on('mouseover', tipTN.show)
+                      // .on('mouseout', tipTN.hide);
+
+        recttn.exit().remove();
+
+        var rectfn = pane.select(".svg-"+newname).select("g")
+                      .selectAll("."+newname+".bar-fn")
+                      .data(newd, function(d , i){return d.probability;});
+
+        rectfn.enter().append("rect").attr("class" , classfn);
+
+
+        rectfn.transition()
+                      .duration(1000)
+                      
+                      .attr("x" , function(d){return x(-d.fn);})
+                      .attr("y" , function(d){return y(d.probability);})
+                      .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
+                      .attr("height" , function(d){return y.rangeBand()});
+                      // .on('mouseover', tipFN.show)
+                      // .on('mouseout', tipFN.hide);
+
+        rectfn.exit().remove();
+
+        var rectfp = pane.select(".svg-"+newname).select("g")
+                      .selectAll("."+newname+".bar-fp")
+                      .data(newd, function(d , i){return d.probability;});
+
+        rectfp.enter().append("rect").attr("class" , classfp);
+
+        rectfp.transition()
+                      .duration(1000)
+                      
+                      .attr("x" , function(d){return x(d.tp);})
+                      .attr("y" , function(d){return y(d.probability);})
+                      .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
+                      .attr("height" , function(d){return y.rangeBand()});
+                      // .on('mouseover', tipFP.show)
+                      // .on('mouseout', tipFP.hide);
+
+        rectfp.exit().remove();
+
+
+        var transitionScale = pane.transition().duration(500);
+
+        transitionScale.select("."+newname+".x.axis")
+                  .call(xAxis)
+                  .selectAll("text")  
+                      .style("text-anchor", "end")
+                      .attr("dx", "-.8em")
+                      .attr("dy", ".15em")
+                      .attr("transform", "rotate(-90)" );
+
+        transitionScale.select("."+newname+".y.axis")
+                    .call(yAxis)
+
+        transitionScale.select("."+newname+".y.axis2")
+                    .call(yAxis2)
+
+                    pane.select("."+newname+".x.axis").moveToFront();
+
+                    pane.select("."+newname+".y.axis2").moveToFront();
+                      // .attr("stroke" , "red");
+      
+
+
+        // t1 = pane.selectAll("."+name+".bar-tp").data(newd);
+        // t2 = pane.selectAll("."+name+".bar-fp").data(newd);
+        // t3 = pane.selectAll("."+name+".bar-fn").data(newd);
+        // t4 = pane.selectAll("."+name+".bar-tn").data(newd);
+
+
+
+
+
+        // t1.attr("x" , function(d){return x(0);})
+        //       .attr("y" , function(d){return y(d.probability);})
+        //       .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
+        //       .attr("height" , function(d){return y.rangeBand()});
+
+        // t2.attr("x" , function(d){return x(d.tp);})
+        //       .attr("y" , function(d){ return y(d.probability);})
+        //       .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
+        //       .attr("height" , function(d){return y.rangeBand()});
+
+        // t3.attr("x" , function(d){return x(-d.fn);})
+        //       .attr("y" , function(d){return y(d.probability);})
+        //       .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
+        //       .attr("height" , function(d){return y.rangeBand()});
+
+        // t4.attr("x" , function(d){return x(-d.fn-d.tn);})
+        //       .attr("y" , function(d){return y(d.probability);})
+        //       .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+        //       .attr("height" , function(d){return y.rangeBand()});
+
+        // t1.enter().append("rect")
+        //       .attr("class" , classtp)
+        //       .attr("x" , function(d){return x(0);})
+        //       .attr("y" , function(d){return y(d.probability);})
+        //       .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
+        //       .attr("height" , function(d){return y.rangeBand()})
+        //       .on('mouseover', tipTP.show)
+        //       .on('mouseout', tipTP.hide);
+
+
+        // t2.enter().append("rect")
+        //       .attr("class" , classfp)
+        //       .attr("x" , function(d){return x(d.tp);})
+        //       .attr("y" , function(d){return y(d.probability);})
+        //       .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
+        //       .attr("height" , function(d){return y.rangeBand()})
+        //       .on('mouseover', tipFP.show)
+        //       .on('mouseout', tipFP.hide);
+
+        // t3.enter().append("rect")
+        //       .attr("class" , classfn)
+        //       .attr("x" , function(d){return x(-d.fn);})
+        //       .attr("y" , function(d){ return y(d.probability);})
+        //       .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
+        //       .attr("height" , function(d){return y.rangeBand()})
+        //       .on('mouseover', tipFN.show)
+        //       .on('mouseout', tipFN.hide);
+
+        // t4.enter().append("rect")
+        //       .attr("class" , classtn)
+        //       .attr("x" , function(d){return x(-d.fn-d.tn);})
+        //       .attr("y" , function(d){return y(d.probability);})
+        //       .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+        //       .attr("height" , function(d){return y.rangeBand()})
+        //       .on('mouseover', tipTN.show)
+        //       .on('mouseout', tipTN.hide);
+        
+
+
+        // t1.exit().transition().remove();
+        // t2.exit().transition().remove();
+        // t3.exit().transition().remove();
+        // t4.exit().transition().remove();
+
+    }
+
+    // this.makeHistograms();
 
   }
-
-
-
-
-
-
 
 
 }// end of class
