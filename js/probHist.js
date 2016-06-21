@@ -340,30 +340,7 @@ function ProbHist(model , pane) {
                 .tickSize(1)
                 .tickFormat(function(d){ return Math.abs(d);});
 
-     var y = d3.scale.ordinal()
-                .domain(newd.map(function(d){ return d.probability;}))
-                .rangeRoundBands([0, height] , 0.1);
-
-                // console.log(y(.2));
-                // console.log(y(.3));
-
-  
-        
-        var yAxis = d3.svg.axis()
-                    .scale(y)
-                    .orient("left")
-                    .tickValues(y.domain().filter(function(d,i){ 
-                      if(this.bins <= 15) return true;
-
-                      return !(i%(2)); } ))
-                    .tickSize(0)
-                    .tickPadding(3);
-
-        var yAxis2 = d3.svg.axis()
-                    .scale(y)
-                    .orient("left")
-                    .tickFormat("")
-                    .tickSize(-1);
+     
 
 
 
@@ -381,7 +358,16 @@ function ProbHist(model , pane) {
 
     for(i in this.histData){
 
-       var y = d3.scale.ordinal()
+       
+
+
+
+
+
+        newd = this.histData[i];
+        name = this.classNames[i];
+
+        var y = d3.scale.ordinal()
                 .domain(newd.map(function(d){ return d.probability;}))
                 .rangeRoundBands([0, height] , 0.1);
 
@@ -405,13 +391,6 @@ function ProbHist(model , pane) {
                     .orient("left")
                     .tickFormat("")
                     .tickSize(-1);
-
-
-
-
-
-        newd = this.histData[i];
-        name = this.classNames[i];
 
         pane.selectAll("."+name+".bar-tp").data(newd);
         pane.selectAll("."+name+".bar-tn").data(newd);
