@@ -10,17 +10,16 @@ function ProbHist(model , pane) {
   this.predicted = model.predicted;
   this.classNames = model.classNames;
 
-  // pane = pane;
-
   this.dataOptions = {
     tp : true,
     tn : true,
     fp : true,
     fn : true
   }
+
   this.probLimits = [0.00 , 1.00];
-  // this.probBegin = 0.00;
-  // this.probEnd = 1.00;
+  this.tnFilter = 0.00;
+  this.tpFilter = 1.00;
   this.bins = 10;
   this.histData = [];
   this.max = {
@@ -117,15 +116,18 @@ function ProbHist(model , pane) {
       }
       for(j in data){
         for(k in preparedData){
-          // console.log(data[j]);
-          // console.log(prob);
-          // console.log(data[j][prob]);
-          if(data[j][prob] < preparedData[k].probability){ 
-            if(this.dataOptions[data[j][name].toLowerCase()])
-              preparedData[k][data[j][name].toLowerCase()]++;
 
-              // console.log(this.dataOptions[data[j][name].toLowerCase()]);
-              // console.log(preparedData[k][data[j][name].toLowerCase()]);
+          if(data[j][name].toLowerCase() == "tn" && data[j][prob] < this.tnFilter){
+            break;
+          }
+
+          if(data[j][name].toLowerCase() == "tp" && data[j][prob] > this.tpFilter){
+            break;
+          }
+          
+          if(data[j][prob] < preparedData[k].probability){ 
+            if(this.dataOptions[data[j][name].toLowerCase()] && data[j][prob] >= this.probLimits[0])
+              preparedData[k][data[j][name].toLowerCase()]++;            
             
             break;
           }
@@ -316,29 +318,24 @@ function ProbHist(model , pane) {
   this.prepareData();
   this.makeHistograms();
 
-
-
-
-
-
-  this.updateSwitch = function(){
+ // this.updateSwitch = function(){
 
     
 
-    this.prepareData();
-    // this.makeHistograms();
-    // console.log(this.histData)
-    scl = Math.max(this.max.left , this.max.right);
+  //   this.prepareData();
+  //   // this.makeHistograms();
+  //   // console.log(this.histData)
+  //   scl = Math.max(this.max.left , this.max.right);
 
-    var x = d3.scale.linear()
-            .domain([-scl , scl])
-            .rangeRound([0, width]);
+  //   var x = d3.scale.linear()
+  //           .domain([-scl , scl])
+  //           .rangeRound([0, width]);
 
-    var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom")
-                .tickSize(1)
-                .tickFormat(function(d){ return Math.abs(d);});
+  //   var xAxis = d3.svg.axis()
+  //               .scale(x)
+  //               .orient("bottom")
+  //               .tickSize(1)
+  //               .tickFormat(function(d){ return Math.abs(d);});
 
      
 
@@ -346,17 +343,17 @@ function ProbHist(model , pane) {
 
 
 
-    var transitionScale = pane.transition().duration(500);
+  //   var transitionScale = pane.transition().duration(500);
 
-    transitionScale.selectAll(".x.axis")
-              .call(xAxis)
-              .selectAll("text")  
-                  .style("text-anchor", "end")
-                  .attr("dx", "-.8em")
-                  .attr("dy", ".15em")
-                  .attr("transform", "rotate(-90)" );
+  //   transitionScale.selectAll(".x.axis")
+  //             .call(xAxis)
+  //             .selectAll("text")  
+  //                 .style("text-anchor", "end")
+  //                 .attr("dx", "-.8em")
+  //                 .attr("dy", ".15em")
+  //                 .attr("transform", "rotate(-90)" );
 
-    for(i in this.histData){
+  //   for(i in this.histData){
 
        
 
@@ -364,77 +361,75 @@ function ProbHist(model , pane) {
 
 
 
-        newd = this.histData[i];
-        name = this.classNames[i];
+  //       newd = this.histData[i];
+  //       name = this.classNames[i];
 
-        var y = d3.scale.ordinal()
-                .domain(newd.map(function(d){ return d.probability;}))
-                .rangeRoundBands([0, height] , 0.1);
+  //       var y = d3.scale.ordinal()
+  //               .domain(newd.map(function(d){ return d.probability;}))
+  //               .rangeRoundBands([0, height] , 0.1);
 
-                // console.log(y(.2));
-                // console.log(y(.3));
+  //               // console.log(y(.2));
+  //               // console.log(y(.3));
 
   
         
-        var yAxis = d3.svg.axis()
-                    .scale(y)
-                    .orient("left")
-                    .tickValues(y.domain().filter(function(d,i){ 
-                      if(this.bins <= 15) return true;
+  //       var yAxis = d3.svg.axis()
+  //                   .scale(y)
+  //                   .orient("left")
+  //                   .tickValues(y.domain().filter(function(d,i){ 
+  //                     if(this.bins <= 15) return true;
 
-                      return !(i%(2)); } ))
-                    .tickSize(0)
-                    .tickPadding(3);
+  //                     return !(i%(2)); } ))
+  //                   .tickSize(0)
+  //                   .tickPadding(3);
 
-        var yAxis2 = d3.svg.axis()
-                    .scale(y)
-                    .orient("left")
-                    .tickFormat("")
-                    .tickSize(-1);
+  //       var yAxis2 = d3.svg.axis()
+  //                   .scale(y)
+  //                   .orient("left")
+  //                   .tickFormat("")
+  //                   .tickSize(-1);
 
-        pane.selectAll("."+name+".bar-tp").data(newd);
-        pane.selectAll("."+name+".bar-tn").data(newd);
-        pane.selectAll("."+name+".bar-fn").data(newd);
-        pane.selectAll("."+name+".bar-fp").data(newd);
-
-
-        var trans = pane.transition().duration(500);
-
-        trans.selectAll("."+name+".bar-tp")
-              .attr("x" , function(d){return x(0);})
-                      .attr("y" , function(d){return y(d.probability);})
-                      .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
-                      .attr("height" , function(d){return y.rangeBand()});
-
-        trans.selectAll("."+name+".bar-fp")
-              .attr("x" , function(d){return x(d.tp);})
-                      .attr("y" , function(d){return y(d.probability);})
-                      .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
-                      .attr("height" , function(d){return y.rangeBand()});
-
-        trans.selectAll("."+name+".bar-fn")
-              .attr("x" , function(d){return x(-d.fn);})
-                      .attr("y" , function(d){return y(d.probability);})
-                      .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
-                      .attr("height" , function(d){return y.rangeBand()});
-
-        trans.selectAll("."+name+".bar-tn")
-              .attr("x" , function(d){return x(-d.fn-d.tn);})
-                      .attr("y" , function(d){return y(d.probability);})
-                      .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
-                      .attr("height" , function(d){return y.rangeBand()});
+  //       pane.selectAll("."+name+".bar-tp").data(newd);
+  //       pane.selectAll("."+name+".bar-tn").data(newd);
+  //       pane.selectAll("."+name+".bar-fn").data(newd);
+  //       pane.selectAll("."+name+".bar-fp").data(newd);
 
 
+  //       var trans = pane.transition().duration(500);
+
+  //       trans.selectAll("."+name+".bar-tp")
+  //             .attr("x" , function(d){return x(0);})
+  //                     .attr("y" , function(d){return y(d.probability);})
+  //                     .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
+  //                     .attr("height" , function(d){return y.rangeBand()});
+
+  //       trans.selectAll("."+name+".bar-fp")
+  //             .attr("x" , function(d){return x(d.tp);})
+  //                     .attr("y" , function(d){return y(d.probability);})
+  //                     .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
+  //                     .attr("height" , function(d){return y.rangeBand()});
+
+  //       trans.selectAll("."+name+".bar-fn")
+  //             .attr("x" , function(d){return x(-d.fn);})
+  //                     .attr("y" , function(d){return y(d.probability);})
+  //                     .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
+  //                     .attr("height" , function(d){return y.rangeBand()});
+
+  //       trans.selectAll("."+name+".bar-tn")
+  //             .attr("x" , function(d){return x(-d.fn-d.tn);})
+  //                     .attr("y" , function(d){return y(d.probability);})
+  //                     .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+  //                     .attr("height" , function(d){return y.rangeBand()});
 
 
-    }
 
-  }
 
-  this.applySettings = function(bins , probs){
-    if(this.probLimits != probs.map(Number)) this.probLimits = probs.map(Number);
-    if(this.bins != Number(bins))this.bins = Number(bins);
+  //   }
 
+  // }
+
+  this.applySettings = function(){
+   
    
   
 
