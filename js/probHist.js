@@ -199,7 +199,11 @@ function ProbHist(model , pane) {
                 .scale(x)
                 .orient("bottom")
                 .tickSize(1)
-                .tickFormat(function(d){ return Math.abs(d);});
+                .tickFormat(function(d){ 
+                  f = Math.abs(d);
+                  if(f>=1000) return(Math.round(f/1000) + "K");
+                  else return f;
+                });
 
                 // .tickFormat(d3.format)
     
@@ -428,12 +432,7 @@ function ProbHist(model , pane) {
 
   // }
 
-  this.applySettings = function(){
-   
-   
-  
-
-    
+  this.applySettings = function(){   
     
     // console.log(this.bins);
     // console.log(this.probLimits);
@@ -478,7 +477,11 @@ function ProbHist(model , pane) {
                     .scale(x)
                     .orient("bottom")
                     .tickSize(1)
-                    .tickFormat(function(d){ return Math.abs(d);});
+                    .tickFormat(function(d){ 
+                      f = Math.abs(d);
+                      if(f>=1000) return(Math.round(f/1000) + "K");
+                      else return f;
+                    });
 
                     // .tickFormat(d3.format)
         
@@ -604,89 +607,12 @@ function ProbHist(model , pane) {
         transitionScale.select("."+newname+".y.axis2")
                     .call(yAxis2)
 
-                    pane.select("."+newname+".x.axis").moveToFront();
+        pane.select("."+newname+".x.axis").moveToFront();
 
-                    pane.select("."+newname+".y.axis2").moveToFront();
-                      // .attr("stroke" , "red");
-      
-
-
-        // t1 = pane.selectAll("."+name+".bar-tp").data(newd);
-        // t2 = pane.selectAll("."+name+".bar-fp").data(newd);
-        // t3 = pane.selectAll("."+name+".bar-fn").data(newd);
-        // t4 = pane.selectAll("."+name+".bar-tn").data(newd);
-
-
-
-
-
-        // t1.attr("x" , function(d){return x(0);})
-        //       .attr("y" , function(d){return y(d.probability);})
-        //       .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
-        //       .attr("height" , function(d){return y.rangeBand()});
-
-        // t2.attr("x" , function(d){return x(d.tp);})
-        //       .attr("y" , function(d){ return y(d.probability);})
-        //       .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
-        //       .attr("height" , function(d){return y.rangeBand()});
-
-        // t3.attr("x" , function(d){return x(-d.fn);})
-        //       .attr("y" , function(d){return y(d.probability);})
-        //       .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
-        //       .attr("height" , function(d){return y.rangeBand()});
-
-        // t4.attr("x" , function(d){return x(-d.fn-d.tn);})
-        //       .attr("y" , function(d){return y(d.probability);})
-        //       .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
-        //       .attr("height" , function(d){return y.rangeBand()});
-
-        // t1.enter().append("rect")
-        //       .attr("class" , classtp)
-        //       .attr("x" , function(d){return x(0);})
-        //       .attr("y" , function(d){return y(d.probability);})
-        //       .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
-        //       .attr("height" , function(d){return y.rangeBand()})
-        //       .on('mouseover', tipTP.show)
-        //       .on('mouseout', tipTP.hide);
-
-
-        // t2.enter().append("rect")
-        //       .attr("class" , classfp)
-        //       .attr("x" , function(d){return x(d.tp);})
-        //       .attr("y" , function(d){return y(d.probability);})
-        //       .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
-        //       .attr("height" , function(d){return y.rangeBand()})
-        //       .on('mouseover', tipFP.show)
-        //       .on('mouseout', tipFP.hide);
-
-        // t3.enter().append("rect")
-        //       .attr("class" , classfn)
-        //       .attr("x" , function(d){return x(-d.fn);})
-        //       .attr("y" , function(d){ return y(d.probability);})
-        //       .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
-        //       .attr("height" , function(d){return y.rangeBand()})
-        //       .on('mouseover', tipFN.show)
-        //       .on('mouseout', tipFN.hide);
-
-        // t4.enter().append("rect")
-        //       .attr("class" , classtn)
-        //       .attr("x" , function(d){return x(-d.fn-d.tn);})
-        //       .attr("y" , function(d){return y(d.probability);})
-        //       .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
-        //       .attr("height" , function(d){return y.rangeBand()})
-        //       .on('mouseover', tipTN.show)
-        //       .on('mouseout', tipTN.hide);
-        
-
-
-        // t1.exit().transition().remove();
-        // t2.exit().transition().remove();
-        // t3.exit().transition().remove();
-        // t4.exit().transition().remove();
-
+        pane.select("."+newname+".y.axis2").moveToFront();
+                      
     }
 
-    // this.makeHistograms();
 
   }
 
