@@ -157,7 +157,7 @@ function ProbHist(model , pane) {
 
     var y = d3.scale.ordinal()
             .domain(data.map(function(d){ return d.probability;}))
-            .rangeRoundBands([0, height] , 0.1);
+            .rangeRoundBands([height , 0] , 0.1);
 
     var xAxis = d3.svg.axis()
                 .scale(x)
@@ -309,7 +309,7 @@ function ProbHist(model , pane) {
 
       var y = d3.scale.ordinal()
               .domain(newd.map(function(d){ return d.probability;}))
-              .rangeRoundBands([0, height] , 0.1);
+              .rangeRoundBands([height , 0] , 0.1);
       
       var yAxis = d3.svg.axis()
                   .scale(y)
