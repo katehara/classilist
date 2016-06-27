@@ -1,5 +1,6 @@
 function Model (data){
 
+	//Model variables for Dataset metadata
 	this.data = data;
 	this.headers = getColumns(this.data);
 	this.nCols = getNCols(this.headers);
@@ -10,18 +11,9 @@ function Model (data){
 	this.classNames = getClassNames(this.data , this.target);
 	// this.confusionMatrix = getConfusionMatrix(data, classNames, target, predicted);
 	labeledData = labelData(this.data, this.classNames, this.target, this.predicted);
-	// console.log(labeledData);
-
-	// prepareData(data, classNames, defaultBin, histData, max);
-
-	// makeHistograms(histData, classNames, pane, Math.max(max.left , max.right));
-
 }
 
-
-
-
-
+//
 function labelData(data, classNames, target, predicted){
 	for(j in classNames){
 		name = classNames[j];
@@ -38,7 +30,7 @@ function labelData(data, classNames, target, predicted){
 	return data;
 }
 
-// get column names
+// get all column names
 function getColumns(data){
 	  var names = d3.keys(data[0]);
 	  return names;
