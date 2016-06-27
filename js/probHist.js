@@ -24,15 +24,21 @@ function ProbHist(model , pane) {
     left : 0
   }
 
-  w=(pane.node().getBoundingClientRect().width - 30)/3;
+  w=(pane.node().getBoundingClientRect().width - 30)/4;
   var margin = {
     top: 20,
     right: 20,
-    bottom: 30,
-    left: 30
+    bottom: 20,
+    left: 20
   },
-  width = Math.max(200,w) - margin.left - margin.right,
+  width = Math.max(198,w) - margin.left - margin.right,
   height = Math.max(200,w) - margin.top - margin.bottom;
+
+// console.log(navigator.appName);
+  // if ($.browser.mozilla) {
+  //   width = Math.max(180,w) - margin.left - margin.right,
+  //   height = Math.max(180,w) - margin.top - margin.bottom;
+  // }
 
   d3.selection.prototype.moveToFront = function() {  
     return this.each(function(){
@@ -140,8 +146,6 @@ function ProbHist(model , pane) {
     }
   }
 
-
-
   // make a probability histogram
   this.probabilityHistogram = function(data, name){
     
@@ -152,7 +156,7 @@ function ProbHist(model , pane) {
     classfn = name + " bar-fn";
        
     var x = d3.scale.linear()
-            .domain([-scl , scl])
+            .domain([-scl , scl]).nice()
             .rangeRound([0, width]);
 
     var y = d3.scale.ordinal()
@@ -162,6 +166,7 @@ function ProbHist(model , pane) {
     var xAxis = d3.svg.axis()
                 .scale(x)
                 .orient("bottom")
+                .ticks(5)
                 .tickSize(1)
                 .tickFormat(function(d){ 
                   f = Math.abs(d);
@@ -173,8 +178,9 @@ function ProbHist(model , pane) {
                 .scale(y)
                 .orient("left")
                 .tickValues(y.domain().filter(function(d,i){ 
-                      if(this.bins <= 15) return true;
-                      return !(i%(2)); } ))
+                  if(i == 0 || i == (this.bins-1) || i == Math.floor((this.bins)/2)) return true;
+                  return false;
+                }))
                 .tickSize(0)
                 .tickPadding(3);
 
@@ -244,12 +250,7 @@ function ProbHist(model , pane) {
     svg.append("g")
       .attr("class" , name + " x axis")
       .attr("transform" , "translate(0," + height + ")")
-      .call(xAxis)
-      .selectAll("text")  
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", ".15em")
-            .attr("transform", "rotate(-90)" );
+      .call(xAxis);
 
     svg.append("g")
       .attr("class" , name + " y axis")
@@ -290,16 +291,14 @@ function ProbHist(model , pane) {
       classfp = newname + " bar-fp";
       classfn = newname + " bar-fn";
 
-      var transitionScale = pane.transition().duration(500);
-
-
       var x = d3.scale.linear()
-              .domain([-scl , scl])
+              .domain([-scl , scl]).nice()
               .rangeRound([0, width]);
 
       var xAxis = d3.svg.axis()
                   .scale(x)
                   .orient("bottom")
+                  .ticks(5)
                   .tickSize(1)
                   .tickFormat(function(d){ 
                     f = Math.abs(d);
@@ -315,8 +314,10 @@ function ProbHist(model , pane) {
                   .scale(y)
                   .orient("left")
                   .tickValues(y.domain().filter(function(d,i){ 
-                    if(this.bins <= 15) return true;
-                    return !(i%(2)); } ))
+                    if(i == 0 || i == (this.bins-1) || i == Math.round((this.bins-1)/2) || i == Math.round((this.bins-1)/4) || i == Math.round(3*(this.bins-1)/4)) 
+                      return true;
+                    return false; 
+                  }))
                   .tickSize(0)
                   .tickPadding(3);
 
@@ -326,15 +327,10 @@ function ProbHist(model , pane) {
                   .tickFormat("")
                   .tickSize(-1);
 
-      if(xTransition){
-        transitionScale.select("."+newname+".x.axis")
-                  .call(xAxis)
-                  .selectAll("text")  
-                      .style("text-anchor", "end")
-                      .attr("dx", "-.8em")
-                      .attr("dy", ".15em")
-                      .attr("transform", "rotate(-90)" );
-      }
+      var transitionScale = pane.transition().duration(500);
+
+      transitionScale.select("."+newname+".x.axis")
+                  .call(xAxis);
 
       transitionScale.select("."+newname+".y.axis")
                   .call(yAxis)
@@ -364,7 +360,6 @@ function ProbHist(model , pane) {
                     .selectAll("."+newname+".bar-tn")
                     .data(newd, function(d , i){return d.probability;});
 
-
       recttn.enter().append("rect")
              .attr("class" , classtn)
              .on('mouseover', tipTN.show)
@@ -387,7 +382,6 @@ function ProbHist(model , pane) {
             .attr("class" , classfn)
             .on('mouseover', tipFN.show)
             .on('mouseout', tipFN.hide);
-
 
       rectfn.transition()
                     .duration(1000)                    

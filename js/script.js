@@ -5,6 +5,10 @@ $(document).ready(function(){
 
 	//bind container for visualization svg
 	var centralPane = d3.select(".central-pane");
+	// var row = d3.select(".left-pane");
+	// h=(row.node().getBoundingClientRect().height);
+
+	// centralPane.attr("height" , h+"px").attr("overflow-y" , "scroll");
 
 	//initialize and setup slider for zooming in/out probabilities
 	var probabilitySlider = document.getElementById('probability-zoom');

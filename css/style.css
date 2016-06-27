@@ -2,6 +2,10 @@ html, body {
 	height : 100%;
 }
 
+* {
+	font: normal 14px "roboto", sans-serif;
+}
+
 nav {
 	color : #fff;
 	background-color: #5e35b1;
@@ -21,8 +25,8 @@ nav {
 }
 
 .collapsible-body {
-	padding-left: 2em;
-	padding-right: 2em;
+	padding-left: 1em;
+	padding-right: 1em;
 	background-color: #ede7f6;
 }
 
@@ -30,10 +34,6 @@ nav {
 	font-size: .7em;
 	opacity : 0.5;
 	padding : .3em;
-}
-
-.collapsible-body .switch {
-	padding : .5em;
 }
 
 label {
@@ -75,11 +75,11 @@ label {
 }
 
 #probability-zoom , #rebin , #filter-high-tp , #filter-low-tn{
-	margin : 1em auto;
+	margin : 0.7em 0.3em;
 }
 
 .noUi-horizontal {
-    height: .5em;
+    height: .4em;
 }
 
 .noUi-handle:after, .noUi-handle:before {
@@ -144,7 +144,7 @@ label {
 }
 
 .btn-floating {
-	margin : 0.5em 2em;
+	margin : 0.5em 0.5em;
 }
 
 .material-tooltip {
@@ -165,14 +165,20 @@ label {
 
 
 
+/*.central-pane.col.m7{
+	width : 50.5%;
 
-
-.main-visual {
+}
+*/
+.probability-histograms {
+	margin-top: 1em;
 	width : 100%;
+	height : 38em;
+	overflow-y: scroll;
 }
 
 .probability-histograms svg {
-	margin: 1em 0.2em;
+	margin: 0.2em;
 	border : 1px solid #5e35b1;
 	border-radius: 3px;
 	background-color: #ede7f6;
@@ -186,6 +192,7 @@ label {
 .tick text {
 	font-size: .6em;
 }
+
 
 svg .bar-tp {
 	fill : #00c853;
