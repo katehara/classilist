@@ -5,39 +5,44 @@ $(document).ready(function(){
 
 	//bind container for visualization svg
 	var centralPane = d3.select(".central-pane");
-	// var row = d3.select(".left-pane");
-	// h=(row.node().getBoundingClientRect().height);
 
-	// centralPane.attr("height" , h+"px").attr("overflow-y" , "scroll");
+	//initialize settigns
+	var settings = new Settings();
+
+	//bind container for Data View
+	var dataPane = d3.select("#data-samples");
+
+	//bind container for Feature View 	
+	var featurePane = d3.select("#feature-view");
 
 	//initialize and setup slider for zooming in/out probabilities
 	var probabilitySlider = document.getElementById('probability-zoom');
 	  noUiSlider.create(probabilitySlider, {
-	   start: [0.00, 1],
+	   start: settings.probLimits,
 	   behaviour: 'drag-tap',
 	   connect: true,
 	   tooltips : true,
-	   step: 0.01,
+	   step: settings.stepProb,
 	   range: {
-	     'min': 0,
-	     'max': 1
+	     'min': settings.minProb,
+	     'max': settings.maxProb
 	   }	  
 	  });
 
 	//initialize and setup slider for increase or decrease in histogram bins
 	var binSlider = document.getElementById('rebin');
 	  noUiSlider.create(binSlider, {
-	   	start: [10],
+	   	start: settings.bins,
 	   	connect : 'lower',
 	   	tooltips : true,
 	   	format: wNumb({
 	        decimals: 0,
 	        thousand: ',',
 	    }),
-	   	step: 1,
+	   	step: settings.stepBins,
 	   	range: {
-		     'min': 1,
-		     'max': 30
+		     'min': settings.minBins,
+		     'max': settings.maxBins
 	   	}	  
 	  });
 
@@ -79,29 +84,35 @@ $(document).ready(function(){
 		probabilityPane = centralPane.append("div").attr("class" , "probability-histograms")
 
 		//initialize class probability histograms
-		var probHist = new ProbHist(model , probabilityPane);
+		var probHist = new ProbHist(model , settings , probabilityPane);
+
+		//initialize pane for visualizing class probabilities
+		// tabbedPane = rightPane.append("div").attr("class" , "tabbed-view");
+
+		// //initialize class probability histograms
+		// var probHist = new ProbHist(model , probabilityPane);
 
 		// action listener for TP switch
 		d3.select(".switch-tp").on("change", function(d){
-			probHist.dataOptions.tp = this.checked;
+			settings.dataOptions.tp = this.checked;
 			probHist.applySettings();
 		});
 
 		// action listener for FP switch
 		d3.select(".switch-fp").on("change", function(d){
-			probHist.dataOptions.fp = this.checked;
+			settings.dataOptions.fp = this.checked;
 			probHist.applySettings();
 		});
 
 		// action listener for TN switch
 		d3.select(".switch-tn").on("change", function(d){
-			probHist.dataOptions.tn = this.checked;
+			settings.dataOptions.tn = this.checked;
 			probHist.applySettings();
 		});
 
 		// action listener for FN switch
 		d3.select(".switch-fn").on("change", function(d){
-			probHist.dataOptions.fn = this.checked;
+			settings.dataOptions.fn = this.checked;
 			probHist.applySettings();
 		});
 
@@ -111,17 +122,15 @@ $(document).ready(function(){
 			probs = [0.00 , 1.00];
 			binSlider.noUiSlider.set(bins);
 			probabilitySlider.noUiSlider.set(probs);
-			probHist.bins = bins;
-			probHist.probLimits = probs;
+			settings.bins = bins;
+			settings.probLimits = probs;
 			probHist.applySettings();
 		});
 
 		// apply new probability window and rebin settings to histograms
 		d3.select(".apply").on("click" , function(){
-			bins = binSlider.noUiSlider.get();
-			probs = probabilitySlider.noUiSlider.get();
-			probHist.bins = Number(bins);
-			probHist.probLimits = probs.map(Number);
+			settings.bins = Number(binSlider.noUiSlider.get());
+			settings.probLimits = probabilitySlider.noUiSlider.get().map(Number);
 			probHist.applySettings();
 		});
 
@@ -136,14 +145,14 @@ $(document).ready(function(){
 	 	//action listener for High-TP filter
 	   	tpSlider.noUiSlider.on("update" , function(values){
 	   		value = Number(values);
-	   		probHist.tpFilter = value;
+	   		settings.tpFilter = value;
 	   		probHist.applySettings();
 	  	});
 
 	   	// action listener for low TN filter
 	   	tnSlider.noUiSlider.on("update" , function(values){
 	   		value = Number(values);
-	   		probHist.tnFilter = value;
+	   		settings.tnFilter = value;
 	   		probHist.applySettings();
 	  	});
 

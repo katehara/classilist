@@ -1,4 +1,4 @@
-function ProbHist(model , pane) {
+function ProbHist(model , settings , pane) {
 
   this.data = model.data;
   this.headers = model.headers;
@@ -8,16 +8,16 @@ function ProbHist(model , pane) {
   this.target = model.target;
   this.predicted = model.predicted;
   this.classNames = model.classNames;
-  this.dataOptions = {
-    tp : true,
-    tn : true,
-    fp : true,
-    fn : true
-  }
-  this.probLimits = [0.00 , 1.00];
-  this.tnFilter = 0.00;
-  this.tpFilter = 1.00;
-  this.bins = 10;
+  // settings.dataOptions = {
+  //   tp : true,
+  //   tn : true,
+  //   fp : true,
+  //   fn : true
+  // }
+  // settings.probLimits = [0.00 , 1.00];
+  // settings.tnFilter = 0.00;
+  // settings.tpFilter = 1.00;
+  // settings.bins = 10;
   this.histData = [];
   this.max = {
     right : 0,
@@ -73,13 +73,13 @@ function ProbHist(model , pane) {
 
   // prepare bin boundaries acc to no of bins
   this.getBinValues = function(){
-    bins = this.bins;
+    bins = settings.bins;
     array = [];
-    k = (this.probLimits[1] - this.probLimits[0])/bins;
+    k = (settings.probLimits[1] - settings.probLimits[0])/bins;
     num=0;
     for(i=1;i<=bins;i++){
       num = i*k;
-      num = Math.round((this.probLimits[0] + num) * 100) / 100;
+      num = Math.round((settings.probLimits[0] + num) * 100) / 100;
       array.push( num);
     }
     return array;
@@ -89,7 +89,7 @@ function ProbHist(model , pane) {
   this.prepareData = function(){
     data = this.data;
     classes = this.classNames;
-    bins = this.bins;
+    bins = settings.bins;
     this.histData = [];
     this.max.right = this.max.left = 0;
     binSize = 1/bins;
@@ -112,16 +112,16 @@ function ProbHist(model , pane) {
       for(j in data){
         for(k in preparedData){
 
-          if(data[j][name].toLowerCase() == "tn" && data[j][prob] < this.tnFilter){
+          if(data[j][name].toLowerCase() == "tn" && data[j][prob] < settings.tnFilter){
             break;
           }
 
-          if(data[j][name].toLowerCase() == "tp" && data[j][prob] > this.tpFilter){
+          if(data[j][name].toLowerCase() == "tp" && data[j][prob] > settings.tpFilter){
             break;
           }
           
           if(data[j][prob] < preparedData[k].probability){ 
-            if(this.dataOptions[data[j][name].toLowerCase()] && data[j][prob] >= this.probLimits[0])
+            if(settings.dataOptions[data[j][name].toLowerCase()] && data[j][prob] >= settings.probLimits[0])
               preparedData[k][data[j][name].toLowerCase()]++;            
             
             break;
@@ -178,7 +178,7 @@ function ProbHist(model , pane) {
                 .scale(y)
                 .orient("left")
                 .tickValues(y.domain().filter(function(d,i){ 
-                  if(i == 0 || i == (this.bins-1) || i == Math.floor((this.bins)/2)) return true;
+                  if(i == 0 || i == (settings.bins-1) || i == Math.floor((settings.bins)/2)) return true;
                   return false;
                 }))
                 .tickSize(0)
@@ -314,7 +314,7 @@ function ProbHist(model , pane) {
                   .scale(y)
                   .orient("left")
                   .tickValues(y.domain().filter(function(d,i){ 
-                    if(i == 0 || i == (this.bins-1) || i == Math.round((this.bins-1)/2) || i == Math.round((this.bins-1)/4) || i == Math.round(3*(this.bins-1)/4)) 
+                    if(i == 0 || i == (settings.bins-1) || i == Math.round((settings.bins-1)/2) || i == Math.round((settings.bins-1)/4) || i == Math.round(3*(settings.bins-1)/4)) 
                       return true;
                     return false; 
                   }))

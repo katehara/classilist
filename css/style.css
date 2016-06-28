@@ -2,13 +2,17 @@ html, body {
 	height : 100%;
 }
 
-* {
+/** {
 	font: normal 14px "roboto", sans-serif;
-}
+}*/
 
 nav {
 	color : #fff;
 	background-color: #5e35b1;
+}
+
+.row .central-pane.col , .row .left-pane.col , .row .right-pane.col {
+	padding : 0 0.3rem;
 }
 
 .rotate90 {
@@ -163,13 +167,6 @@ label {
 
 
 
-
-
-/*.central-pane.col.m7{
-	width : 50.5%;
-
-}
-*/
 .probability-histograms {
 	margin-top: 1em;
 	width : 100%;
@@ -237,4 +234,56 @@ svg .bar-tn {
   margin: -1px 0 0 0;
   top: 100%;
   left: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*right -pane*/
+
+.tabbed-view {
+	margin-top: 1em;
+	width : 100%;
+/*	padding: 0 0.5em;
+*/}
+
+.tabbed-view .tabs .tab a {
+	color : #b39ddb;
+}
+
+.tabbed-view .tabs .tab a.active {
+	color : #fff;
+	font-size: 16px;
+}
+
+.tabbed-view .tabs .tab a:hover {
+	color : #fff;
+}
+
+.tabbed-view li.tab.col.s6 {
+	background-color: #5e35b1;
+	outline : 1px solid #fff;
+	border-radius: 10px 10px 0 0;
+}
+
+.tabbed-view .indicator {
+	background-color : #b39ddb; 
+}
+
+#data-samples {
+	overflow-x: scroll;
+	overflow-y: scroll;
 }

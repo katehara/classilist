@@ -4,7 +4,6 @@
 	<head>
 
 		<title>D3Plugin</title>
-		<script type="text/javascript" src="js/d3.v3.min.js"></script>
 		<link href='https://fonts.googleapis.com/css?family=Roboto:100' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
 		<link rel="stylesheet" type="text/css" href="css/nouislider.min.css"></link>
@@ -112,15 +111,29 @@
 			  </ul>
 
 		</div>
-		<div class="central-pane col s12 m6"></div>
-		<div class = "right-pane col s8 m4"></div>
+		<div class="central-pane col s8 m6"></div>
+		<div class = "right-pane col s12 m4">
+			<div class="row tabbed-view">
+			    <div class="col s12">
+			      <ul class="tabs">
+			        <li class="tab col s6"><a class="active" href="#data-samples">Data Samples</a></li>
+			        <li class="tab col s6"><a href="#feature-view">Feature View</a></li>
+			      </ul>
+			    </div>
+			    <div id="data-samples" class="col s12">Test Tab 1</div>
+			    <div id="feature-view" class="col s12">Test Tab 2</div>
+			  </div>
+
+		</div>
 	</div>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
+		<script type="text/javascript" src="js/d3.v3.min.js"></script>
+		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 		<script type="text/javascript" src="js/nouislider.min.js" ></script>
 		<script type="text/javascript" src="js/wNumb.js" ></script>
+		<script type="text/javascript" src="js/Settings.js" ></script>
 		<script type="text/javascript" src="js/probHist.js" ></script>		
 		<script type="text/javascript" src="js/model.js" ></script>
 		<script type="text/javascript" src="js/script.js" ></script>
