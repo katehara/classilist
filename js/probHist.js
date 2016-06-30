@@ -1,4 +1,4 @@
-function ProbHist(model , settings , pane) {
+function ProbHist(model , settings , pane , table) {
 
   this.data = model.data;
   this.headers = model.headers;
@@ -247,8 +247,68 @@ function ProbHist(model , settings , pane) {
         .text(name);
   }
 
+  this.bindTable = function() {
+
+      d3.selectAll(".bar-tp").on("click" , function(){
+        fullClass = d3.select(this).attr("class");
+        shortClass = fullClass.substr(0, fullClass.indexOf(" "));
+        settings.rightClass = shortClass;
+
+        prob = d3.select(this).data()[0].probability;
+        settings.updateProbBounds(prob);
+
+        settings.rightResult = "tp";
+
+        table.makeTable();
+
+      });
+
+      d3.selectAll(".bar-tn").on("click" , function(){
+        fullClass = d3.select(this).attr("class");
+        shortClass = fullClass.substr(0, fullClass.indexOf(" "));
+        settings.rightClass = shortClass;
+
+        prob = d3.select(this).data()[0].probability;
+        settings.updateProbBounds(prob);
+
+        settings.rightResult = "tn";
+
+        table.makeTable();
+
+      });
+
+      d3.selectAll(".bar-fp").on("click" , function(){
+        fullClass = d3.select(this).attr("class");
+        shortClass = fullClass.substr(0, fullClass.indexOf(" "));
+        settings.rightClass = shortClass;
+
+        prob = d3.select(this).data()[0].probability;
+        settings.updateProbBounds(prob);
+
+        settings.rightResult = "fp";
+
+        table.makeTable();
+
+      });
+
+      d3.selectAll(".bar-fn").on("click" , function(){
+        fullClass = d3.select(this).attr("class");
+        shortClass = fullClass.substr(0, fullClass.indexOf(" "));
+        settings.rightClass = shortClass;
+
+        prob = d3.select(this).data()[0].probability;
+        settings.updateProbBounds(prob);
+
+        settings.rightResult = "fn";
+
+        table.makeTable();
+
+      });
+  }
+
   this.prepareData();
   this.makeHistograms();
+  this.bindTable();
 
   this.applySettings = function(){   
     this.prepareData();
@@ -390,6 +450,8 @@ function ProbHist(model , settings , pane) {
       pane.select("."+newname+".x.axis").moveToFront();
 
       pane.select("."+newname+".y.axis2").moveToFront();
+
+      this.bindTable();
                       
     }
   }
