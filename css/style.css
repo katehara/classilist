@@ -257,8 +257,8 @@ svg .bar-tn {
 .tabbed-view {
 	margin-top: 1em;
 	width : 100%;
-/*	padding: 0 0.5em;
-*/}
+	height : 35em;
+}
 
 .tabbed-view .tabs .tab a {
 	color : #b39ddb;
@@ -284,6 +284,13 @@ svg .bar-tn {
 }
 
 #data-samples {
+	height : 100%;
 	overflow-x: scroll;
 	overflow-y: scroll;
+}
+
+td, th {
+	white-space: nowrap;
+	padding : 5px;
+	border : 1px;
 }

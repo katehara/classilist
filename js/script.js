@@ -75,7 +75,7 @@ $(document).ready(function(){
 	});
 	   
 	// read data
-	d3.csv("data/prob.csv", function (error, data) {
+	d3.csv("data/rapidminer.csv", function (error, data) {
 
 		//prepare data model do all basic calculations about data
 		var model = new Model(data);
@@ -85,6 +85,9 @@ $(document).ready(function(){
 
 		//initialize class probability histograms
 		var probHist = new ProbHist(model , settings , probabilityPane);
+
+		// initialize data table 
+		var table = new Table(model , settings , dataPane);
 
 		//initialize pane for visualizing class probabilities
 		// tabbedPane = rightPane.append("div").attr("class" , "tabbed-view");
@@ -156,10 +159,9 @@ $(document).ready(function(){
 	   		probHist.applySettings();
 	  	});
 
+	  	d3.selectAll(".bar-tp").on("click" , function(){
+	  		console.log(d3.select(this).attr("class"));
+	  		console.log(d3.select(this).data()[0].probability);
+	  	})
 	});
-
 });
-
-
-
-

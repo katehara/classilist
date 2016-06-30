@@ -8,16 +8,6 @@ function ProbHist(model , settings , pane) {
   this.target = model.target;
   this.predicted = model.predicted;
   this.classNames = model.classNames;
-  // settings.dataOptions = {
-  //   tp : true,
-  //   tn : true,
-  //   fp : true,
-  //   fn : true
-  // }
-  // settings.probLimits = [0.00 , 1.00];
-  // settings.tnFilter = 0.00;
-  // settings.tpFilter = 1.00;
-  // settings.bins = 10;
   this.histData = [];
   this.max = {
     right : 0,
@@ -72,18 +62,7 @@ function ProbHist(model , settings , pane) {
             })
 
   // prepare bin boundaries acc to no of bins
-  this.getBinValues = function(){
-    bins = settings.bins;
-    array = [];
-    k = (settings.probLimits[1] - settings.probLimits[0])/bins;
-    num=0;
-    for(i=1;i<=bins;i++){
-      num = i*k;
-      num = Math.round((settings.probLimits[0] + num) * 100) / 100;
-      array.push( num);
-    }
-    return array;
-  }
+  
 
   // prepare histogram data into bins and assign it to property -> histData[]
   this.prepareData = function(){
@@ -93,7 +72,7 @@ function ProbHist(model , settings , pane) {
     this.histData = [];
     this.max.right = this.max.left = 0;
     binSize = 1/bins;
-    binValues = this.getBinValues();
+    binValues = settings.getBinValues();
 
     for(i in classes){
       name = "L-"+classes[i];
@@ -102,7 +81,7 @@ function ProbHist(model , settings , pane) {
       preparedData = [];
       for(j in binValues){
         preparedData.push({
-          probability : binValues[j],
+          probability : binValues[j], // upper value for all buckets
           tn : 0,
           tp : 0,
           fn : 0,
@@ -120,17 +99,15 @@ function ProbHist(model , settings , pane) {
             break;
           }
           
-          if(data[j][prob] < preparedData[k].probability){ 
-            if(settings.dataOptions[data[j][name].toLowerCase()] && data[j][prob] >= settings.probLimits[0])
-              preparedData[k][data[j][name].toLowerCase()]++;            
+          if(settings.dataOptions[data[j][name].toLowerCase()] && 
+            data[j][prob] >= settings.probLimits[0] && data[j][prob] <= preparedData[k].probability){
+              preparedData[k][data[j][name].toLowerCase()]++;          
             
             break;
           }
-
         }
       }
 
-      // console.log(name);
       this.histData.push(preparedData);
       this.max.left = Math.max(this.max.left, d3.max(preparedData , function(d){return (d.tn+d.fn);} ));
       this.max.right = Math.max(this.max.right, d3.max(preparedData , function(d){return (d.tp+d.fp);} ));

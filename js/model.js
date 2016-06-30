@@ -10,7 +10,7 @@ function Model (data){
 	this.predicted = getPredicted(this.headers , this.nCols);
 	this.classNames = getClassNames(this.data , this.target);
 	// this.confusionMatrix = getConfusionMatrix(data, classNames, target, predicted);
-	labeledData = labelData(this.data, this.classNames, this.target, this.predicted);
+	this.labeledData = labelData(this.data, this.classNames, this.target, this.predicted);
 }
 
 //
