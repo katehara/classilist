@@ -63,9 +63,9 @@ function Settings(){
 
 
     this.updateProbBounds = function(upper){
-      binArray = this.getBinValues;
+      binArray = this.getBinValues();
       i = (binArray).indexOf(upper);
-      lower = binArray[++i];
+      lower = (i==0)? 0 : binArray[--i];
       this.rightProbBounds = [lower , upper];
     }
 

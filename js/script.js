@@ -75,7 +75,7 @@ $(document).ready(function(){
 	});
 	   
 	// read data
-	d3.csv("data/rapidminer.csv", function (error, data) {
+	d3.csv("data/prob.csv", function (error, data) {
 
 		//prepare data model do all basic calculations about data
 		var model = new Model(data);
@@ -88,12 +88,6 @@ $(document).ready(function(){
 
 		// initialize data table 
 		var table = new Table(model , settings , dataPane);
-
-		//initialize pane for visualizing class probabilities
-		// tabbedPane = rightPane.append("div").attr("class" , "tabbed-view");
-
-		// //initialize class probability histograms
-		// var probHist = new ProbHist(model , probabilityPane);
 
 		// action listener for TP switch
 		d3.select(".switch-tp").on("change", function(d){
@@ -160,8 +154,59 @@ $(document).ready(function(){
 	  	});
 
 	  	d3.selectAll(".bar-tp").on("click" , function(){
-	  		console.log(d3.select(this).attr("class"));
-	  		console.log(d3.select(this).data()[0].probability);
+	  		fullClass = d3.select(this).attr("class");
+	  		shortClass = fullClass.substr(0, fullClass.indexOf(" "));
+	  		settings.rightClass = shortClass;
+
+	  		prob = d3.select(this).data()[0].probability;
+	  		settings.updateProbBounds(prob);
+
+	  		settings.rightResult = "tp";
+
+	  		table.makeTable();
+
+	  	})
+
+	  	d3.selectAll(".bar-tn").on("click" , function(){
+	  		fullClass = d3.select(this).attr("class");
+	  		shortClass = fullClass.substr(0, fullClass.indexOf(" "));
+	  		settings.rightClass = shortClass;
+
+	  		prob = d3.select(this).data()[0].probability;
+	  		settings.updateProbBounds(prob);
+
+	  		settings.rightResult = "tn";
+
+	  		table.makeTable();
+
+	  	})
+
+	  	d3.selectAll(".bar-fp").on("click" , function(){
+	  		fullClass = d3.select(this).attr("class");
+	  		shortClass = fullClass.substr(0, fullClass.indexOf(" "));
+	  		settings.rightClass = shortClass;
+
+	  		prob = d3.select(this).data()[0].probability;
+	  		settings.updateProbBounds(prob);
+
+	  		settings.rightResult = "fp";
+
+	  		table.makeTable();
+
+	  	})
+
+	  	d3.selectAll(".bar-fn").on("click" , function(){
+	  		fullClass = d3.select(this).attr("class");
+	  		shortClass = fullClass.substr(0, fullClass.indexOf(" "));
+	  		settings.rightClass = shortClass;
+
+	  		prob = d3.select(this).data()[0].probability;
+	  		settings.updateProbBounds(prob);
+
+	  		settings.rightResult = "fn";
+
+	  		table.makeTable();
+
 	  	})
 	});
 });
