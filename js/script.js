@@ -75,6 +75,7 @@ $(document).ready(function(){
 	});
 	   
 	// read data
+	// d3.csv("data/rapidminer.csv", function (error, data) {
 	d3.csv("data/prob.csv", function (error, data) {
 
 		//prepare data model do all basic calculations about data
@@ -83,11 +84,14 @@ $(document).ready(function(){
 		// initialize data table 
 		var table = new Table(model , settings , dataPane);
 
+		//initialize Features Box Plots
+		var boxPlots = new BoxFeatures(model , settings , featurePane);
+
 		//initialize pane for visualizing class probabilities
 		probabilityPane = centralPane.append("div").attr("class" , "probability-histograms")
 
 		//initialize class probability histograms
-		var probHist = new ProbHist(model , settings , probabilityPane , table);
+		var probHist = new ProbHist(model , settings , probabilityPane , table , boxPlots);
 
 		// action listener for TP switch
 		d3.select(".switch-tp").on("change", function(d){
@@ -143,14 +147,14 @@ $(document).ready(function(){
 	   	tpSlider.noUiSlider.on("update" , function(values){
 	   		value = Number(values);
 	   		settings.tpFilter = value;
-	   		probHist.applySettings();
+	   		if(settings.tpFilter < settings.probLimits[1]) probHist.applySettings();
 	  	});
 
 	   	// action listener for low TN filter
 	   	tnSlider.noUiSlider.on("update" , function(values){
 	   		value = Number(values);
 	   		settings.tnFilter = value;
-	   		probHist.applySettings();
+	   		if(settings.tnFilter > settings.probLimits[0])probHist.applySettings();
 	  	});
 
 	  	

@@ -1,4 +1,4 @@
-function ProbHist(model , settings , pane , table) {
+function ProbHist(model , settings , pane , table , boxPlots) {
 
   this.data = model.data;
   this.headers = model.headers;
@@ -187,9 +187,7 @@ function ProbHist(model , settings , pane , table) {
               .attr("x" , function(d){return x(0);})
               .attr("y" , function(d){return y(d.probability);})
               .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
-              .attr("height" , function(d){return y.rangeBand()})
-              .on('mouseover', tipTP.show)
-              .on('mouseout', tipTP.hide);
+              .attr("height" , function(d){return y.rangeBand()});
 
     var fp = svg.selectAll("."+name + ".bar-fp")
               .data(data, function(d , i){return d.probability;})
@@ -198,9 +196,7 @@ function ProbHist(model , settings , pane , table) {
               .attr("x" , function(d){return x(d.tp);})
               .attr("y" , function(d){return y(d.probability);})
               .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
-              .attr("height" , function(d){return y.rangeBand()})
-              .on('mouseover', tipFP.show)
-              .on('mouseout', tipFP.hide);
+              .attr("height" , function(d){return y.rangeBand()});
 
     var fn = svg.selectAll("."+name + ".bar-fn")
               .data(data, function(d , i){return d.probability;})
@@ -209,9 +205,7 @@ function ProbHist(model , settings , pane , table) {
               .attr("x" , function(d){return x(-d.fn);})
               .attr("y" , function(d){return y(d.probability);})
               .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
-              .attr("height" , function(d){return y.rangeBand()})
-              .on('mouseover', tipFN.show)
-              .on('mouseout', tipFN.hide);
+              .attr("height" , function(d){return y.rangeBand()});
 
     var tn = svg.selectAll("."+name + ".bar-tn")
               .data(data, function(d , i){return d.probability;})
@@ -220,9 +214,7 @@ function ProbHist(model , settings , pane , table) {
               .attr("x" , function(d){return x(-d.fn-d.tn);})
               .attr("y" , function(d){return y(d.probability);})
               .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
-              .attr("height" , function(d){return y.rangeBand()})
-              .on('mouseover', tipTN.show)
-              .on('mouseout', tipTN.hide);
+              .attr("height" , function(d){return y.rangeBand()});
 
     svg.append("g")
       .attr("class" , name + " x axis")
@@ -247,9 +239,12 @@ function ProbHist(model , settings , pane , table) {
         .text(name);
   }
 
-  this.bindTable = function() {
+  this.bindEvents = function() {
 
-      d3.selectAll(".bar-tp").on("click" , function(){
+      d3.selectAll(".bar-tp")      
+        .on('mouseover', tipTP.show)
+        .on('mouseout', tipTP.hide)
+        .on("click" , function(){
         fullClass = d3.select(this).attr("class");
         shortClass = fullClass.substr(0, fullClass.indexOf(" "));
         settings.rightClass = shortClass;
@@ -260,10 +255,13 @@ function ProbHist(model , settings , pane , table) {
         settings.rightResult = "tp";
 
         table.makeTable();
-
+        boxPlots.applySettings();
       });
 
-      d3.selectAll(".bar-tn").on("click" , function(){
+      d3.selectAll(".bar-tn")
+        .on('mouseover', tipTN.show)
+        .on('mouseout', tipTN.hide)
+        .on("click" , function(){
         fullClass = d3.select(this).attr("class");
         shortClass = fullClass.substr(0, fullClass.indexOf(" "));
         settings.rightClass = shortClass;
@@ -274,10 +272,13 @@ function ProbHist(model , settings , pane , table) {
         settings.rightResult = "tn";
 
         table.makeTable();
-
+        boxPlots.applySettings();
       });
 
-      d3.selectAll(".bar-fp").on("click" , function(){
+      d3.selectAll(".bar-fp")
+        .on('mouseover', tipFP.show)
+        .on('mouseout', tipFP.hide)
+        .on("click" , function(){
         fullClass = d3.select(this).attr("class");
         shortClass = fullClass.substr(0, fullClass.indexOf(" "));
         settings.rightClass = shortClass;
@@ -288,10 +289,13 @@ function ProbHist(model , settings , pane , table) {
         settings.rightResult = "fp";
 
         table.makeTable();
-
+        boxPlots.applySettings();
       });
 
-      d3.selectAll(".bar-fn").on("click" , function(){
+      d3.selectAll(".bar-fn")
+        .on('mouseover', tipFN.show)
+        .on('mouseout', tipFN.hide)
+        .on("click" , function(){
         fullClass = d3.select(this).attr("class");
         shortClass = fullClass.substr(0, fullClass.indexOf(" "));
         settings.rightClass = shortClass;
@@ -302,13 +306,13 @@ function ProbHist(model , settings , pane , table) {
         settings.rightResult = "fn";
 
         table.makeTable();
-
+        boxPlots.applySettings();
       });
   }
 
   this.prepareData();
   this.makeHistograms();
-  this.bindTable();
+  this.bindEvents();
 
   this.applySettings = function(){   
     this.prepareData();
@@ -380,9 +384,7 @@ function ProbHist(model , settings , pane , table) {
                     .data(newd, function(d , i){return d.probability;});
 
       recttp.enter().append("rect")
-            .attr("class" , classtp)
-            .on('mouseover', tipTP.show)
-            .on('mouseout', tipTP.hide);
+            .attr("class" , classtp);
 
       recttp.transition()
                     .duration(1000)                    
@@ -398,9 +400,7 @@ function ProbHist(model , settings , pane , table) {
                     .data(newd, function(d , i){return d.probability;});
 
       recttn.enter().append("rect")
-             .attr("class" , classtn)
-             .on('mouseover', tipTN.show)
-              .on('mouseout', tipTN.hide);
+             .attr("class" , classtn);
 
       recttn.transition()
                     .duration(1000)                    
@@ -416,9 +416,7 @@ function ProbHist(model , settings , pane , table) {
                     .data(newd, function(d , i){return d.probability;});
 
       rectfn.enter().append("rect")
-            .attr("class" , classfn)
-            .on('mouseover', tipFN.show)
-            .on('mouseout', tipFN.hide);
+            .attr("class" , classfn);
 
       rectfn.transition()
                     .duration(1000)                    
@@ -434,9 +432,7 @@ function ProbHist(model , settings , pane , table) {
                     .data(newd, function(d , i){return d.probability;});
 
       rectfp.enter().append("rect")
-            .attr("class" , classfp)
-            .on('mouseover', tipFP.show)
-            .on('mouseout', tipFP.hide);
+            .attr("class" , classfp);
 
       rectfp.transition()
                     .duration(1000)                    
@@ -451,7 +447,7 @@ function ProbHist(model , settings , pane , table) {
 
       pane.select("."+newname+".y.axis2").moveToFront();
 
-      this.bindTable();
+      this.bindEvents();
                       
     }
   }

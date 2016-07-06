@@ -283,7 +283,7 @@ svg .bar-tn {
 	background-color : #b39ddb; 
 }
 
-#data-samples {
+#data-samples  , #feature-view{
 	height : 100%;
 	overflow-x: scroll;
 	overflow-y: scroll;
@@ -294,3 +294,4 @@ td, th {
 	padding : 5px;
 	border : 1px;
 }
+

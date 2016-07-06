@@ -5,14 +5,7 @@ function Table(model , settings , pane)
 	this.tableData = [];
 
 	this.makeTable = function(){
-
 		pane.select("*").remove();
-
-		pr = settings.rightProbBounds;
-		cls = settings.rightClass;
-		res = settings.rightResult;
-
-		console.log(pr + "  " + cls + "  "+ res);
 
 		var table = pane.append("table")
 						.attr("class" , "striped highlight");
@@ -34,19 +27,7 @@ function Table(model , settings , pane)
 						});
 
 		var rows = tbody.selectAll("tr")
-						.data((this.data).filter(function(d){
-							pr = settings.rightProbBounds;
-							cls = settings.rightClass;
-							res = settings.rightResult;
-
-							// if(cls != "all" && d[model.target] != cls) return false;
-
-							if(res != "all" && d["L-"+cls] != res.toUpperCase()) return false;
-
-							if(d["P-"+cls] < pr[0] || d["P-"+cls] > pr[1]) return false;
-
-							return true;
-						}))
+						.data(settings.rightFilteredData(this.data))
 						.enter()
 						.append("tr");
 

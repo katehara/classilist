@@ -11,6 +11,15 @@ function Model (data){
 	this.classNames = getClassNames(this.data , this.target);
 	// this.confusionMatrix = getConfusionMatrix(data, classNames, target, predicted);
 	this.labeledData = labelData(this.data, this.classNames, this.target, this.predicted);
+	this.numericData = numericData(this.data , this.features)
+}
+
+function numericData(data , names){
+	data.forEach(function(d){
+		for(j in names) 
+			if(!isNaN(d[names[j]])) 
+				d[names[j]] = +d[names[j]];
+	});
 }
 
 //
