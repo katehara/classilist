@@ -91,4 +91,6 @@ function Settings(){
 
     this.boxIQR = 1.5;
 
+    this.centerOverlap = false;
+
 }

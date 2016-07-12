@@ -1,6 +1,9 @@
 function Table(model , settings , pane)
 {
-	columns = model.headers;
+	columns = (model.headers).filter(function(d){
+					if(d.substr(0,2) != "P-") return true;
+					else return false;
+				});
 	this.data = model.data;
 	this.tableData = [];
 

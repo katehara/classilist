@@ -12,12 +12,12 @@ function BoxFeatures(model , settings , pane){
 	var y;
 
 	w = (pane.node().getBoundingClientRect().width)* 9/10;
-	h = (pane.node().getBoundingClientRect().width)/2;
+	h = (pane.node().getBoundingClientRect().height)*9.5/10;
 	var margin = {
 	    top: 30,
-	    right: 20,
+	    right: 10,
 	    bottom: 20,
-	    left: 20
+	    left: 60
 	},
 	width = w - margin.left - margin.right,
 	height = Math.max(250,h) - margin.top - margin.bottom;
@@ -148,29 +148,29 @@ function BoxFeatures(model , settings , pane){
 		
 		pane.select("*").remove();
 
-		width = Math.max(width , (this.boxData).length * 70);
+		height = Math.max(height/2 , (this.boxData).length * 15);
 
 
-		x = d3.scale.ordinal()
+		y = d3.scale.ordinal()
             	.domain(this.boxData.map(function(d){ return d.name;}))
-            	.rangeRoundBands([0 , width] , 0.3);
+            	.rangeRoundBands([height , 0] , 0.3);
 
-    	y = d3.scale.linear()
+    	x = d3.scale.linear()
         		.domain([this.min , this.max]).nice()
-        		.range([height , 0]);
+        		.range([0 , width/2]);
 		
 
         var xAxis = d3.svg.axis()
         			.scale(x)
         			.orient("bottom")
-        			.tickSize(1);        			
+        			.tickSize(1)
+        			.ticks(0);        			
 
         
         var yAxis = d3.svg.axis()
         			.scale(y)
         			.orient("left")
-        			.tickSize(1)
-        			.ticks(10);
+        			.tickSize(1);
 
         var svg = pane.append("svg")
               		.attr("class" , "svg-boxPlot all")
@@ -183,15 +183,22 @@ function BoxFeatures(model , settings , pane){
 	      	.attr("class" , "feature x axis")
 	      	.attr("transform" , "translate(0," + height + ")")
 	      	.call(xAxis)
-	      	.selectAll('text')
-			.text(function (d,i) {
-			   return (d).substr(2);
-			});
+
+	    svg.append("text")
+	    	.attr("transform" , "translate("+width/8+ ",0)")
+    		.style("font-size" , "0.8em")
+    		.style("fill" , "#263238")
+    		.style("font-style" , "roboto")
+    		.text("Entire Dataset");   	
 
 	    svg.append("g")
 	      	.attr("class" , "feature y axis")
 	      	.attr("transform" , "translate(0,0)")
-	      	.call(yAxis);
+	      	.call(yAxis)
+	      	.selectAll('text')	      	
+			.text(function (d,i) {
+			   return (d).substr(2);
+			});
 
 		svg.call(tipMedian);
 		svg.call(tipOutlier);
@@ -205,157 +212,140 @@ function BoxFeatures(model , settings , pane){
 	    			.enter().append("g")
 	    			.attr("class" , "box all");
 
-	    boxes.append("text")
-	    		.attr("x" , x(margin.left))
-	    		.attr("y" , y(this.max + 6))
-	    		.style("font-size" , "0.8em")
-	    		.style("fill" , "#263238")
-	    		.style("font-style" , "roboto")
-	    		.text("Feature View for Entire Dataset");
-
 	    boxes.append("line")
 	    		.attr("class" , "center")
-	    		.attr("x1" , function(d){return x(d.name)})
-	    		.attr("x2" , function(d){return x(d.name)})
-	    		.attr("y1" , function(d){return y(d.whiskers[0])})
-	    		.attr("y2" , function(d){return y(d.whiskers[1])})
-	    		.attr("transform" , "translate("+x.rangeBand()/2+",0)")
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y(d.name)})
+	    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	    		.attr("x2" , function(d){return x(d.whiskers[1])})
+	    		.attr("transform" , "translate(0,"+y.rangeBand()/2+")")
 	    		.style("stroke" , stroke)
 	    		.style("stroke-dasharray", ("3, 3"));
 
 	    boxes.append("line")
 	    		.attr("class" , "whisker upper")
-	    		.attr("x1" , function(d){return x(d.name)})
-	    		.attr("x2" , function(d){return x.rangeBand() + x(d.name);})
-	    		.attr("y1" , function(d){return y(d.whiskers[1])})
-	    		.attr("y2" , function(d){return y(d.whiskers[1])})
-	    		.style("stroke" , stroke);
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("x1" , function(d){return x(d.whiskers[1])})
+	    		.attr("x2" , function(d){return x(d.whiskers[1])})
+	    		.style("stroke" , stroke)
 
 	    boxes.append("line")
 	    		.attr("class" , "whisker lower")
-	    		.attr("x1" , function(d){return x(d.name)})
-	    		.attr("x2" , function(d){return x.rangeBand() + x(d.name);})
-	    		.attr("y1" , function(d){return y(d.whiskers[0])})
-	    		.attr("y2" , function(d){return y(d.whiskers[0])})
-	    		.style("stroke" , stroke);
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	    		.attr("x2" , function(d){return x(d.whiskers[0])})
+	    		.style("stroke" , stroke)
 
 	    boxes.append("rect")
 	    		.attr("class" , "quartile")
-	    		.attr("x" , function(d){return x(d.name)})
-	    		.attr("y" , function(d){return y(d.quartiles[2])})
-	    		.attr("width" , function(d){return x.rangeBand()})
-	    		.attr("height" , function(d){return y(d.quartiles[0]) - y(d.quartiles[2])})
+	    		.attr("y" , function(d){return y(d.name)})
+	    		.attr("x" , function(d){return x(d.quartiles[0])})
+	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
+	    		.attr("height" , function(d){return y.rangeBand()})
 	    		.style("stroke" , stroke)
 	    		.style("fill" , fill);
 
 	    boxes.append("line")
 	    		.attr("class" , "median")
-	    		.attr("x1" , function(d){return x(d.name)})
-	    		.attr("x2" , function(d){return x.rangeBand() + x(d.name);})
-	    		.attr("y1" , function(d){return y(d.quartiles[1])})
-	    		.attr("y2" , function(d){return y(d.quartiles[1])})
-	    		.style("stroke" , stroke);
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("x1" , function(d){return x(d.quartiles[1])})
+	    		.attr("x2" , function(d){return x(d.quartiles[1])})
+	    		.style("stroke" , stroke)
+	    		.style("stroke-width" , "3");
 
-	    boxes.selectAll("circle")
-		    		.data(function(d){ return d.outliers})
-		    		.enter().append("circle")
-		    		.attr("class" , "outlier")
-		    		.attr("cx" , function(d){return (x(d3.select(this.parentNode).datum().name)) + x.rangeBand()/2})
-		    		.attr("cy" , function(d){return y(d)})
-		    		.attr("r" , 1)
-		    		.style("stroke" , stroke)
-		    		.style("fill" , fill);
+		// var svgSelected = pane.append("svg")
+  //             		.attr("class" , "svg-boxPlot selected")
+  //             		.attr("width" , width + margin.left + margin.right)
+  //             		.attr("height" , height + margin.top + margin.bottom)
+  //             		.append("g")
+  //               		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		var svgSelected = pane.append("svg")
-              		.attr("class" , "svg-boxPlot selected")
-              		.attr("width" , width + margin.left + margin.right)
-              		.attr("height" , height + margin.top + margin.bottom)
-              		.append("g")
-                		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		// svgSelected.append("g")
+	 //      	.attr("class" , "selection x axis")
+	 //      	.attr("transform" , "translate(0," + height + ")")
+	 //      	.call(xAxis)
+	 //      	.selectAll('text')
+		// 	.text(function (d,i) {
+		// 	   return (d).substr(2);
+		// 	});
 
-		svgSelected.append("g")
+	 //    svgSelected.append("g")
+	 //      	.attr("class" , "selection y axis")
+	 //      	.attr("transform" , "translate(0,0)")
+	 //      	.call(yAxis);
+
+	 	svg.append("g")
 	      	.attr("class" , "selection x axis")
-	      	.attr("transform" , "translate(0," + height + ")")
+	      	.attr("transform" , "translate("+(width+margin.right)/2+"," + height + ")")
 	      	.call(xAxis)
-	      	.selectAll('text')
-			.text(function (d,i) {
-			   return (d).substr(2);
-			});
 
-	    svgSelected.append("g")
-	      	.attr("class" , "selection y axis")
-	      	.attr("transform" , "translate(0,0)")
-	      	.call(yAxis);
+	    svg.append("text")
+	    	.attr("transform" , "translate("+((width+margin.right)/2 + width/8)+ ",0)")
+    		.style("font-size" , "0.8em")
+    		.style("fill" , "#263238")
+    		.style("font-style" , "roboto")
+    		.text("Selection");   	
 
-
-		var boxesSelected = svgSelected.selectAll(".box.selected")
+		var boxesSelected = svg.selectAll(".box.selected")
 	    			.data(this.boxData , function(d){return d.name;})
 	    			.enter().append("g")
-	    			.attr("class" , "box selected");
+	    			.attr("class" , "box selected")
+	    			.attr("transform" , "translate("+(width+margin.right)/2+",0)");
 
-	    boxesSelected.append("text")
-	    		.attr("x" , x(margin.left))
-	    		.attr("y" , y(this.max + 6))
-	    		.style("font-size" , "0.8em")
-	    		.style("fill" , "#263238")
-	    		.style("font-style" , "roboto")
-	    		.text("Feature View for Selection");
+	 //    boxesSelected.append("text")
+	 //    		.attr("x" , x(margin.left))
+	 //    		.attr("y" , y(this.max + 6))
+	 //    		.style("font-size" , "0.8em")
+	 //    		.style("fill" , "#263238")
+	 //    		.style("font-style" , "roboto")
+	 //    		.text("Feature View for Selection");
 
 	    boxesSelected.append("line")
 	    		.attr("class" , "center")
-	    		.attr("x1" , function(d){return x(d.name)})
-	    		.attr("x2" , function(d){return x(d.name)})
-	    		.attr("y1" , function(d){return y(d.whiskers[0])})
-	    		.attr("y2" , function(d){return y(d.whiskers[1])})
-	    		.attr("transform" , "translate("+x.rangeBand()/2+",0)")
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y(d.name)})
+	    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	    		.attr("x2" , function(d){return x(d.whiskers[1])})
+	    		.attr("transform" , "translate(0,"+y.rangeBand()/2+")")
 	    		.style("stroke" , stroke)
 	    		.style("stroke-dasharray", ("3, 3"));
 
 	    boxesSelected.append("line")
 	    		.attr("class" , "whisker upper")
-	    		.attr("x1" , function(d){return x(d.name)})
-	    		.attr("x2" , function(d){return x.rangeBand() + x(d.name);})
-	    		.attr("y1" , function(d){return y(d.whiskers[1])})
-	    		.attr("y2" , function(d){return y(d.whiskers[1])})
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("x1" , function(d){return x(d.whiskers[1])})
+	    		.attr("x2" , function(d){return x(d.whiskers[1])})
 	    		.style("stroke" , stroke);
 
 	    boxesSelected.append("line")
 	    		.attr("class" , "whisker lower")
-	    		.attr("x1" , function(d){return x(d.name)})
-	    		.attr("x2" , function(d){return x.rangeBand() + x(d.name);})
-	    		.attr("y1" , function(d){return y(d.whiskers[0])})
-	    		.attr("y2" , function(d){return y(d.whiskers[0])})
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	    		.attr("x2" , function(d){return x(d.whiskers[0])})
 	    		.style("stroke" , stroke);
 
 	    boxesSelected.append("rect")
 	    		.attr("class" , "quartile")
-	    		.attr("x" , function(d){return x(d.name)})
-	    		.attr("y" , function(d){return y(d.quartiles[2])})
-	    		.attr("width" , function(d){return x.rangeBand()})
-	    		.attr("height" , function(d){return y(d.quartiles[0]) - y(d.quartiles[2])})
+	    		.attr("y" , function(d){return y(d.name)})
+	    		.attr("x" , function(d){return x(d.quartiles[0])})
+	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
+	    		.attr("height" , function(d){return y.rangeBand()})
 	    		.style("stroke" , stroke)
 	    		.style("fill" , fill);
 
 	    boxesSelected.append("line")
 	    		.attr("class" , "median")
-	    		.attr("x1" , function(d){return x(d.name)})
-	    		.attr("x2" , function(d){return x.rangeBand() + x(d.name);})
-	    		.attr("y1" , function(d){return y(d.quartiles[1])})
-	    		.attr("y2" , function(d){return y(d.quartiles[1])})
-	    		.style("stroke" , stroke);
-
-	    boxesSelected.selectAll("circle")
-		    		.data(function(d){ return d.outliers})
-		    		.enter().append("circle")
-		    		.attr("class" , "outlier")
-		    		.attr("cx" , function(d){return (x(d3.select(this.parentNode).datum().name)) + x.rangeBand()/2})
-		    		.attr("cy" , function(d){return y(d)})
-		    		.attr("r" , 1)
-		    		.style("stroke" , stroke)
-		    		.style("fill" , fill);
-
-
-
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("x1" , function(d){return x(d.quartiles[1])})
+	    		.attr("x2" , function(d){return x(d.quartiles[1])})
+	    		.style("stroke" , stroke)
+	    		.style("stroke-width" , "3");
 	};
 
 	this.bindEvents = function(){
@@ -380,10 +370,6 @@ function BoxFeatures(model , settings , pane){
 			.on('mouseover', tipMedian.show)
         	.on('mouseout', tipMedian.hide);
 
-        d3.selectAll("circle.outlier")
-			.on('mouseover', tipOutlier.show)
-        	.on('mouseout', tipOutlier.hide);
-
 
 
 	};
@@ -391,6 +377,7 @@ function BoxFeatures(model , settings , pane){
 	this.prepareData();
 	this.makePlots();
 	this.bindEvents();
+	// this.makeDistribution();
 
 	this.applySettings = function(){
 		this.prepareData();
@@ -399,42 +386,26 @@ function BoxFeatures(model , settings , pane){
 	    			.data(this.newData , function(d){return d.name;})
 
 	    boxesSelected.select("line.center").transition().duration(500)
-	    		.attr("x1" , function(d){return x(d.name)})
-	    		.attr("x2" , function(d){return x(d.name)})
-	    		.attr("y1" , function(d){return y(d.whiskers[0])})
-	    		.attr("y2" , function(d){return y(d.whiskers[1])});
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y(d.name)})
+	    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	    		.attr("x2" , function(d){return x(d.whiskers[1])});
 
 	    boxesSelected.select("line.whisker.upper").transition().duration(500)
-	    		.attr("y1" , function(d){return y(d.whiskers[1])})
-	    		.attr("y2" , function(d){return y(d.whiskers[1])})
+	    		.attr("x1" , function(d){return x(d.whiskers[1])})
+	    		.attr("x2" , function(d){return x(d.whiskers[1])})
 
 	    boxesSelected.select("line.whisker.lower").transition().duration(500)
-	    		.attr("y1" , function(d){return y(d.whiskers[0])})
-	    		.attr("y2" , function(d){return y(d.whiskers[0])})
+	    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	    		.attr("x2" , function(d){return x(d.whiskers[0])})
 
 	    boxesSelected.select("rect.quartile").transition().duration(500)
-	    		.attr("y" , function(d){return y(d.quartiles[2])})
-	    		.attr("height" , function(d){return y(d.quartiles[0]) - y(d.quartiles[2])})
+	    		.attr("x" , function(d){return x(d.quartiles[0])})
+	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])});
 
 	    boxesSelected.select("line.median").transition().duration(500)
-	    		.attr("y1" , function(d){return y(d.quartiles[1])})
-	    		.attr("y2" , function(d){return y(d.quartiles[1])})
-
-	    var outliers = boxesSelected.selectAll("circle.outlier")
-		    		.data(function(d){ return d.outliers})
-		    		
-		outliers.enter().append("circle")
-		    		.attr("class" , "outlier")
-
-
-		outliers.transition().duration(500)
-		    		.attr("cx" , function(d){return (x(d3.select(this.parentNode).datum().name)) + x.rangeBand()/2})
-		    		.attr("cy" , function(d){return y(d)})
-		    		.attr("r" , 1)
-		    		.style("stroke" , stroke)
-		    		.style("fill" , fill);
-
-		outliers.exit().remove();
+	    		.attr("x1" , function(d){return x(d.quartiles[1])})
+	    		.attr("x2" , function(d){return x(d.quartiles[1])});
 
 		this.bindEvents();
 

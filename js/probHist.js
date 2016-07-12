@@ -127,10 +127,10 @@ function ProbHist(model , settings , pane , table , boxPlots) {
   this.probabilityHistogram = function(data, name){
     
     scl = Math.max(this.max.left , this.max.right);
-    classtp = name + " bar-tp";
-    classtn = name + " bar-tn";
-    classfp = name + " bar-fp";
-    classfn = name + " bar-fn";
+    classtp = name + " bar-tp bar";
+    classtn = name + " bar-tn bar";
+    classfp = name + " bar-fp bar";
+    classfn = name + " bar-fn bar";
        
     var x = d3.scale.linear()
             .domain([-scl , scl]).nice()
@@ -253,6 +253,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
         settings.updateProbBounds(prob);
 
         settings.rightResult = "tp";
+        settings.centerOverlap = true;
 
         table.makeTable();
         boxPlots.applySettings();
@@ -270,6 +271,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
         settings.updateProbBounds(prob);
 
         settings.rightResult = "tn";
+        settings.centerOverlap = true;
 
         table.makeTable();
         boxPlots.applySettings();
@@ -287,6 +289,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
         settings.updateProbBounds(prob);
 
         settings.rightResult = "fp";
+        settings.centerOverlap = true;
 
         table.makeTable();
         boxPlots.applySettings();
@@ -304,6 +307,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
         settings.updateProbBounds(prob);
 
         settings.rightResult = "fn";
+        settings.centerOverlap = true;
 
         table.makeTable();
         boxPlots.applySettings();
@@ -327,10 +331,10 @@ function ProbHist(model , settings , pane , table , boxPlots) {
       newd = this.histData[i];
       newname = this.classNames[i];
 
-      classtp = newname + " bar-tp";
-      classtn = newname + " bar-tn";
-      classfp = newname + " bar-fp";
-      classfn = newname + " bar-fn";
+      classtp = newname + " bar-tp bar";
+      classtn = newname + " bar-tn bar";
+      classfp = newname + " bar-fp bar";
+      classfn = newname + " bar-fn bar";
 
       var x = d3.scale.linear()
               .domain([-scl , scl]).nice()
