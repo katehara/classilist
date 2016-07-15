@@ -75,8 +75,8 @@ $(document).ready(function(){
 	});
 	   
 	// read data
-	// d3.csv("data/rapidminer.csv", function (error, data) {
-	d3.csv("data/prob.csv", function (error, data) {
+	d3.csv("data/rapidminer.csv", function (error, data) {
+	// d3.csv("data/prob.csv", function (error, data) {
 
 		//prepare data model do all basic calculations about data
 		var model = new Model(data);
@@ -119,20 +119,24 @@ $(document).ready(function(){
 
 		//reset the probabilty slider and rebin slider 
 		d3.select(".reset").on("click" , function(){
-			bins = 10;
-			probs = [0.00 , 1.00];
-			binSlider.noUiSlider.set(bins);
-			probabilitySlider.noUiSlider.set(probs);
-			settings.bins = bins;
-			settings.probLimits = probs;
-			probHist.applySettings();
+			if(!d3.select(this).classed("disabled")){
+				bins = 10;
+				probs = [0.00 , 1.00];
+				binSlider.noUiSlider.set(bins);
+				probabilitySlider.noUiSlider.set(probs);
+				settings.bins = bins;
+				settings.probLimits = probs;
+				probHist.applySettings();
+			}
 		});
 
 		// apply new probability window and rebin settings to histograms
 		d3.select(".apply").on("click" , function(){
-			settings.bins = Number(binSlider.noUiSlider.get());
-			settings.probLimits = probabilitySlider.noUiSlider.get().map(Number);
-			probHist.applySettings();
+			if(!d3.select(this).classed("disabled")){
+				settings.bins = Number(binSlider.noUiSlider.get());
+				settings.probLimits = probabilitySlider.noUiSlider.get().map(Number);
+				probHist.applySettings();
+			}
 		});
 
 		//bind low probility to TN filter and high probability to TP filter

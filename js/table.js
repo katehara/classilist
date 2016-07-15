@@ -1,13 +1,13 @@
-function Table(model , settings , pane)
-{
+function Table(model , settings , pane) {
 	columns = (model.headers).filter(function(d){
 					if(d.substr(0,2) != "P-") return true;
 					else return false;
 				});
 	this.data = model.data;
-	this.tableData = [];
+	this.tableData;
 
 	this.makeTable = function(){
+		this.tableData = settings.rightFilteredData(this.data);
 		pane.select("*").remove();
 
 		var table = pane.append("table")
@@ -30,7 +30,7 @@ function Table(model , settings , pane)
 						});
 
 		var rows = tbody.selectAll("tr")
-						.data(settings.rightFilteredData(this.data))
+						.data(this.tableData)
 						.enter()
 						.append("tr");
 
@@ -46,6 +46,6 @@ function Table(model , settings , pane)
 
 	}
 
+	
 	this.makeTable();
-
 }

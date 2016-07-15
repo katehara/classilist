@@ -191,20 +191,23 @@ label {
 }
 
 
-svg .bar-tp {
+svg .bar-tp , svg .overlap-tp{
 	fill : #00c853;
 }
 
-svg .bar-fp {
+svg .bar-fp , svg .overlap-fp{
 	fill : #ffc400;
 }
 
-svg .bar-fn {
+svg .bar-fn , svg .overlap-fn{
 	fill : #f44336;
 }
-svg .bar-tn {
+
+svg .bar-tn , svg .overlap-tn{
 	fill : #00b0ff;
 }
+
+
 
 .d3-tip {
 	text-align: center;

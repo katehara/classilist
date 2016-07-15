@@ -19,7 +19,7 @@ function BoxFeatures(model , settings , pane){
 	    bottom: 20,
 	    left: 60
 	},
-	width = w - margin.left - margin.right,
+	width = w - margin.left - margin.right;
 	height = Math.max(250,h) - margin.top - margin.bottom;
 	stroke = "#5e35b1";
 	fill = "#ede7f6";
@@ -159,7 +159,6 @@ function BoxFeatures(model , settings , pane){
         		.domain([this.min , this.max]).nice()
         		.range([0 , width/2]);
 		
-
         var xAxis = d3.svg.axis()
         			.scale(x)
         			.orient("bottom")

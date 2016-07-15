@@ -1,5 +1,6 @@
 function ProbHist(model , settings , pane , table , boxPlots) {
 
+  var _self = this;
   this.data = model.data;
   this.headers = model.headers;
   this.nCols = model.nCols;
@@ -13,6 +14,9 @@ function ProbHist(model , settings , pane , table , boxPlots) {
     right : 0,
     left : 0
   }
+
+  var x;
+  var y;
 
   w=(pane.node().getBoundingClientRect().width - 30)/4;
   var margin = {
@@ -132,11 +136,11 @@ function ProbHist(model , settings , pane , table , boxPlots) {
     classfp = name + " bar-fp bar";
     classfn = name + " bar-fn bar";
        
-    var x = d3.scale.linear()
+    x = d3.scale.linear()
             .domain([-scl , scl]).nice()
             .rangeRound([0, width]);
 
-    var y = d3.scale.ordinal()
+    y = d3.scale.ordinal()
             .domain(data.map(function(d){ return d.probability;}))
             .rangeRoundBands([height , 0] , 0.1);
 
@@ -239,6 +243,146 @@ function ProbHist(model , settings , pane , table , boxPlots) {
         .text(name);
   }
 
+  this.overlapToggle = function(set){
+    if(set){
+      d3.selectAll(".bar").style("display" , "none");//"fill" , "#bdbdbd");
+      // d3.selectAll(".overlap-bar").attr("display" , "");
+      // d3.select(".switch-over").property('checked', true);
+      _self.overlapUpdate();
+      d3.selectAll(".overlap-bar").style("display" , "");
+      d3.selectAll(".collapsible-body").selectAll("*").attr("disabled" , "disabled");
+      d3.selectAll(".collapsible-body").selectAll("a").classed("disabled", true);
+
+
+
+    }
+
+    else {
+      d3.selectAll(".overlap-bar").remove();//attr("display" , "none");
+      d3.selectAll(".bar").style("display" , "");
+      d3.selectAll(".collapsible-body").selectAll("*").attr("disabled" , null);
+      d3.selectAll(".collapsible-body").selectAll("a").classed("disabled", false);
+      // d3.selectAll(".bar-tn").style("fill" , "#00b0ff");
+      // d3.selectAll(".bar-tp").style("fill" , "#00c853");
+      // d3.selectAll(".bar-fn").style("fill" , "#f44336");
+      // d3.selectAll(".bar-fp").style("fill" , "#ffc400");
+      // d3.select(".switch-over").property('checked', false);
+    }
+
+  }
+
+  this.overlapUpdate = function(){
+    data = table.tableData;
+    classes = model.classNames;
+    this.overData = [];
+    binSize = 1/settings.bins;
+    binValues = settings.getBinValues();
+
+
+    for(i in classes){
+        classname = classes[i];
+        name = "L-"+classes[i];
+        prob = "P-"+classes[i];
+
+        preparedData = [];
+        for(j in binValues){
+          preparedData.push({
+              probability : binValues[j], // upper value for all buckets
+              tn : 0,
+              tp : 0,
+              fn : 0,
+              fp : 0,
+          });
+        }
+        for(j in data){
+          for(k in preparedData){
+
+              // if(data[j][name].toLowerCase() == "tn" && data[j][prob] < settings.tnFilter){
+              // break;
+              // }
+
+              // if(data[j][name].toLowerCase() == "tp" && data[j][prob] > settings.tpFilter){
+              //   break;
+              // }
+            
+              if(
+                // settings.dataOptions[data[j][name].toLowerCase()] && 
+                data[j][prob] >= settings.probLimits[0] && data[j][prob] <= preparedData[k].probability){
+                    preparedData[k][data[j][name].toLowerCase()]++;          
+              
+                break;
+              }
+          }
+        }
+        var svg = pane.select(".svg-"+classname).select("g");
+
+        var overTP = svg.selectAll("."+classname + ".overlap-bar.overlap-tp")
+              .data(preparedData, function(d , i){return d.probability;})
+
+        overTP.enter().append("rect")
+              .attr("class" , classname + " overlap-bar overlap-tp")
+              .attr("x" , function(d){return x(0);})
+              .attr("y" , function(d){return y(d.probability);})
+              .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
+              .attr("height" , function(d){return y.rangeBand()})
+              .on('mouseover', tipTP.show)
+              .on('mouseout', tipTP.hide)
+              .on("click" , function(){
+              _self.overlapToggle(false);
+              });
+
+
+        var overFP = svg.selectAll("."+classname + ".overlap-bar.overlap-fp")
+              .data(preparedData, function(d , i){return d.probability;})
+
+        overFP.enter().append("rect")
+              .attr("class" , classname + " overlap-bar overlap-fp")
+              .attr("x" , function(d){return x(d.tp);})
+              .attr("y" , function(d){return y(d.probability);})
+              .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
+              .attr("height" , function(d){return y.rangeBand()})
+              .on('mouseover', tipFP.show)
+              .on('mouseout', tipFP.hide)
+              .on("click" , function(){
+              _self.overlapToggle(false);
+              });
+
+        var overFN = svg.selectAll("."+classname + ".overlap-bar.overlap-fn")
+              .data(preparedData, function(d , i){return d.probability;})
+
+        overFN.enter().append("rect")
+              .attr("class" , classname + " overlap-bar overlap-fn")
+              .attr("x" , function(d){return x(-d.fn);})
+              .attr("y" , function(d){return y(d.probability);})
+              .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
+              .attr("height" , function(d){return y.rangeBand()})
+              .on('mouseover', tipFN.show)
+              .on('mouseout', tipFN.hide)
+              .on("click" , function(){
+              _self.overlapToggle(false);
+              });;
+
+
+        var overTN = svg.selectAll("."+classname + ".overlap-bar.overlap-tn")
+              .data(preparedData, function(d , i){return d.probability;})
+
+        overTN.enter().append("rect")
+              .attr("class" , classname + " overlap-bar overlap-tn")
+              .attr("x" , function(d){return x(-d.fn-d.tn);})
+              .attr("y" , function(d){return y(d.probability);})
+              .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+              .attr("height" , function(d){return y.rangeBand()})
+              .on('mouseover', tipTN.show)
+              .on('mouseout', tipTN.hide)
+              .on("click" , function(){
+              _self.overlapToggle(false);
+              });;
+
+
+        d3.selectAll(".overlap-bar").style("display" , "none");        
+    }
+  }
+
   this.bindEvents = function() {
 
       d3.selectAll(".bar-tp")      
@@ -253,10 +397,12 @@ function ProbHist(model , settings , pane , table , boxPlots) {
         settings.updateProbBounds(prob);
 
         settings.rightResult = "tp";
-        settings.centerOverlap = true;
+        // settings.centerOverlap = true;
 
         table.makeTable();
         boxPlots.applySettings();
+        // _self.overlapUpdate();
+        _self.overlapToggle(true);
       });
 
       d3.selectAll(".bar-tn")
@@ -271,10 +417,12 @@ function ProbHist(model , settings , pane , table , boxPlots) {
         settings.updateProbBounds(prob);
 
         settings.rightResult = "tn";
-        settings.centerOverlap = true;
+        // settings.centerOverlap = true;
 
         table.makeTable();
         boxPlots.applySettings();
+        // _self.overlapUpdate();
+        _self.overlapToggle(true);
       });
 
       d3.selectAll(".bar-fp")
@@ -289,10 +437,12 @@ function ProbHist(model , settings , pane , table , boxPlots) {
         settings.updateProbBounds(prob);
 
         settings.rightResult = "fp";
-        settings.centerOverlap = true;
+        // settings.centerOverlap = true;
 
         table.makeTable();
         boxPlots.applySettings();
+        // _self.overlapUpdate();
+        _self.overlapToggle(true);
       });
 
       d3.selectAll(".bar-fn")
@@ -307,10 +457,12 @@ function ProbHist(model , settings , pane , table , boxPlots) {
         settings.updateProbBounds(prob);
 
         settings.rightResult = "fn";
-        settings.centerOverlap = true;
+        // settings.centerOverlap = true;
 
         table.makeTable();
         boxPlots.applySettings();
+        // _self.overlapUpdate();
+        _self.overlapToggle(true);
       });
   }
 
@@ -324,7 +476,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
     if(scl != Math.max(this.max.left , this.max.right)) xTransition = true;
     scl = Math.max(this.max.left , this.max.right);
 
-
+    d3.selectAll(".overlap-bar").remove();
 
     for(i in this.histData){   
 
@@ -336,7 +488,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
       classfp = newname + " bar-fp bar";
       classfn = newname + " bar-fn bar";
 
-      var x = d3.scale.linear()
+      x = d3.scale.linear()
               .domain([-scl , scl]).nice()
               .rangeRound([0, width]);
 
@@ -351,7 +503,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
                     else return f;
                   });
 
-      var y = d3.scale.ordinal()
+      y = d3.scale.ordinal()
               .domain(newd.map(function(d){ return d.probability;}))
               .rangeRoundBands([height , 0] , 0.1);
       
