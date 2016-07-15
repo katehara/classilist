@@ -75,8 +75,8 @@ $(document).ready(function(){
 	});
 	   
 	// read data
-	d3.csv("data/rapidminer.csv", function (error, data) {
-	// d3.csv("data/prob.csv", function (error, data) {
+	// d3.csv("data/rapidminer.csv", function (error, data) {
+	d3.csv("data/prob.csv", function (error, data) {
 
 		//prepare data model do all basic calculations about data
 		var model = new Model(data);

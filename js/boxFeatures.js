@@ -38,13 +38,6 @@ function BoxFeatures(model , settings , pane){
               return "<span>First Quartile:</span> <span>" + d.quartiles[0] + "<br><span>Second Quartile:</span> <span>" + d.quartiles[2];
             })
 
-  	var tipOutlier = d3.tip()
-            .attr('class', 'd3-tip')
-            .offset([-10, 0])
-            .html(function(d) {
-              return "<span>Outlier:</span> <span>" + d;
-            })
-
   	var tipWhiskerUpper = d3.tip()
             .attr('class', 'd3-tip')
             .offset([-10, 0])
@@ -132,7 +125,8 @@ function BoxFeatures(model , settings , pane){
 				data : d,
 				quartiles : q,
 				whiskers : w,
-				outliers : o
+				outliers : o,
+				difference : 0
 			});
 		}
 	};
@@ -200,7 +194,6 @@ function BoxFeatures(model , settings , pane){
 			});
 
 		svg.call(tipMedian);
-		svg.call(tipOutlier);
 		svg.call(tipWhiskerLower);
 		svg.call(tipWhiskerUpper);
 		svg.call(tipCenter);
@@ -347,6 +340,7 @@ function BoxFeatures(model , settings , pane){
 	    		.style("stroke-width" , "3");
 	};
 
+
 	this.bindEvents = function(){
 
 		d3.selectAll("line.center")
@@ -381,6 +375,35 @@ function BoxFeatures(model , settings , pane){
 	this.applySettings = function(){
 		this.prepareData();
 
+		old = this.boxData;
+		nuu = this.newData;
+		for(i in nuu){
+			nuu[i].diff = Math.abs(old[i].quartiles[1] - nuu[i].quartiles[1]);
+			console.log(nuu[i].name +"  "+nuu[i].diff)
+		}
+
+		nuu.sort(function(a , b){
+			// comparator
+			return d3.ascending(a.diff , b.diff);
+		});
+
+		y.domain(nuu.map(function(d){ return d.name;}));
+
+		var yAxis = d3.svg.axis()
+        			.scale(y)
+        			.orient("left")
+        			.tickSize(1);
+
+        
+		pane.select(".feature.y.axis")
+	      	.call(yAxis)
+	      	.selectAll('text')	      	
+			.text(function (d,i) {
+
+			   return (d).substr(2);
+			});
+
+
 		var boxesSelected = pane.selectAll(".box.selected")
 	    			.data(this.newData , function(d){return d.name;})
 
@@ -393,20 +416,47 @@ function BoxFeatures(model , settings , pane){
 	    boxesSelected.select("line.whisker.upper").transition().duration(500)
 	    		.attr("x1" , function(d){return x(d.whiskers[1])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
 
 	    boxesSelected.select("line.whisker.lower").transition().duration(500)
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[0])})
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
 
 	    boxesSelected.select("rect.quartile").transition().duration(500)
 	    		.attr("x" , function(d){return x(d.quartiles[0])})
-	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])});
+	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
+	    		.attr("y" , function(d){return y(d.name)});
 
 	    boxesSelected.select("line.median").transition().duration(500)
 	    		.attr("x1" , function(d){return x(d.quartiles[1])})
-	    		.attr("x2" , function(d){return x(d.quartiles[1])});
+	    		.attr("x2" , function(d){return x(d.quartiles[1])})
+	    		.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);});
+
+	    boxes = d3.selectAll(".box.all")
+
+		boxes.selectAll("line.center").transition().duration(500)
+				.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y(d.name);})	
+
+		boxes.selectAll("line.whisker").transition().duration(500)
+				.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+
+	    boxes.selectAll("line.median").transition().duration(500)
+				.attr("y1" , function(d){return y(d.name)})
+	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+
+	    boxes.selectAll("rect.quartile").transition().duration(500)
+				.attr("y" , function(d){return y(d.name)})
+
 
 		this.bindEvents();
+	    // this.sortPlots();
+
 
 	};
 
