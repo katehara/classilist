@@ -259,6 +259,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
 
     else {
       d3.selectAll(".overlap-bar").remove();//attr("display" , "none");
+      d3.selectAll(".d3-tip").style("opacity" , "0");
       d3.selectAll(".bar").style("display" , "");
       d3.selectAll(".collapsible-body").selectAll("*").attr("disabled" , null);
       d3.selectAll(".collapsible-body").selectAll("a").classed("disabled", false);

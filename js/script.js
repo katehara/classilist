@@ -10,7 +10,7 @@ $(document).ready(function(){
 	var settings = new Settings();
 
 	//bind container for Data View
-	var dataPane = d3.select("#data-samples");
+	var dataPane = d3.select("#data-samples");//.select(".data-table");
 
 	//bind container for Feature View 	
 	var featurePane = d3.select("#feature-view");
@@ -136,6 +136,18 @@ $(document).ready(function(){
 				settings.bins = Number(binSlider.noUiSlider.get());
 				settings.probLimits = probabilitySlider.noUiSlider.get().map(Number);
 				probHist.applySettings();
+			}
+		});
+
+		d3.select(".prev").on("click" , function(){
+			if(!d3.select(this).classed("disabled")){
+				table.slideData(0);
+			}
+		});
+
+		d3.select(".next").on("click" , function(){
+			if(!d3.select(this).classed("disabled")){
+				table.slideData(1);
 			}
 		});
 

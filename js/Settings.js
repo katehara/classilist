@@ -59,6 +59,10 @@ function Settings(){
 
 
 
+    this.tableSize = 500;
+
+    this.tableCurrentPage = 1;
+
     this.rightProbBounds = [0.00 , 1.00];
 
 

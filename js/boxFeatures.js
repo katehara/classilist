@@ -379,7 +379,6 @@ function BoxFeatures(model , settings , pane){
 		nuu = this.newData;
 		for(i in nuu){
 			nuu[i].diff = Math.abs(old[i].quartiles[1] - nuu[i].quartiles[1]);
-			console.log(nuu[i].name +"  "+nuu[i].diff)
 		}
 
 		nuu.sort(function(a , b){
