@@ -258,16 +258,11 @@ function ProbHist(model , settings , pane , table , boxPlots) {
     }
 
     else {
-      d3.selectAll(".overlap-bar").remove();//attr("display" , "none");
+      d3.selectAll(".overlap-bar").remove();
       d3.selectAll(".d3-tip").style("opacity" , "0");
       d3.selectAll(".bar").style("display" , "");
       d3.selectAll(".collapsible-body").selectAll("*").attr("disabled" , null);
       d3.selectAll(".collapsible-body").selectAll("a").classed("disabled", false);
-      // d3.selectAll(".bar-tn").style("fill" , "#00b0ff");
-      // d3.selectAll(".bar-tp").style("fill" , "#00c853");
-      // d3.selectAll(".bar-fn").style("fill" , "#f44336");
-      // d3.selectAll(".bar-fp").style("fill" , "#ffc400");
-      // d3.select(".switch-over").property('checked', false);
     }
 
   }

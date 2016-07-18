@@ -21,8 +21,6 @@ function BoxFeatures(model , settings , pane){
 	},
 	width = w - margin.left - margin.right;
 	height = Math.max(250,h) - margin.top - margin.bottom;
-	stroke = "#5e35b1";
-	fill = "#ede7f6";
 
 	var tipMedian = d3.tip()
             .attr('class', 'd3-tip')
@@ -179,9 +177,7 @@ function BoxFeatures(model , settings , pane){
 
 	    svg.append("text")
 	    	.attr("transform" , "translate("+width/8+ ",0)")
-    		.style("font-size" , "0.8em")
-    		.style("fill" , "#263238")
-    		.style("font-style" , "roboto")
+	    	.attr("class" , "box-indicator-text")
     		.text("Entire Dataset");   	
 
 	    svg.append("g")
@@ -205,69 +201,40 @@ function BoxFeatures(model , settings , pane){
 	    			.attr("class" , "box all");
 
 	    boxes.append("line")
-	    		.attr("class" , "center")
+	    		.attr("class" , "center box-stroke box-dasharray")
 	    		.attr("y1" , function(d){return y(d.name)})
 	    		.attr("y2" , function(d){return y(d.name)})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
-	    		.attr("transform" , "translate(0,"+y.rangeBand()/2+")")
-	    		.style("stroke" , stroke)
-	    		.style("stroke-dasharray", ("3, 3"));
+	    		.attr("transform" , "translate(0,"+y.rangeBand()/2+")");
 
 	    boxes.append("line")
-	    		.attr("class" , "whisker upper")
+	    		.attr("class" , "whisker upper box-stroke")
 	    		.attr("y1" , function(d){return y(d.name)})
 	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
 	    		.attr("x1" , function(d){return x(d.whiskers[1])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
-	    		.style("stroke" , stroke)
 
 	    boxes.append("line")
-	    		.attr("class" , "whisker lower")
+	    		.attr("class" , "whisker lower box-stroke")
 	    		.attr("y1" , function(d){return y(d.name)})
 	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[0])})
-	    		.style("stroke" , stroke)
 
 	    boxes.append("rect")
-	    		.attr("class" , "quartile")
+	    		.attr("class" , "quartile box-stroke box-fill")
 	    		.attr("y" , function(d){return y(d.name)})
 	    		.attr("x" , function(d){return x(d.quartiles[0])})
 	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
 	    		.attr("height" , function(d){return y.rangeBand()})
-	    		.style("stroke" , stroke)
-	    		.style("fill" , fill);
 
 	    boxes.append("line")
-	    		.attr("class" , "median")
+	    		.attr("class" , "median box-stroke box-width")
 	    		.attr("y1" , function(d){return y(d.name)})
 	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
 	    		.attr("x1" , function(d){return x(d.quartiles[1])})
 	    		.attr("x2" , function(d){return x(d.quartiles[1])})
-	    		.style("stroke" , stroke)
-	    		.style("stroke-width" , "3");
-
-		// var svgSelected = pane.append("svg")
-  //             		.attr("class" , "svg-boxPlot selected")
-  //             		.attr("width" , width + margin.left + margin.right)
-  //             		.attr("height" , height + margin.top + margin.bottom)
-  //             		.append("g")
-  //               		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-		// svgSelected.append("g")
-	 //      	.attr("class" , "selection x axis")
-	 //      	.attr("transform" , "translate(0," + height + ")")
-	 //      	.call(xAxis)
-	 //      	.selectAll('text')
-		// 	.text(function (d,i) {
-		// 	   return (d).substr(2);
-		// 	});
-
-	 //    svgSelected.append("g")
-	 //      	.attr("class" , "selection y axis")
-	 //      	.attr("transform" , "translate(0,0)")
-	 //      	.call(yAxis);
 
 	 	svg.append("g")
 	      	.attr("class" , "selection x axis")
@@ -276,9 +243,7 @@ function BoxFeatures(model , settings , pane){
 
 	    svg.append("text")
 	    	.attr("transform" , "translate("+((width+margin.right)/2 + width/8)+ ",0)")
-    		.style("font-size" , "0.8em")
-    		.style("fill" , "#263238")
-    		.style("font-style" , "roboto")
+	    	.attr("class" , "box-indicator-text")
     		.text("Selection");   	
 
 		var boxesSelected = svg.selectAll(".box.selected")
@@ -287,57 +252,42 @@ function BoxFeatures(model , settings , pane){
 	    			.attr("class" , "box selected")
 	    			.attr("transform" , "translate("+(width+margin.right)/2+",0)");
 
-	 //    boxesSelected.append("text")
-	 //    		.attr("x" , x(margin.left))
-	 //    		.attr("y" , y(this.max + 6))
-	 //    		.style("font-size" , "0.8em")
-	 //    		.style("fill" , "#263238")
-	 //    		.style("font-style" , "roboto")
-	 //    		.text("Feature View for Selection");
-
 	    boxesSelected.append("line")
-	    		.attr("class" , "center")
+	    		.attr("class" , "center box-stroke box-dasharray")
 	    		.attr("y1" , function(d){return y(d.name)})
 	    		.attr("y2" , function(d){return y(d.name)})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
 	    		.attr("transform" , "translate(0,"+y.rangeBand()/2+")")
-	    		.style("stroke" , stroke)
-	    		.style("stroke-dasharray", ("3, 3"));
 
 	    boxesSelected.append("line")
-	    		.attr("class" , "whisker upper")
+	    		.attr("class" , "whisker upper box-stroke")
 	    		.attr("y1" , function(d){return y(d.name)})
 	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
 	    		.attr("x1" , function(d){return x(d.whiskers[1])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
-	    		.style("stroke" , stroke);
 
 	    boxesSelected.append("line")
-	    		.attr("class" , "whisker lower")
+	    		.attr("class" , "whisker lower box-stroke")
 	    		.attr("y1" , function(d){return y(d.name)})
 	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[0])})
-	    		.style("stroke" , stroke);
 
 	    boxesSelected.append("rect")
-	    		.attr("class" , "quartile")
+	    		.attr("class" , "quartile box-stroke box-fill")
 	    		.attr("y" , function(d){return y(d.name)})
 	    		.attr("x" , function(d){return x(d.quartiles[0])})
 	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
 	    		.attr("height" , function(d){return y.rangeBand()})
-	    		.style("stroke" , stroke)
-	    		.style("fill" , fill);
 
-	    boxesSelected.append("line")
+	    boxesSelected.append("line box-stroke box-width")
 	    		.attr("class" , "median")
 	    		.attr("y1" , function(d){return y(d.name)})
 	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
 	    		.attr("x1" , function(d){return x(d.quartiles[1])})
 	    		.attr("x2" , function(d){return x(d.quartiles[1])})
-	    		.style("stroke" , stroke)
-	    		.style("stroke-width" , "3");
+
 	};
 
 

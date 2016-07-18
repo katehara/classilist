@@ -307,3 +307,26 @@ a .small-text{
 	color: #757575;
 }
 
+.box-dasharray{
+	stroke-dasharray : 3;
+}
+
+.box-width{
+	stroke-width : 3;
+}
+
+.box-stroke{
+	stroke: #5e35b1;
+}
+
+.box-fill{
+	fill : #ede7f6;
+}
+
+
+.box-indicator-text{
+	font-size : 0.8em;
+    fill : #263238;
+    font-style : "roboto";
+}
+
