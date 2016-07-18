@@ -281,8 +281,8 @@ function BoxFeatures(model , settings , pane){
 	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
 	    		.attr("height" , function(d){return y.rangeBand()})
 
-	    boxesSelected.append("line box-stroke box-width")
-	    		.attr("class" , "median")
+	    boxesSelected.append("line")
+	    		.attr("class" , "median box-stroke box-width")
 	    		.attr("y1" , function(d){return y(d.name)})
 	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
 	    		.attr("x1" , function(d){return x(d.quartiles[1])})
