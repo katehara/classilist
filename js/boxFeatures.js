@@ -82,7 +82,7 @@ function BoxFeatures(model , settings , pane){
 			else return false;
 		})
 		r = [];
-		for(i in o){
+		for(i=0,len=o.length; i<len ; i++){
 			if(o[i] != ((i==0)? -Infinity : o[i-1])){
 				r.push(o[i]);
 			}
@@ -99,13 +99,13 @@ function BoxFeatures(model , settings , pane){
 		this.filteredData = settings.rightFilteredData(this.data);
 
 		// prepare data only for numerical features
-		for(j in this.features) 
+		for(j = 0,lenj=(this.features).length; j<lenj ; j++) 
 			if(!isNaN(this.filteredData[0][this.features[j]])) 
 				(this.featuresData).push([this.features[j] , []]);
 			
 
-		for(i in this.filteredData){
-			for(j in this.featuresData){
+		for(i=0,len=(this.filteredData).length; i<len ; i++){
+			for(j = 0,lenj=(this.featuresData).length; j<lenj ; j++){
 
 				value = this.filteredData[i][this.features[j]];
 				(this.featuresData[j][1]).push(value);
@@ -114,9 +114,9 @@ function BoxFeatures(model , settings , pane){
 			}
 		}
 
-		for(j in this.featuresData){
-			n = this.featuresData[j][0];
-			d = this.featuresData[j][1].sort(d3.ascending);
+		for(k = 0,lenk=(this.featuresData).length; k<lenk ; k++){
+			n = this.featuresData[k][0];
+			d = this.featuresData[k][1].sort(d3.ascending);
 			q = this.quartiles(d);
 			w = this.whiskers(d , q);
 			o = this.outliers(d , w);
@@ -136,7 +136,7 @@ function BoxFeatures(model , settings , pane){
 
 	this.makePlots = function(){
 
-		for(i in this.newData){
+		for(i=0,len=(this.newData).length; i<len ; i++){
 			this.boxData[i] = this.newData[i];
 		}
 		
@@ -377,7 +377,7 @@ function BoxFeatures(model , settings , pane){
 
 		old = this.boxData;
 		nuu = this.newData;
-		for(i in nuu){
+		for(i=0,len=nuu.length; i<len ; i++){
 			nuu[i].diff = Math.abs(old[i].quartiles[1] - nuu[i].quartiles[1]);
 		}
 

@@ -78,12 +78,12 @@ function ProbHist(model , settings , pane , table , boxPlots) {
     binSize = 1/bins;
     binValues = settings.getBinValues();
 
-    for(i in classes){
+    for(i=0,len=classes.length; i<len ; i++){
       name = "L-"+classes[i];
       prob = "P-"+classes[i];
 
       preparedData = [];
-      for(j in binValues){
+      for(j = 0,lenj=binValues.length; j<lenj ; j++){
         preparedData.push({
           probability : binValues[j], // upper value for all buckets
           tn : 0,
@@ -92,8 +92,8 @@ function ProbHist(model , settings , pane , table , boxPlots) {
           fp : 0,
         });
       }
-      for(j in data){
-        for(k in preparedData){
+      for(j = 0,lenj=data.length; j<lenj ; j++){
+        for(k = 0,lenk=preparedData.length; k<lenk ; k++){
 
           if(data[j][name].toLowerCase() == "tn" && data[j][prob] < settings.tnFilter){
             break;
@@ -122,7 +122,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
   // make all probibility histograms
   this.makeHistograms = function(){
     pane.selectAll("*").remove();
-    for(i in this.histData){
+    for(i=0,len=(this.histData).length; i<len ; i++){
       this.probabilityHistogram(this.histData[i], this.classNames[i]);
     }
   }
@@ -279,24 +279,23 @@ function ProbHist(model , settings , pane , table , boxPlots) {
     binSize = 1/settings.bins;
     binValues = settings.getBinValues();
 
+    for(i=0,len=classes.length; i<len ; i++){
+      classname = classes[i];
+      name = "L-"+classes[i];
+      prob = "P-"+classes[i];
 
-    for(i in classes){
-        classname = classes[i];
-        name = "L-"+classes[i];
-        prob = "P-"+classes[i];
-
-        preparedData = [];
-        for(j in binValues){
-          preparedData.push({
-              probability : binValues[j], // upper value for all buckets
-              tn : 0,
-              tp : 0,
-              fn : 0,
-              fp : 0,
-          });
-        }
-        for(j in data){
-          for(k in preparedData){
+      preparedData = [];
+      for(j = 0,lenj=binValues.length; j<lenj ; j++){
+        preparedData.push({
+          probability : binValues[j], // upper value for all buckets
+          tn : 0,
+          tp : 0,
+          fn : 0,
+          fp : 0,
+        });
+      }
+      for(j = 0,lenj=data.length; j<lenj ; j++){
+        for(k = 0,lenk=preparedData.length; k<lenk ; k++){
 
               // if(data[j][name].toLowerCase() == "tn" && data[j][prob] < settings.tnFilter){
               // break;
@@ -479,7 +478,7 @@ function ProbHist(model , settings , pane , table , boxPlots) {
 
     d3.selectAll(".overlap-bar").remove();
 
-    for(i in this.histData){   
+    for(i=0,len=(this.histData).length; i<len ; i++){   
 
       newd = this.histData[i];
       newname = this.classNames[i];

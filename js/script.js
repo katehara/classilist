@@ -159,14 +159,6 @@ $(document).ready(function(){
 				table.slideData(2);
 		});
 
-		//bind low probility to TN filter and high probability to TP filter
-		// probabilitySlider.noUiSlider.on("update" , function(values){
-	 //  		values = values.map(Number);
-	 //  		if(values[0]<=0.50 && values[0] > Number(tnSlider.noUiSlider.get())) tnSlider.noUiSlider.set(values[0]);
-	 //  		if(values[1]>=0.50 && values[1] < Number(tpSlider.noUiSlider.get())) tpSlider.noUiSlider.set(values[1]);
-
-		//  });
-
 	 	//action listener for High-TP filter
 	   	tpSlider.noUiSlider.on("update" , function(values){
 	   		value = Number(values);

@@ -82,7 +82,7 @@ function Settings(){
 
       filteredData = (data).filter(function(d){
               if(res != "all" && d[label] != res.toUpperCase()) return false;
-              if(d[prob] < pr[0] || d[prob] > pr[1]) return false;
+              if(d[prob] <= pr[0] || d[prob] > pr[1]) return false;
               return true;
               });
 

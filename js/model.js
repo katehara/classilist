@@ -15,19 +15,19 @@ function Model (data){
 }
 
 function numericData(data , names){
-	data.forEach(function(d){
-		for(j in names) 
-			if(!isNaN(d[names[j]])) 
-				d[names[j]] = +d[names[j]];
-	});
+	for(i=0,len=data.length; i<len ; i++){
+		for(j=0,lenj = names.length;j<lenj;j++) 
+			if(!isNaN(data[i][names[j]])) 
+				data[i][names[j]] = +data[i][names[j]];
+	}
 }
 
 //
 function labelData(data, classNames, target, predicted){
-	for(j in classNames){
+	for(j = 0, lenj =classNames.length;j<lenj;j++){
 		name = classNames[j];
 		// console.log(name);
-		for(i in data){
+		for(i=0,len=data.length; i<len ; i++){
 
 			if(data[i][target] == name && data[i][predicted] == name) data[i]["L-"+name] = "TP";
 			else if(data[i][target] != name && data[i][predicted] == name) data[i]["L-"+name] = "FP";
@@ -88,7 +88,7 @@ function getPredicted(names , n){
 function getClassNames(data , target){
 	var unique = {};
 	var distinct = [];
-	for( var i in data ){
+	for(i=0,len=data.length; i<len ; i++ ){
 		if( typeof(unique[data[i][target]]) == "undefined"){
 			distinct.push(data[i][target]);
 		}
