@@ -1,8 +1,6 @@
 function Table(model , settings , outerpane) {
-	columns = (model.headers).filter(function(d){
-					if(d.substr(0,2) != "P-") return true;
-					else return false;
-				});
+
+	columns = getTableColumns(model.headers);
 	this.data = model.data;
 	this.tableData;
 	this.groupedData;
@@ -47,8 +45,8 @@ function Table(model , settings , outerpane) {
 						.append("th")
 						.text(function(c){
 							if(c == "Predicted") return c+"-"+(model.target).substr(2);
-							else if(c.substr(0,2) != "P-") return c.substr(2);
-							else return c;
+							// else if(c.substr(0,2) != "P-") return c.substr(2);
+							else return c.substr(2);
 						});		
 
 		var rows = tbody.selectAll("tr")
@@ -74,10 +72,19 @@ function Table(model , settings , outerpane) {
 
 	this.slideData = function(t){
 
+		len = (this.groupedData).length;
+
+		if(t==-1){ 
+			if(settings.tableCurrentPage == 1) return;
+			else curr = settings.tableCurrentPage = 1;
+		}
+		if(t==2){ 
+			if(settings.tableCurrentPage == len) return;
+			else curr = settings.tableCurrentPage = len;
+		}
+
 		if(t==0) curr = --settings.tableCurrentPage; //previous page
 		else if(t==1) curr = ++settings.tableCurrentPage; //previous page
-			
-		len = (this.groupedData).length;
 
 		var tbody = pane.select("table").select("tbody");
 
@@ -107,6 +114,21 @@ function Table(model , settings , outerpane) {
 		
 }
 
+function getTableColumns(headers){
+	var a , p;
+	cols = headers.filter(function(d , i){
+					if(d.substr(0,2) == "F-") return true;
+					else {
+						if(d == "Predicted") p = i;
+						else if(d.substr(0,2) == "A-") a = i;
+						return false;
+					}
+				});
+
+	cols.unshift(headers[p]);
+	cols.unshift(headers[a]);
+	return cols;
+}
 
 
 function sliceData(data , size){

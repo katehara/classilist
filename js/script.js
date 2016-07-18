@@ -151,6 +151,14 @@ $(document).ready(function(){
 			}
 		});
 
+		d3.select(".first").on("click" , function(){
+				table.slideData(-1);
+		});
+
+		d3.select(".last").on("click" , function(){
+				table.slideData(2);
+		});
+
 		//bind low probility to TN filter and high probability to TP filter
 		// probabilitySlider.noUiSlider.on("update" , function(values){
 	 //  		values = values.map(Number);

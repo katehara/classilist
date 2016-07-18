@@ -286,7 +286,11 @@ svg .bar-tn , svg .overlap-tn{
 	background-color : #b39ddb; 
 }
 
-#data-samples  , #feature-view{
+#data-samples {
+	height: 100%;
+}
+
+#data-samples .data-table , #feature-view{
 	height : 100%;
 	overflow-x: scroll;
 	overflow-y: scroll;
@@ -296,5 +300,10 @@ td, th {
 	white-space: nowrap;
 	padding : 5px;
 	border : 1px;
+}
+
+a .small-text{
+	font-size: 0.8em;
+	color: #757575;
 }
 
