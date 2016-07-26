@@ -9,7 +9,7 @@ function Model (data){
 	this.target = getTarget(this.headers , this.nCols);
 	this.predicted = getPredicted(this.headers , this.nCols);
 	this.classNames = getClassNames(this.data , this.target);
-	// this.confusionMatrix = getConfusionMatrix(data, classNames, target, predicted);
+	this.confusionMatrix = getConfusionMatrix(this.data, this.classNames, this.target, this.predicted);
 	this.labeledData = labelData(this.data, this.classNames, this.target, this.predicted);
 	this.numericData = numericData(this.data , this.features)
 }
@@ -98,29 +98,26 @@ function getClassNames(data , target){
 	return distinct;
 }
 
-//get array of class objects having all respective details
-
-
 // get confusion matrix
-// function getConfusionMatrix(data, classNames, target, predicted) {
-// 	classmap = {};
-// 	cl = classNames.length;
-// 	mat = zeros(cl , cl);
-// 	// console.log(mat);
-// 	for( i=0;i<cl;i++){
-// 		classmap[classNames[i]] = i;
-// 	}
-// 	// console.log(classmap);
-// 	for(i=0;i<data.length;i++){ 
-// 		aclass = data[i][target]; 
-// 		pclass = data[i][predicted]; 
-// 		aind = classmap[aclass]; 
-// 		pind = classmap[pclass]; 
-// 		(mat[aind][pind])++;
-// 	}
-// 	// console.log(mat);
-// 	return mat;
-// }
+function getConfusionMatrix(data, classNames, target, predicted) {
+	classmap = {};
+	cl = classNames.length;
+	mat = zeros(cl , cl);
+	// console.log(mat);
+	for( i=0;i<cl;i++){
+		classmap[classNames[i]] = i;
+	}
+	// console.log(classmap);
+	for(i=0;i<data.length;i++){ 
+		aclass = data[i][target]; 
+		pclass = data[i][predicted]; 
+		aind = classmap[aclass]; 
+		pind = classmap[pclass]; 
+		(mat[aind][pind])++;
+	}
+	// console.log(mat);
+	return mat
+}
 
 
 // helpers

@@ -1,4 +1,14 @@
 function Settings(){
+
+  // define panes
+  this.confPane = d3.select(".confusion-matrix");
+  this.tablePane = d3.select(".data-table");
+  this.pagerPane = d3.select(".pager")
+  this.featurePane = d3.select(".box-plots");
+  this.histPane = d3.select(".class-histogram");
+  this.probPane = d3.select(".probability-histograms");
+
+
 	// state of data switches
 	this.dataOptions = {
 	    tp : true,

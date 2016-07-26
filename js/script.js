@@ -3,8 +3,8 @@ $(document).ready(function(){
 	//activate sidenav on loading window for small and medium sized windows
 	$(".button-collapse").sideNav();
 
-	//bind container for visualization svg
-	var centralPane = d3.select(".central-pane");
+	//bind container for probability histograms
+	var probabilityPane = d3.select(".central-pane").select(".probability-histograms");
 
 	//initialize settigns
 	var settings = new Settings();
@@ -82,16 +82,24 @@ $(document).ready(function(){
 		var model = new Model(data);
 		
 		// initialize data table 
-		var table = new Table(model , settings , dataPane);
+		var table = new Table(model , settings);
 
 		//initialize Features Box Plots
-		var boxPlots = new BoxFeatures(model , settings , featurePane);
-
-		//initialize pane for visualizing class probabilities
-		probabilityPane = centralPane.append("div").attr("class" , "probability-histograms")
+		var boxPlots = new BoxFeatures(model , settings)
 
 		//initialize class probability histograms
-		var probHist = new ProbHist(model , settings , probabilityPane , table , boxPlots);
+		var probHist = new ProbHist(model , settings);
+
+		//initialize summary class histograms
+		var classhist = new classHist(model , settings);
+
+		//initialize confusion Matrix
+		var confmat = new confMatrix(model , settings);
+
+		//initialize selection overlaps
+		var overlaps = new Overlaps(model , settings, table, boxPlots, probHist, classHist, confmat);
+
+		
 
 		// action listener for TP switch
 		d3.select(".switch-tp").on("change", function(d){

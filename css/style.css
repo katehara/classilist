@@ -29,8 +29,9 @@ nav {
 }
 
 .collapsible-body {
-	padding-left: 1em;
-	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
 	background-color: #ede7f6;
 }
 
@@ -69,6 +70,9 @@ label {
 	background-color: #00b0ff;
 }
 
+.switch label .lever{
+	margin: 7px 2px;
+}
 
 .rotate-45 {
 	-webkit-transform: rotate(-45deg);
@@ -78,8 +82,16 @@ label {
     transform: rotate(-45deg);
 }
 
+.divider {
+	width: 100%;
+	height : 1px;
+	background-color: #5e35b1;
+	margin : 1px;
+	/*border-radius: 2px;*/
+}
+
 #probability-zoom , #rebin , #filter-high-tp , #filter-low-tn{
-	margin : 0.7em 0.3em;
+	margin : 0.3em 0.5em;
 }
 
 .noUi-horizontal {
@@ -161,7 +173,9 @@ label {
 }
 
 
-
+.dont-display{
+	display : none;
+}
 
 
 
@@ -181,7 +195,7 @@ label {
 	background-color: #ede7f6;
 }
 
-.probability-histograms rect:hover {
+.probability-histograms rect:hover , .left-bar rect:hover  , .confusion-matrix rect:hover{
 	stroke : black; 
 }
 
@@ -191,19 +205,19 @@ label {
 }
 
 
-svg .bar-tp , svg .overlap-tp{
+svg .left-bar-tp ,svg .bar-tp , svg .overlap-tp{
 	fill : #00c853;
 }
 
-svg .bar-fp , svg .overlap-fp{
+svg .left-bar-fp , svg .bar-fp , svg .overlap-fp{
 	fill : #ffc400;
 }
 
-svg .bar-fn , svg .overlap-fn{
+svg .left-bar-fn , svg .bar-fn , svg .overlap-fn{
 	fill : #f44336;
 }
 
-svg .bar-tn , svg .overlap-tn{
+svg .left-bar-tn , svg .bar-tn , svg .overlap-tn{
 	fill : #00b0ff;
 }
 
@@ -276,7 +290,7 @@ svg .bar-tn , svg .overlap-tn{
 	color : #fff;
 }
 
-.tabbed-view li.tab.col.s6 {
+.tabbed-view li.tab.col {
 	background-color: #5e35b1;
 	outline : 1px solid #fff;
 	border-radius: 10px 10px 0 0;
@@ -290,7 +304,7 @@ svg .bar-tn , svg .overlap-tn{
 	height: 100%;
 }
 
-#data-samples .data-table , #feature-view{
+#data-samples .data-table , #feature-view , #conf-mat{
 	height : 100%;
 	overflow-x: scroll;
 	overflow-y: scroll;

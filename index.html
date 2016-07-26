@@ -39,14 +39,27 @@
 			<ul class="collapsible" data-collapsible="expandable">
 			    <li>
 			      	<div class="collapsible-header active">
-			      		<i class="material-icons rotate90">equalizer</i>
-			      		Data Options
+			      		<i class="material-icons">tune</i>
+			      		Controls
 			      	</div>
-			      	<div class="collapsible-body">
+			      	<div class="collapsible-body center">
 				      	<!-- <p>Turn off to remove from visualization</p> -->
 				      	<form>
-					      	<div class="row">
-						      	<div class="switch col s12 m6">
+			  					<div class="switch col s12 m6">
+								    <label>
+								      TN
+								      <input class="switch-tn" type="checkbox" checked>
+								      <span class="lever tn"></span>
+								    </label>
+			  					</div>
+			  					<div class="switch col s12 m6">
+								    <label>
+								      FN
+								      <input class="switch-fn" type="checkbox" checked>
+								      <span class="lever fn"></span>
+								    </label>
+			  					</div>
+			  					<div class="switch col s12 m6">
 								    <label>
 								      TP
 								      <input class="switch-tp" type="checkbox" checked>
@@ -60,80 +73,70 @@
 								      <span class="lever fp"></span>
 								    </label>
 			  					</div>
-			  					<div class="switch col s12 m6">
-								    <label>
-								      FN
-								      <input class="switch-fn" type="checkbox" checked>
-								      <span class="lever fn"></span>
-								    </label>
-			  					</div>
-			  					<div class="switch col s12 m6">
-								    <label>
-								      TN
-								      <input class="switch-tn" type="checkbox" checked>
-								      <span class="lever tn"></span>
-								    </label>
-			  					</div>
-		  					</div>
-	  					</form>
-	  					<label>Filter High TPs</label>
-		      			<div id="filter-high-tp"></div>
-		      			<label>Filter Low TNs</label>
-		      			<div id="filter-low-tn"></div>
+			  					<div class="divider"></div>
+			  					<label>Filter High TPs</label>
+				      			<div id="filter-high-tp"></div>
+				      			<label>Filter Low TNs</label>
+				      			<div id="filter-low-tn"></div>
+				      			<label>Probability Range</label>
+				      			<div id="probability-zoom"></div>
+				      			<label>Rebin</label>
+				      			<div id="rebin"></div>
+				      			<div class = "apply-axis center">
+					      			<a class="reset tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="" data-delay="10" data-tooltip="Reset"><i class="material-icons">replay</i></a>
+					      			<a class="apply tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="" data-delay="25" data-tooltip="Apply"><i class="material-icons">done_all</i></a>
+					      			<a class="clear tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="" data-delay="25" data-tooltip="Clear Selection"><i class="material-icons">clear</i></a>
+				      			</div>
+		      			</form>
   					</div>
 			    </li>
 			    <li>
 			      	<div class="collapsible-header active">
-			      		<i class="material-icons rotate-45">shuffle</i>
-			      		Axis Options
-	      			</div>
-			      	<div class="collapsible-body">
-			      		<!-- <p>Slide to rescale</p> -->
-		      			<label>Probability Range</label>
-		      			<div id="probability-zoom"></div>
-		      			<label>Rebin</label>
-		      			<div id="rebin"></div>
-		      			<div class = "apply-axis center">
-			      			<a class="reset tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="left" data-delay="25" data-tooltip="Reset"><i class="material-icons">replay</i></a>
-			      			<a class="apply tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="right" data-delay="25" data-tooltip="Apply"><i class="material-icons">done_all</i></a>
-		      			</div>
+			      		<i class="material-icons">format_align_left</i>
+			      		Summary
 			      	</div>
+			      	<div class="collapsible-body class-histogram">
+				      	
+  					</div>
 			    </li>
-			  <!--  <li>
-			      	<div class="collapsible-header active">
-			      		<i class="material-icons rotate90">swap_calls</i>
-			      		Visualizations
-			      	</div>
-			      	<div class="collapsible-body">
-			      		<p>Switch visualization</p> 
-		      		</div>
-			    </li>  -->
 			  </ul>
 
 		</div>
-		<div class="central-pane col s8 m6"></div>
-		<div class = "right-pane col s12 m4">
+		<div class="central-pane col s8 m7">
+			<div class="probability-histograms"></div>
+		</div>
+		<div class = "right-pane col s12 m3">
 			<div class="row tabbed-view">
+
 			    <div class="col s12">
 			      <ul class="tabs">
-			        <li class="tab col s6"><a class="active" href="#feature-view">Feature View</a></li>
-			        <li class="tab col s6"><a href="#data-samples">Data Samples</a></li>
+			        <li class="tab col s4"><a class="active" href="#feature-view">Features</a></li>
+			        <li class="tab col s4"><a href="#conf-mat">Matrix</a></li>
+			        <li class="tab col s4"><a href="#data-samples">Data</a></li>
 			      </ul>
 			    </div>
-			    <div id="data-samples" class="col s12">
-			    <div class = "pager center">
-			    	<a href="#!"><span class = "first small-text"></span></a>
-			    	<a class="prev tooltipped btn-floating waves-effect waves-light deep-purple darken-1"><i class="material-icons">chevron_left</i></a>
-			    	<span class = "page"></span>
-			      	<a class="next tooltipped btn-floating waves-effect waves-light deep-purple darken-1"><i class="material-icons">chevron_right</i></a>
-			    	<a href="#!"><span class = "last small-text"></span></a>
-			    </div>
-			    <div class = "data-table">
-			    </div>
-			    </div>
-			    <div id="feature-view" class="col s12"></div>
-			  </div>
 
+			    <div id="data-samples" class="col s12">
+				    <div class = "pager center">
+				    	<a href="#!"><span class = "first small-text"></span></a>
+				    	<a class="prev tooltipped btn-floating waves-effect waves-light deep-purple darken-1"><i class="material-icons">chevron_left</i></a>
+				    	<span class = "page"></span>
+				      	<a class="next tooltipped btn-floating waves-effect waves-light deep-purple darken-1"><i class="material-icons">chevron_right</i></a>
+				    	<a href="#!"><span class = "last small-text"></span></a>
+				    </div>
+
+				    <div class = "data-table">
+				    </div>
+			    </div>
+
+			    <div id="feature-view" class="col s12">
+				    <div class = "box-plots"> </div>
+			    </div>
+
+			    <div id="conf-mat" class="col s12">
+				    <div class = "confusion-matrix"> </div>
+			    </div>
+			</div>
 		</div>
 	</div>
 
@@ -147,6 +150,9 @@
 		<script type="text/javascript" src="js/Settings.js" ></script>
 		<script type="text/javascript" src="js/boxFeatures.js" ></script>
 		<script type="text/javascript" src="js/probHist.js" ></script>
+		<script type="text/javascript" src="js/classHist.js" ></script>
+		<script type="text/javascript" src="js/overlaps.js" ></script>
+		<script type="text/javascript" src="js/confMatrix.js" ></script>
 		<script type="text/javascript" src="js/table.js" ></script>	
 		<script type="text/javascript" src="js/model.js" ></script>
 		<script type="text/javascript" src="js/script.js" ></script>

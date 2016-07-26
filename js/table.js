@@ -1,11 +1,12 @@
-function Table(model , settings , outerpane) {
+function Table(model , settings){
 
 	columns = getTableColumns(model.headers);
 	this.data = model.data;
 	this.tableData;
 	this.groupedData;
-	pane = outerpane.select(".data-table");
-	pager = outerpane.select(".pager");
+
+	pane = settings.tablePane;
+	pager = settings.pagerPane;
 	page = pager.select(".page");
 	prev = pager.select(".prev");
 	next = pager.select(".next");
@@ -15,18 +16,25 @@ function Table(model , settings , outerpane) {
 	this.setPager = function(){
 		curr = settings.tableCurrentPage;
 		len = (this.groupedData).length;
-		page.text(" "+ curr +" ");
-		first.text(1 + "..");
-		last.text(".." + len);
-		if(curr == 1) prev.classed("disabled" , true)
-		else prev.classed("disabled" , false);
-
-		if(curr == len) next.classed("disabled" , true);
-		else next.classed("disabled" , false);
+		curlen = (this.groupedData)[curr-1].length;
+		if(len <= 1){
+			pager.classed("dont-display" , true);
+		}
+		else{
+				pager.classed("dont-display" , false);
+				page.text(" "+ curr +" ("+curlen+")");
+				first.text(1 + "..");
+				last.text(".." + len );
+				if(curr == 1) prev.classed("disabled" , true)
+				else prev.classed("disabled" , false);
+	
+				if(curr == len) next.classed("disabled" , true);
+				else next.classed("disabled" , false);
+			}
 	}
 
 	this.makeTable = function(){
-		this.tableData = settings.rightFilteredData(this.data);
+		this.tableData = this.data;
 		
 		this.groupedData = sliceData(this.tableData, settings.tableSize) ;//spliceData(settings.rightFilteredData(this.data) , settings.tableSize);
 		

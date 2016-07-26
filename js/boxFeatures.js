@@ -1,4 +1,4 @@
-function BoxFeatures(model , settings , pane){
+function BoxFeatures(model , settings){
 
 	this.data = model.data;
 	this.features = model.features;
@@ -8,19 +8,19 @@ function BoxFeatures(model , settings , pane){
 	this.min = Infinity;
 	this.boxData = [];
 	this.newData = [];
-	var x;
-	var y;
+	var x , y0 , y1 , xAxis, yAxis;
+	pane = settings.featurePane;
 
-	w = (pane.node().getBoundingClientRect().width)* 9/10;
+	w = (pane.node().getBoundingClientRect().width);
 	h = (pane.node().getBoundingClientRect().height)*9.5/10;
 	var margin = {
-	    top: 30,
+	    top: 20,
 	    right: 10,
 	    bottom: 20,
 	    left: 60
 	},
 	width = w - margin.left - margin.right;
-	height = Math.max(250,h) - margin.top - margin.bottom;
+	height = Math.max(500,h) - margin.top - margin.bottom;
 
 	var tipMedian = d3.tip()
             .attr('class', 'd3-tip')
@@ -94,7 +94,7 @@ function BoxFeatures(model , settings , pane){
 		this.newData = [];
 		this.featuresData = [];
 
-		this.filteredData = settings.rightFilteredData(this.data);
+		this.filteredData = this.data;
 
 		// prepare data only for numerical features
 		for(j = 0,lenj=(this.features).length; j<lenj ; j++) 
@@ -140,31 +140,35 @@ function BoxFeatures(model , settings , pane){
 		
 		pane.select("*").remove();
 
-		height = Math.max(height/2 , (this.boxData).length * 15);
+		height = Math.max(height , (this.boxData).length * 20);
 
-
-		y = d3.scale.ordinal()
+		y0 = d3.scale.ordinal()
             	.domain(this.boxData.map(function(d){ return d.name;}))
-            	.rangeRoundBands([height , 0] , 0.3);
+            	.rangeRoundBands([height , 0] , 0.1);
+
+        y1 = d3.scale.ordinal()
+            	.domain(d3.range(2))
+            	.rangeRoundBands([y0.rangeBand() , 0] , 0.3);
+
 
     	x = d3.scale.linear()
         		.domain([this.min , this.max]).nice()
-        		.range([0 , width/2]);
+        		.range([0 , width]);
 		
-        var xAxis = d3.svg.axis()
+        xAxis = d3.svg.axis()
         			.scale(x)
         			.orient("bottom")
         			.tickSize(1)
-        			.ticks(0);        			
+        			.ticks(5);        			
 
         
-        var yAxis = d3.svg.axis()
-        			.scale(y)
+        yAxis = d3.svg.axis()
+        			.scale(y0)
         			.orient("left")
         			.tickSize(1);
 
         var svg = pane.append("svg")
-              		.attr("class" , "svg-boxPlot all")
+              		.attr("class" , "svg-boxPlot")
               		.attr("width" , width + margin.left + margin.right)
               		.attr("height" , height + margin.top + margin.bottom)
               		.append("g")
@@ -174,11 +178,7 @@ function BoxFeatures(model , settings , pane){
 	      	.attr("class" , "feature x axis")
 	      	.attr("transform" , "translate(0," + height + ")")
 	      	.call(xAxis)
-
-	    svg.append("text")
-	    	.attr("transform" , "translate("+width/8+ ",0)")
-	    	.attr("class" , "box-indicator-text")
-    		.text("Entire Dataset");   	
+ 	
 
 	    svg.append("g")
 	      	.attr("class" , "feature y axis")
@@ -195,98 +195,143 @@ function BoxFeatures(model , settings , pane){
 		svg.call(tipCenter);
 		svg.call(tipQuartile);
 
-	    var boxes = svg.selectAll(".box.all")
-	    			.data(this.boxData , function(d){return d.name;})
-	    			.enter().append("g")
-	    			.attr("class" , "box all");
 
-	    boxes.append("line")
+		var features = svg.selectAll(".feature-group")
+						.data(this.boxData , function(d){return d.name;})
+						.enter().append("g")
+						.attr("class" , "feature-group")
+						.attr("transform", function(d) { return "translate(0," + y0(d.name)+")"; });
+
+	    // var boxes = svg.selectAll(".box.all")
+	    // 			.data(this.boxData , function(d){return d.name;})
+	    // 			.enter().append("g")
+	    // 			.attr("class" , "box all");
+
+	    features.append("line")
 	    		.attr("class" , "center box-stroke box-dasharray")
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y(d.name)})
+	    		.attr("y1" , function(d){return y1(1)})
+	    		.attr("y2" , function(d){return y1(1)})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
-	    		.attr("transform" , "translate(0,"+y.rangeBand()/2+")");
+	    		.attr("transform" , "translate(0,"+y1.rangeBand()/2+")");
 
-	    boxes.append("line")
+	    features.append("line")
 	    		.attr("class" , "whisker upper box-stroke")
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("y1" , function(d){return y1(1)})
+	    		.attr("y2" , function(d){return y1.rangeBand() + y1(1);})
 	    		.attr("x1" , function(d){return x(d.whiskers[1])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
 
-	    boxes.append("line")
+	    features.append("line")
 	    		.attr("class" , "whisker lower box-stroke")
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("y1" , function(d){return y1(1)})
+	    		.attr("y2" , function(d){return y1.rangeBand() + y1(1);})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[0])})
 
-	    boxes.append("rect")
+	    features.append("rect")
 	    		.attr("class" , "quartile box-stroke box-fill")
-	    		.attr("y" , function(d){return y(d.name)})
+	    		.attr("y" , function(d){return y1(1)})
 	    		.attr("x" , function(d){return x(d.quartiles[0])})
 	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
-	    		.attr("height" , function(d){return y.rangeBand()})
+	    		.attr("height" , function(d){return y1.rangeBand()})
 
-	    boxes.append("line")
+	    features.append("line")
 	    		.attr("class" , "median box-stroke box-width")
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("y1" , function(d){return y1(1)})
+	    		.attr("y2" , function(d){return y1.rangeBand() + y1(1);})
 	    		.attr("x1" , function(d){return x(d.quartiles[1])})
 	    		.attr("x2" , function(d){return x(d.quartiles[1])})
 
-	 	svg.append("g")
-	      	.attr("class" , "selection x axis")
-	      	.attr("transform" , "translate("+(width+margin.right)/2+"," + height + ")")
-	      	.call(xAxis)
 
-	    svg.append("text")
-	    	.attr("transform" , "translate("+((width+margin.right)/2 + width/8)+ ",0)")
-	    	.attr("class" , "box-indicator-text")
-    		.text("Selection");   	
 
-		var boxesSelected = svg.selectAll(".box.selected")
-	    			.data(this.boxData , function(d){return d.name;})
-	    			.enter().append("g")
-	    			.attr("class" , "box selected")
-	    			.attr("transform" , "translate("+(width+margin.right)/2+",0)");
 
-	    boxesSelected.append("line")
+	   	var featuresSelected = svg.selectAll(".feature-group-selected")
+						.data(this.newData , function(d){return d.name;})
+						.enter().append("g")
+						.attr("class" , "feature-group-selected dont-display")
+						.attr("transform", function(d) { return "translate(0," + y0(d.name)+")"; });
+
+
+	    featuresSelected.append("line")
 	    		.attr("class" , "center box-stroke box-dasharray")
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y(d.name)})
+	    		.attr("y1" , function(d){return y1(0)})
+	    		.attr("y2" , function(d){return y1(0)})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
-	    		.attr("transform" , "translate(0,"+y.rangeBand()/2+")")
+	    		.attr("transform" , "translate(0,"+y1.rangeBand()/2+")");
 
-	    boxesSelected.append("line")
+	    featuresSelected.append("line")
 	    		.attr("class" , "whisker upper box-stroke")
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("y1" , function(d){return y1(0)})
+	    		.attr("y2" , function(d){return y1.rangeBand() + y1(0);})
 	    		.attr("x1" , function(d){return x(d.whiskers[1])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
 
-	    boxesSelected.append("line")
+	    featuresSelected.append("line")
 	    		.attr("class" , "whisker lower box-stroke")
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("y1" , function(d){return y1(0)})
+	    		.attr("y2" , function(d){return y1.rangeBand() + y1(0);})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[0])})
 
-	    boxesSelected.append("rect")
+	    featuresSelected.append("rect")
 	    		.attr("class" , "quartile box-stroke box-fill")
-	    		.attr("y" , function(d){return y(d.name)})
+	    		.attr("y" , function(d){return y1(0)})
 	    		.attr("x" , function(d){return x(d.quartiles[0])})
 	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
-	    		.attr("height" , function(d){return y.rangeBand()})
+	    		.attr("height" , function(d){return y1.rangeBand()})
 
-	    boxesSelected.append("line")
+	    featuresSelected.append("line")
 	    		.attr("class" , "median box-stroke box-width")
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
+	    		.attr("y1" , function(d){return y1(0)})
+	    		.attr("y2" , function(d){return y1.rangeBand() + y1(0);})
 	    		.attr("x1" , function(d){return x(d.quartiles[1])})
 	    		.attr("x2" , function(d){return x(d.quartiles[1])})
+
+
+
+		// var boxesSelected = svg.selectAll(".box.selected")
+	 //    			.data(this.boxData , function(d){return d.name;})
+	 //    			.enter().append("g")
+	 //    			.attr("class" , "box selected")
+	 //    			.attr("transform" , "translate("+(width+margin.right)/2+",0)");
+
+	 //    boxesSelected.append("line")
+	 //    		.attr("class" , "center box-stroke box-dasharray")
+	 //    		.attr("y1" , function(d){return y0(d.name)})
+	 //    		.attr("y2" , function(d){return y0(d.name)})
+	 //    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	 //    		.attr("x2" , function(d){return x(d.whiskers[1])})
+	 //    		.attr("transform" , "translate(0,"+y1.rangeBand()/2+")")
+
+	 //    boxesSelected.append("line")
+	 //    		.attr("class" , "whisker upper box-stroke")
+	 //    		.attr("y1" , function(d){return y0(d.name)})
+	 //    		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
+	 //    		.attr("x1" , function(d){return x(d.whiskers[1])})
+	 //    		.attr("x2" , function(d){return x(d.whiskers[1])})
+
+	 //    boxesSelected.append("line")
+	 //    		.attr("class" , "whisker lower box-stroke")
+	 //    		.attr("y1" , function(d){return y0(d.name)})
+	 //    		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
+	 //    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	 //    		.attr("x2" , function(d){return x(d.whiskers[0])})
+
+	 //    boxesSelected.append("rect")
+	 //    		.attr("class" , "quartile box-stroke box-fill")
+	 //    		.attr("y" , function(d){return y0(d.name)})
+	 //    		.attr("x" , function(d){return x(d.quartiles[0])})
+	 //    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
+	 //    		.attr("height" , function(d){return y1.rangeBand()})
+
+	 //    boxesSelected.append("line")
+	 //    		.attr("class" , "median box-stroke box-width")
+	 //    		.attr("y1" , function(d){return y0(d.name)})
+	 //    		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
+	 //    		.attr("x1" , function(d){return x(d.quartiles[1])})
+	 //    		.attr("x2" , function(d){return x(d.quartiles[1])})
 
 	};
 
@@ -320,91 +365,90 @@ function BoxFeatures(model , settings , pane){
 	this.prepareData();
 	this.makePlots();
 	this.bindEvents();
-	// this.makeDistribution();
 
 	this.applySettings = function(){
-		this.prepareData();
+	// 	this.prepareData();
 
-		old = this.boxData;
-		nuu = this.newData;
-		for(i=0,len=nuu.length; i<len ; i++){
-			nuu[i].diff = Math.abs(old[i].quartiles[1] - nuu[i].quartiles[1]);
-		}
+	// 	old = this.boxData;
+	// 	nuu = this.newData;
+	// 	for(i=0,len=nuu.length; i<len ; i++){
+	// 		nuu[i].diff = Math.abs(old[i].quartiles[1] - nuu[i].quartiles[1]);
+	// 	}
 
-		nuu.sort(function(a , b){
-			// comparator
-			return d3.ascending(a.diff , b.diff);
-		});
+	// 	nuu.sort(function(a , b){
+	// 		// comparator
+	// 		return d3.ascending(a.diff , b.diff);
+	// 	});
 
-		y.domain(nuu.map(function(d){ return d.name;}));
+	// 	y.domain(nuu.map(function(d){ return d.name;}));
 
-		var yAxis = d3.svg.axis()
-        			.scale(y)
-        			.orient("left")
-        			.tickSize(1);
+	// 	var yAxis = d3.svg.axis()
+ //        			.scale(y)
+ //        			.orient("left")
+ //        			.tickSize(1);
 
         
-		pane.select(".feature.y.axis")
-	      	.call(yAxis)
-	      	.selectAll('text')	      	
-			.text(function (d,i) {
+	// 	pane.select(".feature.y.axis")
+	//       	.call(yAxis)
+	//       	.selectAll('text')	      	
+	// 		.text(function (d,i) {
 
-			   return (d).substr(2);
-			});
-
-
-		var boxesSelected = pane.selectAll(".box.selected")
-	    			.data(this.newData , function(d){return d.name;})
-
-	    boxesSelected.select("line.center").transition().duration(500)
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y(d.name)})
-	    		.attr("x1" , function(d){return x(d.whiskers[0])})
-	    		.attr("x2" , function(d){return x(d.whiskers[1])});
-
-	    boxesSelected.select("line.whisker.upper").transition().duration(500)
-	    		.attr("x1" , function(d){return x(d.whiskers[1])})
-	    		.attr("x2" , function(d){return x(d.whiskers[1])})
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
-
-	    boxesSelected.select("line.whisker.lower").transition().duration(500)
-	    		.attr("x1" , function(d){return x(d.whiskers[0])})
-	    		.attr("x2" , function(d){return x(d.whiskers[0])})
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
-
-	    boxesSelected.select("rect.quartile").transition().duration(500)
-	    		.attr("x" , function(d){return x(d.quartiles[0])})
-	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
-	    		.attr("y" , function(d){return y(d.name)});
-
-	    boxesSelected.select("line.median").transition().duration(500)
-	    		.attr("x1" , function(d){return x(d.quartiles[1])})
-	    		.attr("x2" , function(d){return x(d.quartiles[1])})
-	    		.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);});
-
-	    boxes = d3.selectAll(".box.all")
-
-		boxes.selectAll("line.center").transition().duration(500)
-				.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y(d.name);})	
-
-		boxes.selectAll("line.whisker").transition().duration(500)
-				.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
-
-	    boxes.selectAll("line.median").transition().duration(500)
-				.attr("y1" , function(d){return y(d.name)})
-	    		.attr("y2" , function(d){return y.rangeBand() + y(d.name);})
-
-	    boxes.selectAll("rect.quartile").transition().duration(500)
-				.attr("y" , function(d){return y(d.name)})
+	// 		   return (d).substr(2);
+	// 		});
 
 
-		this.bindEvents();
-	    // this.sortPlots();
+	// 	var boxesSelected = pane.selectAll(".box.selected")
+	//     			.data(this.newData , function(d){return d.name;})
+
+	//     boxesSelected.select("line.center").transition().duration(500)
+	//     		.attr("y1" , function(d){return y0(d.name)})
+	//     		.attr("y2" , function(d){return y0(d.name)})
+	//     		.attr("x1" , function(d){return x(d.whiskers[0])})
+	//     		.attr("x2" , function(d){return x(d.whiskers[1])});
+
+	//     boxesSelected.select("line.whisker.upper").transition().duration(500)
+	//     		.attr("x1" , function(d){return x(d.whiskers[1])})
+	//     		.attr("x2" , function(d){return x(d.whiskers[1])})
+	//     		.attr("y1" , function(d){return y0(d.name)})
+	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
+
+	//     boxesSelected.select("line.whisker.lower").transition().duration(500)
+	//     		.attr("x1" , function(d){return x(d.whiskers[0])})
+	//     		.attr("x2" , function(d){return x(d.whiskers[0])})
+	//     		.attr("y1" , function(d){return y0(d.name)})
+	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
+
+	//     boxesSelected.select("rect.quartile").transition().duration(500)
+	//     		.attr("x" , function(d){return x(d.quartiles[0])})
+	//     		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
+	//     		.attr("y" , function(d){return y0(d.name)});
+
+	//     boxesSelected.select("line.median").transition().duration(500)
+	//     		.attr("x1" , function(d){return x(d.quartiles[1])})
+	//     		.attr("x2" , function(d){return x(d.quartiles[1])})
+	//     		.attr("y1" , function(d){return y0(d.name)})
+	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);});
+
+	//     boxes = d3.selectAll(".box.all")
+
+	// 	boxes.selectAll("line.center").transition().duration(500)
+	// 			.attr("y1" , function(d){return y0(d.name)})
+	//     		.attr("y2" , function(d){return y0(d.name);})	
+
+	// 	boxes.selectAll("line.whisker").transition().duration(500)
+	// 			.attr("y1" , function(d){return y0(d.name)})
+	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
+
+	//     boxes.selectAll("line.median").transition().duration(500)
+	// 			.attr("y1" , function(d){return y0(d.name)})
+	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
+
+	//     boxes.selectAll("rect.quartile").transition().duration(500)
+	// 			.attr("y" , function(d){return y0(d.name)})
+
+
+	// 	this.bindEvents();
+	//     // this.sortPlots();
 
 
 	};
