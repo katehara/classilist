@@ -158,14 +158,14 @@ function BoxFeatures(model , settings){
         xAxis = d3.svg.axis()
         			.scale(x)
         			.orient("bottom")
-        			.tickSize(1)
+        			.tickSize(0.3)
         			.ticks(5);        			
 
         
         yAxis = d3.svg.axis()
         			.scale(y0)
         			.orient("left")
-        			.tickSize(1);
+        			.tickSize(0.3);
 
         var svg = pane.append("svg")
               		.attr("class" , "svg-boxPlot")

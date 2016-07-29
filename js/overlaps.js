@@ -1,5 +1,44 @@
-function Overlaps(model, settings, table, box, probs, his, conf ){
+function Overlaps(model, settings, table, box, probs, hist, conf ){
 
+
+	data = model.data;
+	var overlapData , probData, classData, tableData, boxData, confData; 
+	// probMax = settings.overlapProbLimits[0],
+	// probMin = settings.overlapProbLimits[1],
+	// selClass = settings = overlapClass;
+
+	this.prepareData = function(){
+
+
+	}
+
+	this.overlapProbHist = function(){
+
+	}
+
+	this.overlapBoxFeatures = function(){
+
+	}
+
+	this.overlapClassHist = function(){
+
+	}
+
+	this.overlapConfMat = function(){
+
+	}
+
+	this.overlapTable = function(){
+
+	}
+
+	this.overlapActivate = function(){
+
+	}
+
+	this.overlapDeactivate = function(){
+
+	}
 }
 
 this.overlapToggle = function(set){

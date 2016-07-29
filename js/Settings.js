@@ -10,7 +10,7 @@ function Settings(){
 
 
 	// state of data switches
-	this.dataOptions = {
+	this.probDataOptions = {
 	    tp : true,
 	    tn : true,
 	    fp : true,
@@ -21,26 +21,21 @@ function Settings(){
   	this.probLimits = [0.00 , 1.00];
 
   	//tn filter slider value
-  	this.tnFilter = 0.00;
+  	this.probtnFilter = 0.00;
 
   	//tp filter probability value
-  	this.tpFilter = 1.00;
+  	this.probtpFilter = 1.00;
 
   	// bins count in probability histograms
-  	this.bins = 10;
+  	this.probbins = 10;
 
-    this.getBinValues = function(){
-      bins = this.bins;
-      array = [];
-      k = (this.probLimits[1] - this.probLimits[0])/bins;
-      num=0;
-      for(i=1;i<=bins;i++){
-        num = i*k;
-        num = Math.round((this.probLimits[0] + num) * 100) / 100;
-        array.push( num);
-      }
-      return array;
-    }
+    // //Apply switches on summary
+    // this.switchesOnSummary = true;
+
+    // //Apply switches on summary
+    // this.filtersOnSummary = true;
+
+    
 
 
 

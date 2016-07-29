@@ -9,9 +9,9 @@ function classHist(model , settings){
 	w=(pane.node().getBoundingClientRect().width);
 	h=(pane.node().getBoundingClientRect().height);
 	var margin = {
-	    top: 10,
+	    top: 30,
 	    right: 20,
-	    bottom: 20,
+	    bottom: 10,
 	    left: 20
 	},
 	width = Math.max(198,w) - margin.left - margin.right,
@@ -61,31 +61,33 @@ function classHist(model , settings){
 
       	for(j = 0,lenj=data.length; j<lenj ; j++){
         	for(k = 0,lenk=(this.histData).length; k<lenk ; k++){
-        		Cname = "L-"+(this.histData)[k].name;
+        		Cname = "L-"+(this.histData)[k].name;        		
 
-        		(this.histData)[k][data[j][Cname].toLowerCase()]++;
+	           // 	if(settings.filtersOnSummary && data[j][name].toLowerCase() == "tn" && data[j][prob] < settings.probtnFilter){
+	           //  	break;
+	          	// }
 
-      //     if(data[j][name].toLowerCase() == "tn" && data[j][prob] < settings.tnFilter){
-      //       break;
-      //     }
+	          	// if(settings.filtersOnSummary && data[j][name].toLowerCase() == "tp" && data[j][prob] > settings.probtpFilter){
+	           //  	break;
+	          	// }
+	          
+	          	// if(settings.switchesOnSummary && !(settings.probDataOptions[data[j][name].toLowerCase()])){
+	          	// 	break;
+	          	// }
 
-      //     if(data[j][name].toLowerCase() == "tp" && data[j][prob] > settings.tpFilter){
-      //       break;
-      //     }
-          
-      //     if(settings.dataOptions[data[j][name].toLowerCase()] && 
-      //       data[j][prob] >= settings.probLimits[0] && data[j][prob] <= preparedData[k].probability){
-      //         preparedData[k][data[j][name].toLowerCase()]++;          
-            
-      //       break;
-      //     }
-      //   }
-      		}
+	          	// if(settings.filtersOnSummary && (data[j][prob] > settings.probLimits[1] || data[j][prob] < settings.probLimits[0]))
+	          	// {            
+	           //  	break;
+	          	// }
+
+	          	(this.histData)[k][data[j][Cname].toLowerCase()]++;
+        	}
+      	}
 
 
       		// left = Math.max(left, d3.max((this.histDafunction(d){return (d.tn+d.fn);} ));
       		// right = Math.max(right, d3.max((this.histData) , function(d){return (d.tp+d.fp);} ));
-    	}
+    	
 
     	left = d3.max((this.histData) , function(d){return (d.tn+d.fn);} );
       	right = d3.max((this.histData) , function(d){return (d.tp+d.fp);} );
@@ -106,7 +108,7 @@ function classHist(model , settings){
 		                .scale(x)
 		                .orient("bottom")
 		                .ticks(5)
-		                .tickSize(1)
+		                .tickSize(0.3)
 		                .tickFormat(function(d){ 
 		                  f = Math.abs(d);
 		                  if(f>=1000) return(Math.round(f/1000) + "K");
@@ -127,7 +129,7 @@ function classHist(model , settings){
 		                .scale(y)
 		                .orient("left")
 		                .tickFormat("")
-		                .tickSize(-1);
+		                .tickSize(0.3);
 
 		    var svg = pane
 		    			// .selectAll("svg")
@@ -151,6 +153,7 @@ function classHist(model , settings){
 		    //           .attr("y" , -12)
 		    //           .attr("dy" , ".5em")
 		    //           .text(function(d , i){return (d[0].name)});
+
 
 		    var bars = svg.selectAll(".left-bar")
 		    			.data(this.histData , function(d){ return d.name;})
@@ -199,8 +202,6 @@ function classHist(model , settings){
 		      .attr("class" , "y axis2")
 		      .attr("transform" , "translate(" + x(0) +",0)")
 		      .call(yAxis2);
-
-
 	}
 
 	this.bindEvents = function(){

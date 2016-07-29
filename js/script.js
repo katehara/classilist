@@ -32,7 +32,7 @@ $(document).ready(function(){
 	//initialize and setup slider for increase or decrease in histogram bins
 	var binSlider = document.getElementById('rebin');
 	  noUiSlider.create(binSlider, {
-	   	start: settings.bins,
+	   	start: settings.probbins,
 	   	connect : 'lower',
 	   	tooltips : true,
 	   	format: wNumb({
@@ -103,26 +103,30 @@ $(document).ready(function(){
 
 		// action listener for TP switch
 		d3.select(".switch-tp").on("change", function(d){
-			settings.dataOptions.tp = this.checked;
+			settings.probDataOptions.tp = this.checked;
 			probHist.applySettings();
+			if(settings.switchesOnSummary) classHist.applySettings();
 		});
 
 		// action listener for FP switch
 		d3.select(".switch-fp").on("change", function(d){
-			settings.dataOptions.fp = this.checked;
+			settings.probDataOptions.fp = this.checked;
 			probHist.applySettings();
+			if(settings.switchesOnSummary) classHist.applySettings();
 		});
 
 		// action listener for TN switch
 		d3.select(".switch-tn").on("change", function(d){
-			settings.dataOptions.tn = this.checked;
+			settings.probDataOptions.tn = this.checked;
 			probHist.applySettings();
+			if(settings.switchesOnSummary) classHist.applySettings();
 		});
 
 		// action listener for FN switch
 		d3.select(".switch-fn").on("change", function(d){
-			settings.dataOptions.fn = this.checked;
+			settings.probDataOptions.fn = this.checked;
 			probHist.applySettings();
+			if(settings.switchesOnSummary) classHist.applySettings();
 		});
 
 		//reset the probabilty slider and rebin slider 
@@ -132,16 +136,28 @@ $(document).ready(function(){
 				probs = [0.00 , 1.00];
 				binSlider.noUiSlider.set(bins);
 				probabilitySlider.noUiSlider.set(probs);
-				settings.bins = bins;
+				tpSlider.noUiSlider.set(probs[1]);
+				tnSlider.noUiSlider.set(probs[0]);
+				settings.probtpFilter = probs[1]
+				settings.probtnFilter = probs[0]
+				settings.probbins = bins;
 				settings.probLimits = probs;
 				probHist.applySettings();
+			}
+		});
+
+		d3.select(".clear").on("click" , function(){
+			if(!d3.select(this).classed("disabled")){
+				overlaps.overlapDeactivate();
 			}
 		});
 
 		// apply new probability window and rebin settings to histograms
 		d3.select(".apply").on("click" , function(){
 			if(!d3.select(this).classed("disabled")){
-				settings.bins = Number(binSlider.noUiSlider.get());
+				settings.probtpFilter = Number(tpSlider.noUiSlider.get());
+				settings.probtnFilter = Number(tnSlider.noUiSlider.get());
+				settings.probbins = Number(binSlider.noUiSlider.get());
 				settings.probLimits = probabilitySlider.noUiSlider.get().map(Number);
 				probHist.applySettings();
 			}
@@ -168,18 +184,18 @@ $(document).ready(function(){
 		});
 
 	 	//action listener for High-TP filter
-	   	tpSlider.noUiSlider.on("update" , function(values){
-	   		value = Number(values);
-	   		settings.tpFilter = value;
-	   		if(settings.tpFilter < settings.probLimits[1]) probHist.applySettings();
-	  	});
+	   // 	tpSlider.noUiSlider.on("update" , function(values){
+	   // 		value = Number(values);
+	   // 		settings.tpFilter = value;
+	   // 		if(settings.tpFilter < settings.probLimits[1]) probHist.applySettings();
+	  	// });
 
-	   	// action listener for low TN filter
-	   	tnSlider.noUiSlider.on("update" , function(values){
-	   		value = Number(values);
-	   		settings.tnFilter = value;
-	   		if(settings.tnFilter > settings.probLimits[0])probHist.applySettings();
-	  	});
+	   // 	// action listener for low TN filter
+	   // 	tnSlider.noUiSlider.on("update" , function(values){
+	   // 		value = Number(values);
+	   // 		settings.tnFilter = value;
+	   // 		if(settings.tnFilter > settings.probLimits[0])probHist.applySettings();
+	  	// });
 
 	  	
 	});

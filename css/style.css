@@ -304,7 +304,13 @@ svg .left-bar-tn , svg .bar-tn , svg .overlap-tn{
 	height: 100%;
 }
 
-#data-samples .data-table , #feature-view , #conf-mat{
+#data-samples .data-table{
+	height : 90%;
+	overflow-x: scroll;
+	overflow-y: scroll;
+}
+
+#feature-view , #conf-mat{
 	height : 100%;
 	overflow-x: scroll;
 	overflow-y: scroll;
