@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
 	
 	//activate sidenav on loading window for small and medium sized windows
 	$(".button-collapse").sideNav();
@@ -78,6 +79,7 @@ $(document).ready(function(){
 	// d3.csv("data/rapidminer.csv", function (error, data) {
 	d3.csv("data/prob.csv", function (error, data) {
 
+		_self = this;
 		//prepare data model do all basic calculations about data
 		var model = new Model(data);
 		
@@ -88,16 +90,16 @@ $(document).ready(function(){
 		var boxPlots = new BoxFeatures(model , settings)
 
 		//initialize class probability histograms
-		var probHist = new ProbHist(model , settings);
+		var probHist = new ProbHist(model , settings, _self);
 
 		//initialize summary class histograms
-		var classhist = new classHist(model , settings);
+		var classhist = new classHist(model , settings, _self);
 
 		//initialize confusion Matrix
-		var confmat = new confMatrix(model , settings);
+		var confmat = new confMatrix(model , settings, _self);
 
 		//initialize selection overlaps
-		var overlaps = new Overlaps(model , settings, table, boxPlots, probHist, classHist, confmat);
+		this.overlaps = new Overlaps(model , settings, table, boxPlots, probHist, classhist, confmat);
 
 		
 
@@ -182,6 +184,20 @@ $(document).ready(function(){
 		d3.select(".last").on("click" , function(){
 				table.slideData(2);
 		});
+
+		d3.selectAll(".with-gap").on("change", function(d){
+			mode = d3.select('input[name="mat-mode"]:checked').property("id");
+			if(mode == "size-mode") settings.matrixMode = 1;
+			else if (mode == "fill-mode") settings.matrixMode = 0;
+			confmat.applySettings();
+		});
+
+		d3.select("#diagonal").on("change", function(d){
+			settings.matrixDiagonals = this.checked;
+			confmat.applySettings();
+		});
+
+
 
 	 	//action listener for High-TP filter
 	   // 	tpSlider.noUiSlider.on("update" , function(values){

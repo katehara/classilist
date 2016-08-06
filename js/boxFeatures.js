@@ -89,12 +89,12 @@ function BoxFeatures(model , settings){
 	}
 
 
-	this.prepareData = function(){
+	this.prepareData = function(nowData){
 
 		this.newData = [];
 		this.featuresData = [];
 
-		this.filteredData = this.data;
+		this.filteredData = nowData;
 
 		// prepare data only for numerical features
 		for(j = 0,lenj=(this.features).length; j<lenj ; j++) 
@@ -202,11 +202,6 @@ function BoxFeatures(model , settings){
 						.attr("class" , "feature-group")
 						.attr("transform", function(d) { return "translate(0," + y0(d.name)+")"; });
 
-	    // var boxes = svg.selectAll(".box.all")
-	    // 			.data(this.boxData , function(d){return d.name;})
-	    // 			.enter().append("g")
-	    // 			.attr("class" , "box all");
-
 	    features.append("line")
 	    		.attr("class" , "center box-stroke box-dasharray")
 	    		.attr("y1" , function(d){return y1(1)})
@@ -289,50 +284,6 @@ function BoxFeatures(model , settings){
 	    		.attr("x1" , function(d){return x(d.quartiles[1])})
 	    		.attr("x2" , function(d){return x(d.quartiles[1])})
 
-
-
-		// var boxesSelected = svg.selectAll(".box.selected")
-	 //    			.data(this.boxData , function(d){return d.name;})
-	 //    			.enter().append("g")
-	 //    			.attr("class" , "box selected")
-	 //    			.attr("transform" , "translate("+(width+margin.right)/2+",0)");
-
-	 //    boxesSelected.append("line")
-	 //    		.attr("class" , "center box-stroke box-dasharray")
-	 //    		.attr("y1" , function(d){return y0(d.name)})
-	 //    		.attr("y2" , function(d){return y0(d.name)})
-	 //    		.attr("x1" , function(d){return x(d.whiskers[0])})
-	 //    		.attr("x2" , function(d){return x(d.whiskers[1])})
-	 //    		.attr("transform" , "translate(0,"+y1.rangeBand()/2+")")
-
-	 //    boxesSelected.append("line")
-	 //    		.attr("class" , "whisker upper box-stroke")
-	 //    		.attr("y1" , function(d){return y0(d.name)})
-	 //    		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
-	 //    		.attr("x1" , function(d){return x(d.whiskers[1])})
-	 //    		.attr("x2" , function(d){return x(d.whiskers[1])})
-
-	 //    boxesSelected.append("line")
-	 //    		.attr("class" , "whisker lower box-stroke")
-	 //    		.attr("y1" , function(d){return y0(d.name)})
-	 //    		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
-	 //    		.attr("x1" , function(d){return x(d.whiskers[0])})
-	 //    		.attr("x2" , function(d){return x(d.whiskers[0])})
-
-	 //    boxesSelected.append("rect")
-	 //    		.attr("class" , "quartile box-stroke box-fill")
-	 //    		.attr("y" , function(d){return y0(d.name)})
-	 //    		.attr("x" , function(d){return x(d.quartiles[0])})
-	 //    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
-	 //    		.attr("height" , function(d){return y1.rangeBand()})
-
-	 //    boxesSelected.append("line")
-	 //    		.attr("class" , "median box-stroke box-width")
-	 //    		.attr("y1" , function(d){return y0(d.name)})
-	 //    		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
-	 //    		.attr("x1" , function(d){return x(d.quartiles[1])})
-	 //    		.attr("x2" , function(d){return x(d.quartiles[1])})
-
 	};
 
 
@@ -362,100 +313,73 @@ function BoxFeatures(model , settings){
 
 	};
 
-	this.prepareData();
+	this.prepareData(this.data);
 	this.makePlots();
 	this.bindEvents();
 
-	this.applySettings = function(){
-	// 	this.prepareData();
+	this.overlap = function(newdata){
+		pane = settings.featurePane;
+		this.prepareData(newdata);
 
-	// 	old = this.boxData;
-	// 	nuu = this.newData;
-	// 	for(i=0,len=nuu.length; i<len ; i++){
-	// 		nuu[i].diff = Math.abs(old[i].quartiles[1] - nuu[i].quartiles[1]);
-	// 	}
+		old = this.boxData;
+		now = this.newData;
+		for(i=0,len=now.length; i<len ; i++){
+			now[i].diff = Math.abs(old[i].quartiles[1] - now[i].quartiles[1]);
+		}
 
-	// 	nuu.sort(function(a , b){
-	// 		// comparator
-	// 		return d3.ascending(a.diff , b.diff);
-	// 	});
+		now.sort(function(a , b){
+			// comparator
+			return d3.ascending(a.diff , b.diff);
+		});
 
-	// 	y.domain(nuu.map(function(d){ return d.name;}));
+		y0.domain(now.map(function(d){ return d.name;}));
 
-	// 	var yAxis = d3.svg.axis()
- //        			.scale(y)
- //        			.orient("left")
- //        			.tickSize(1);
+		yAxis = d3.svg.axis()
+        			.scale(y0)
+        			.orient("left")
+        			.tickSize(0.3);
 
         
-	// 	pane.select(".feature.y.axis")
-	//       	.call(yAxis)
-	//       	.selectAll('text')	      	
-	// 		.text(function (d,i) {
+		pane.select(".feature.y.axis")
+	      	.call(yAxis)
+	      	.selectAll('text')	      	
+			.text(function (d,i) {
+			   return (d).substr(2);
+			});
 
-	// 		   return (d).substr(2);
-	// 		});
+		
 
-
-	// 	var boxesSelected = pane.selectAll(".box.selected")
-	//     			.data(this.newData , function(d){return d.name;})
-
-	//     boxesSelected.select("line.center").transition().duration(500)
-	//     		.attr("y1" , function(d){return y0(d.name)})
-	//     		.attr("y2" , function(d){return y0(d.name)})
-	//     		.attr("x1" , function(d){return x(d.whiskers[0])})
-	//     		.attr("x2" , function(d){return x(d.whiskers[1])});
-
-	//     boxesSelected.select("line.whisker.upper").transition().duration(500)
-	//     		.attr("x1" , function(d){return x(d.whiskers[1])})
-	//     		.attr("x2" , function(d){return x(d.whiskers[1])})
-	//     		.attr("y1" , function(d){return y0(d.name)})
-	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
-
-	//     boxesSelected.select("line.whisker.lower").transition().duration(500)
-	//     		.attr("x1" , function(d){return x(d.whiskers[0])})
-	//     		.attr("x2" , function(d){return x(d.whiskers[0])})
-	//     		.attr("y1" , function(d){return y0(d.name)})
-	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
-
-	//     boxesSelected.select("rect.quartile").transition().duration(500)
-	//     		.attr("x" , function(d){return x(d.quartiles[0])})
-	//     		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
-	//     		.attr("y" , function(d){return y0(d.name)});
-
-	//     boxesSelected.select("line.median").transition().duration(500)
-	//     		.attr("x1" , function(d){return x(d.quartiles[1])})
-	//     		.attr("x2" , function(d){return x(d.quartiles[1])})
-	//     		.attr("y1" , function(d){return y0(d.name)})
-	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);});
-
-	//     boxes = d3.selectAll(".box.all")
-
-	// 	boxes.selectAll("line.center").transition().duration(500)
-	// 			.attr("y1" , function(d){return y0(d.name)})
-	//     		.attr("y2" , function(d){return y0(d.name);})	
-
-	// 	boxes.selectAll("line.whisker").transition().duration(500)
-	// 			.attr("y1" , function(d){return y0(d.name)})
-	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
-
-	//     boxes.selectAll("line.median").transition().duration(500)
-	// 			.attr("y1" , function(d){return y0(d.name)})
-	//     		.attr("y2" , function(d){return y1.rangeBand() + y0(d.name);})
-
-	//     boxes.selectAll("rect.quartile").transition().duration(500)
-	// 			.attr("y" , function(d){return y0(d.name)})
+		var features = pane.selectAll(".feature-group")
+						.attr("transform", function(d) { return "translate(0," + y0(d.name)+")"; });
 
 
-	// 	this.bindEvents();
-	//     // this.sortPlots();
+	   	var featuresSelected = pane.selectAll(".feature-group-selected")
+						.data(this.newData , function(d){return d.name;})
 
+		featuresSelected.transition().duration(500)
+				.attr("transform", function(d) { return "translate(0," + y0(d.name)+")"; });
 
+	    featuresSelected.select("line.center").transition().duration(500)
+	    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	    		.attr("x2" , function(d){return x(d.whiskers[1])})
+	    		.attr("transform" , "translate(0,"+y1.rangeBand()/2+")");
+
+	    featuresSelected.select("line.whisker.upper").transition().duration(500)
+	    		.attr("x1" , function(d){return x(d.whiskers[1])})
+	    		.attr("x2" , function(d){return x(d.whiskers[1])})
+
+	    featuresSelected.select("line.whisker.lower").transition().duration(500)
+	    		.attr("x1" , function(d){return x(d.whiskers[0])})
+	    		.attr("x2" , function(d){return x(d.whiskers[0])})
+
+	    featuresSelected.select("rect.quartile").transition().duration(500)
+	    		.attr("x" , function(d){return x(d.quartiles[0])})
+	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
+
+	    featuresSelected.select("line.median").transition().duration(500)
+	    		.attr("x1" , function(d){return x(d.quartiles[1])})
+	    		.attr("x2" , function(d){return x(d.quartiles[1])})
+
+		this.bindEvents();
 	};
-
-
-
-
-	
-
 }

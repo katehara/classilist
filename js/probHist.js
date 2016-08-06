@@ -1,9 +1,9 @@
-function ProbHist(model , settings ){
+function ProbHist(model , settings , parent){
 
   var _self = this;
   this.data = model.data;
   this.classNames = model.classNames;
-  this.histData = [];
+  this.histData = this.newData = [];
   this.max = {
     right : 0,
     left : 0
@@ -75,11 +75,11 @@ function ProbHist(model , settings ){
   }
 
   // prepare histogram data into bins and assign it to property -> histData[]
-  this.prepareData = function(){
-    data = this.data;
+  this.prepareData = function(data){
+    // data = this.data;
     classes = this.classNames;
     bins = settings.probbins;
-    this.histData = [];
+    this.newData = [];
     this.max.right = this.max.left = 0;
     binValues = this.getBinValues();
 
@@ -120,7 +120,7 @@ function ProbHist(model , settings ){
         }
       }
 
-      this.histData.push(preparedData);
+      this.newData.push(preparedData);
       this.max.left = Math.max(this.max.left, d3.max(preparedData , function(d){return (d.tn+d.fn);} ));
       this.max.right = Math.max(this.max.right, d3.max(preparedData , function(d){return (d.tp+d.fp);} ));
     }
@@ -129,7 +129,10 @@ function ProbHist(model , settings ){
 
   // make all probibility histograms
   this.makeHistograms = function(){
-    // pane.selectAll("*").remove();
+
+    for(i=0,len=(this.newData).length; i<len ; i++){
+      this.histData[i] = this.newData[i];
+    }
     scl = Math.max(this.max.left , this.max.right);
     x = d3.scale.linear()
             .domain([-scl , scl]).nice()
@@ -165,8 +168,6 @@ function ProbHist(model , settings ){
                 .orient("left")
                 .tickFormat("")
                 .tickSize(0.3);
-
-                console.log(this.histData);
 
     var svg = pane.selectAll(".svg-probHist")
               .data(this.histData)
@@ -248,99 +249,77 @@ function ProbHist(model , settings ){
         .on('mouseover', tipTP.show)
         .on('mouseout', tipTP.hide)
         .on("click" , function(){
-        // fullClass = d3.select(this).attr("class");
-        // shortClass = fullClass.substr(0, fullClass.indexOf(" "));
-        // settings.rightClass = shortClass;
-
-        // prob = d3.select(this).data()[0].probability;
-        // settings.updateProbBounds(prob);
-
-        // settings.rightResult = "tp";
-        // // settings.centerOverlap = true;
-
-        // table.makeTable();
-        // boxPlots.applySettings();
-        // _self.overlapUpdate();
-        // _self.overlapToggle(true);
+          if(!(d3.select(this).classed("filled-gray"))){
+            obj = d3.select(this).data()[0]
+            settings.oca = obj.name;
+            settings.ocp = "all";
+            settings.opl = obj.lowProb;
+            settings.oph = obj.probability;
+            settings.ors = "tp";
+            parent.overlaps.overlapActivate(2);
+          }
       });
 
       d3.selectAll(".bar-tn")
         .on('mouseover', tipTN.show)
         .on('mouseout', tipTN.hide)
         .on("click" , function(){
-        // fullClass = d3.select(this).attr("class");
-        // shortClass = fullClass.substr(0, fullClass.indexOf(" "));
-        // settings.rightClass = shortClass;
-
-        // prob = d3.select(this).data()[0].probability;
-        // settings.updateProbBounds(prob);
-        // console.log(settings.rightProbBounds);
-
-        // settings.rightResult = "tn";
-        // // settings.centerOverlap = true;
-
-        // table.makeTable();
-        // boxPlots.applySettings();
-        // _self.overlapUpdate();
-        // _self.overlapToggle(true);
+          if(!(d3.select(this).classed("filled-gray"))){
+            obj = d3.select(this).data()[0]
+            settings.oca = obj.name;
+            settings.ocp = "all";
+            settings.opl = obj.lowProb;
+            settings.oph = obj.probability;
+            settings.ors = "tn";
+            parent.overlaps.overlapActivate(2);
+          }
       });
 
       d3.selectAll(".bar-fp")
         .on('mouseover', tipFP.show)
         .on('mouseout', tipFP.hide)
         .on("click" , function(){
-        // fullClass = d3.select(this).attr("class");
-        // shortClass = fullClass.substr(0, fullClass.indexOf(" "));
-        // settings.rightClass = shortClass;
-
-        // prob = d3.select(this).data()[0].probability;
-        // settings.updateProbBounds(prob);
-
-        // settings.rightResult = "fp";
-        // // settings.centerOverlap = true;
-
-        // table.makeTable();
-        // boxPlots.applySettings();
-        // _self.overlapUpdate();
-        // _self.overlapToggle(true);
+          if(!(d3.select(this).classed("filled-gray"))){
+            obj = d3.select(this).data()[0]
+            settings.oca = obj.name;
+            settings.ocp = "all";
+            settings.opl = obj.lowProb;
+            settings.oph = obj.probability;
+            settings.ors = "fp";
+            parent.overlaps.overlapActivate(2);
+          }
       });
 
       d3.selectAll(".bar-fn")
         .on('mouseover', tipFN.show)
         .on('mouseout', tipFN.hide)
         .on("click" , function(){
-        // fullClass = d3.select(this).attr("class");
-        // shortClass = fullClass.substr(0, fullClass.indexOf(" "));
-        // settings.rightClass = shortClass;
-
-        // prob = d3.select(this).data()[0].probability;
-        // settings.updateProbBounds(prob);
-        // console.log(settings.rightProbBounds);
-
-        // settings.rightResult = "fn";
-        // // settings.centerOverlap = true;
-
-        // table.makeTable();
-        // boxPlots.applySettings();
-        // _self.overlapUpdate();
-        // _self.overlapToggle(true);
+          if(!(d3.select(this).classed("filled-gray"))){
+            obj = d3.select(this).data()[0]
+            settings.oca = obj.name;
+            settings.ocp = "all";
+            settings.opl = obj.lowProb;
+            settings.oph = obj.probability;          
+            settings.ors = "fn";
+            parent.overlaps.overlapActivate(2);
+          }
       });
   }
 
-  this.prepareData();
+  this.prepareData(this.data);
   this.makeHistograms();
   this.bindEvents();
 
   this.applySettings = function(){ 
     pane= settings.probPane;
-    this.prepareData();
+    this.prepareData(this.data);
     scl = Math.max(this.max.left , this.max.right);
     x = d3.scale.linear()
             .domain([-scl , scl]).nice()
             .rangeRound([0, width]);
 
     y = d3.scale.ordinal()
-            .domain(((this.histData)[0]).map(function(d){ return d.probability;}))
+            .domain(((this.newData)[0]).map(function(d){ return d.probability;}))
             .rangeRoundBands([height , 0] , 0.1);
 
     xAxis = d3.svg.axis()
@@ -370,19 +349,11 @@ function ProbHist(model , settings ){
                 .tickFormat("")
                 .tickSize(0.3);
 
-// pane.selectAll("*").remove();
 
     var svg = pane.selectAll("svg.svg-probHist")
-              .data(this.histData)
+              .data(this.newData)
 
         svg = svg.select("g");
-
-              // .enter().append("svg")
-              // .attr("class" , "svg-probHist")
-              // .attr("width" , width + margin.left + margin.right)
-    //           .attr("height" , height + margin.top + margin.bottom)
-    //           .append("g")
-    //             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var transitionScale = svg.transition().duration(500);
 
@@ -394,14 +365,6 @@ function ProbHist(model , settings ){
 
                         transitionScale.select(".y.axis2")
                         .call(yAxis2)
-
-
-    // svg.append("text")
-    //           .attr("class" , "class-label")
-    //           .attr("x" , "0")
-    //           .attr("y" , -12)
-    //           .attr("dy" , ".5em")
-    //           .text(function(d , i){return (d[0].name)});
 
     var tp = svg.selectAll(".bar-tp")
               .data(function(d){return d;})
@@ -460,138 +423,56 @@ function ProbHist(model , settings ){
               tn.exit().remove();
 
     this.bindEvents();
+  }
 
-    // pane.selectAll("g .x.axis")
-    //   .call(xAxis);
+  this.overlap = function(nowdata){
+    pane = settings.probPane;
+    this.prepareData(nowdata);
 
-    // pane.selectAll("g .y.axis")
-    //   .call(yAxis);
+    var svg = pane.selectAll("svg")
+              .data(this.newData)
 
-    // pane.selectAll("g .y.axis2")
-    //   .call(yAxis2);
+    groups = svg.select("g");
 
-    // xTransition = false;
-    // if(scl != Math.max(this.max.left , this.max.right)) xTransition = true;
-    // scl = Math.max(this.max.left , this.max.right);
+    var tp = groups.selectAll(".overlap-tp")
+              .data(function(d){return d;})
+              .enter().append("rect")
+              .attr("class" , function(d){return d.name+" overlap-tp overlap";})
+              .attr("x" , function(d){return x(0);})
+              .attr("y" , function(d){return y(d.probability);})
+              .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
+              .attr("height" , function(d){return y.rangeBand()});
 
-    // for(i=0,len=(this.histData).length; i<len ; i++){   
+    var fp = groups.selectAll(".overlap-fp")
+              .data(function(d){return d;})
+              .enter().append("rect")
+              .attr("class" , function(d){return d.name+" overlap-fp overlap";})
+              .attr("x" , function(d){return x(d.tp);})
+              .attr("y" , function(d){return y(d.probability);})
+              .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
+              .attr("height" , function(d){return y.rangeBand()});
 
-    //   newd = this.histData[i];
-    //   newname = this.classNames[i];
+    var fn = groups.selectAll(".overlap-fn")
+              .data(function(d){return d;})
+              .enter().append("rect")
+              .attr("class" , function(d){return d.name+" overlap-fn overlap";})
+              .attr("x" , function(d){return x(-d.fn);})
+              .attr("y" , function(d){return y(d.probability);})
+              .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
+              .attr("height" , function(d){return y.rangeBand()});
 
-    //   classtp = newname + " bar-tp bar";
-    //   classtn = newname + " bar-tn bar";
-    //   classfp = newname + " bar-fp bar";
-    //   classfn = newname + " bar-fn bar";
+    var tn = groups.selectAll(".overlap-tn")
+              .data(function(d){return d;})
+              .enter().append("rect")
+              .attr("class" , function(d){return d.name+" overlap-tn overlap";})
+              .attr("x" , function(d){return x(-d.fn-d.tn);})
+              .attr("y" , function(d){return y(d.probability);})
+              .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+              .attr("height" , function(d){return y.rangeBand()});
 
-    //   x = d3.scale.linear()
-    //           .domain([-scl , scl]).nice()
-    //           .rangeRound([0, width]);
 
-    //   var xAxis = d3.svg.axis()
-    //               .scale(x)
-    //               .orient("bottom")
-    //               .ticks(5)
-    //               .tickSize(1)
-    //               .tickFormat(function(d){ 
-    //                 f = Math.abs(d);
-    //                 if(f>=1000) return(Math.round(f/1000) + "K");
-    //                 else return f;
-    //               });
 
-    //   y = d3.scale.ordinal()
-    //           .domain(newd.map(function(d){ return d.probability;}))
-    //           .rangeRoundBands([height , 0] , 0.1);
-      
-    //   var yAxis = d3.svg.axis()
-    //               .scale(y)
-    //               .orient("left")
-    //               .tickValues(y.domain().filter(function(d,i){ 
-    //                 if(i == 0 || i == (settings.bins-1) || i == Math.round((settings.bins-1)/2) || i == Math.round((settings.bins-1)/4) || i == Math.round(3*(settings.bins-1)/4)) 
-    //                   return true;
-    //                 return false; 
-    //               }))
-    //               .tickSize(0)
-    //               .tickPadding(3);
 
-    //   var yAxis2 = d3.svg.axis()
-    //               .scale(y)
-    //               .orient("left")
-    //               .tickFormat("")
-    //               .tickSize(-1);
-
-      
-
-    //   var recttp = pane.select(".svg-"+newname).select("g")
-    //                 .selectAll("."+newname+".bar-tp")
-    //                 .data(newd, function(d , i){return d.probability;});
-
-    //   recttp.enter().append("rect")
-    //         .attr("class" , classtp);
-
-    //   recttp.transition()
-    //                 .duration(1000)                    
-    //                 .attr("x" , function(d){return x(0);})
-    //                 .attr("y" , function(d){return y(d.probability);})
-    //                 .attr("width" , function(d){return Math.abs(x(d.tp) - x(0));})
-    //                 .attr("height" , function(d){return y.rangeBand()});                    
-
-    //   recttp.exit().remove();
-
-    //   var recttn = pane.select(".svg-"+newname).select("g")
-    //                 .selectAll("."+newname+".bar-tn")
-    //                 .data(newd, function(d , i){return d.probability;});
-
-    //   recttn.enter().append("rect")
-    //          .attr("class" , classtn);
-
-    //   recttn.transition()
-    //                 .duration(1000)                    
-    //                 .attr("x" , function(d){return x(-d.fn-d.tn);})
-    //                 .attr("y" , function(d){return y(d.probability);})
-    //                 .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
-    //                 .attr("height" , function(d){return y.rangeBand()});
-
-    //   recttn.exit().remove();
-
-    //   var rectfn = pane.select(".svg-"+newname).select("g")
-    //                 .selectAll("."+newname+".bar-fn")
-    //                 .data(newd, function(d , i){return d.probability;});
-
-    //   rectfn.enter().append("rect")
-    //         .attr("class" , classfn);
-
-    //   rectfn.transition()
-    //                 .duration(1000)                    
-    //                 .attr("x" , function(d){return x(-d.fn);})
-    //                 .attr("y" , function(d){return y(d.probability);})
-    //                 .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
-    //                 .attr("height" , function(d){return y.rangeBand()});
-
-    //   rectfn.exit().remove();
-
-    //   var rectfp = pane.select(".svg-"+newname).select("g")
-    //                 .selectAll("."+newname+".bar-fp")
-    //                 .data(newd, function(d , i){return d.probability;});
-
-    //   rectfp.enter().append("rect")
-    //         .attr("class" , classfp);
-
-    //   rectfp.transition()
-    //                 .duration(1000)                    
-    //                 .attr("x" , function(d){return x(d.tp);})
-    //                 .attr("y" , function(d){return y(d.probability);})
-    //                 .attr("width" , function(d){return Math.abs(x(d.fp) - x(0));})
-    //                 .attr("height" , function(d){return y.rangeBand()});                    
-
-    //   rectfp.exit().remove();
-
-    //   pane.select("."+newname+".x.axis").moveToFront();
-
-    //   pane.select("."+newname+".y.axis2").moveToFront();
-
-    //   this.bindEvents();
-                      
-    // }
+              
   }
 }// end of class

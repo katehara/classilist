@@ -46,6 +46,39 @@ label {
 	padding : 0 auto;
 }
 
+.control-matrix label , [type="radio"]:not(:checked)+label, [type="radio"]:checked+label {
+	font-size: 0.8em;
+}
+
+form p {
+	margin-top :0;
+}
+
+[type="radio"].with-gap:checked+label:after{
+	border-color : #b388ff;
+	background-color: #b388ff;
+}
+
+[type="radio"].with-gap:checked+label:before {
+ 	border-color : #b388ff;
+}
+
+[type="checkbox"]+label:before {
+	top: 2px;
+    left: 3px;
+    width: 15px;
+    height: 15px;
+}
+
+[type="checkbox"]:checked+label:before {
+	top: 0px;
+    left: 0px;
+    width: 10px;
+    height: 17px;
+	border-right: 2px solid #b388ff;
+	border-bottom: 2px solid #b388ff;
+}
+
 .switch label input[type=checkbox]:checked+.lever:after {
 	background-color: #d1c4e9;
 }
@@ -178,7 +211,14 @@ label {
 }
 
 
+.filled-gray {
+	fill : #bdbdbd !important;
+}
 
+.stroked-gray {
+	stroke : #9e9e9e !important;
+	fill : #eee !important;
+}
 
 
 .probability-histograms {
@@ -205,19 +245,19 @@ label {
 }
 
 
-svg .left-bar-tp ,svg .bar-tp , svg .overlap-tp{
+svg .left-bar-tp ,svg .bar-tp , svg .overlap-tp , svg .overlap-left-bar-tp{
 	fill : #00c853;
 }
 
-svg .left-bar-fp , svg .bar-fp , svg .overlap-fp{
+svg .left-bar-fp , svg .bar-fp , svg .overlap-fp , svg .overlap-left-bar-fp{
 	fill : #ffc400;
 }
 
-svg .left-bar-fn , svg .bar-fn , svg .overlap-fn{
+svg .left-bar-fn , svg .bar-fn , svg .overlap-fn , svg .overlap-left-bar-fn{
 	fill : #f44336;
 }
 
-svg .left-bar-tn , svg .bar-tn , svg .overlap-tn{
+svg .left-bar-tn , svg .bar-tn , svg .overlap-tn , svg .overlap-left-bar-tn{
 	fill : #00b0ff;
 }
 
@@ -310,10 +350,14 @@ svg .left-bar-tn , svg .bar-tn , svg .overlap-tn{
 	overflow-y: scroll;
 }
 
-#feature-view , #conf-mat{
+#feature-view , #conf-mat .confusion-matrix {
 	height : 100%;
 	overflow-x: scroll;
 	overflow-y: scroll;
+}
+
+.control-matrix {
+	overflow: hidden;
 }
 
 td, th {

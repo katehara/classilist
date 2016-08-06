@@ -134,6 +134,28 @@
 			    </div>
 
 			    <div id="conf-mat" class="col s12">
+			    	<div class="control-matrix center">
+			    		<form>
+			    			<div class="switch col s6 m6">
+							    <p>
+							      <input class="with-gap" name="mat-mode" type="radio" id="fill-mode" checked="checked" />
+							      <label for="fill-mode">Color Scale</label>
+							    </p>
+						    </div>
+						    <div class="switch col s6 m6">
+						      	<p>
+						        	<input class="with-gap" name="mat-mode" type="radio" id="size-mode" />
+						        	<label for="size-mode">Size Scale</label>
+						    	</p>
+						    </div>
+						    <div class="switch col s12 center">
+				    			<p>
+							      <input type="checkbox" id="diagonal" checked="checked" />
+							      <label for="diagonal">Show Diagonal</label>
+							    </p>
+						    </div>
+						  </form>
+			    	</div>
 				    <div class = "confusion-matrix"> </div>
 			    </div>
 			</div>
@@ -151,9 +173,9 @@
 		<script type="text/javascript" src="js/boxFeatures.js" ></script>
 		<script type="text/javascript" src="js/probHist.js" ></script>
 		<script type="text/javascript" src="js/classHist.js" ></script>
-		<script type="text/javascript" src="js/overlaps.js" ></script>
 		<script type="text/javascript" src="js/confMatrix.js" ></script>
-		<script type="text/javascript" src="js/table.js" ></script>	
+		<script type="text/javascript" src="js/table.js" ></script>
+		<script type="text/javascript" src="js/overlaps.js" ></script>	
 		<script type="text/javascript" src="js/model.js" ></script>
 		<script type="text/javascript" src="js/script.js" ></script>
 

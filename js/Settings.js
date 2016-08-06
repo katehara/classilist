@@ -64,42 +64,23 @@ function Settings(){
 
 
 
+    this.matrixDiagonals = true;
+
+    // 0 : color scale ; fixed dimensions
+    // 1 : fixed color ; dimension scale
+    this.matrixMode = 0;
+
     this.tableSize = 500;
 
     this.tableCurrentPage = 1;
 
-    this.rightProbBounds = [0.00 , 1.00];
-
-
-    this.updateProbBounds = function(upper){
-      binArray = this.getBinValues();
-      i = (binArray).indexOf(upper);
-      lower = (i==0)? this.probLimits[0] : binArray[--i];
-      this.rightProbBounds = [lower , upper];
-    };
-
-    this.rightFilteredData = function(data) {
-      pr = this.rightProbBounds;
-      cls = this.rightClass;
-      res = this.rightResult;
-      label = "L-"+cls;
-      prob = "P-"+cls;
-
-      filteredData = (data).filter(function(d){
-              if(res != "all" && d[label] != res.toUpperCase()) return false;
-              if(d[prob] <= pr[0] || d[prob] > pr[1]) return false;
-              return true;
-              });
-
-      return (filteredData);
-    };
-
-    this.rightClass = "all";
-
-    this.rightResult = "all";
 
     this.boxIQR = 1.5;
 
-    this.centerOverlap = false;
+    this.opl = 0.00;
+    this.oph = 1.00;
+    this.oca = "all";
+    this.ocp = "all";
+    this.ors = "all"; 
 
 }

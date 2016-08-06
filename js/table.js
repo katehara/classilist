@@ -18,10 +18,13 @@ function Table(model , settings){
 		len = (this.groupedData).length;
 		curlen = (this.groupedData)[curr-1].length;
 		if(len <= 1){
-			pager.classed("dont-display" , true);
+			pager.selectAll("*").classed("dont-display" , true);
+			pager.append("div.records")
+				.text(curlen+" Records Displaying");
 		}
 		else{
-				pager.classed("dont-display" , false);
+				pager.selectAll("*").classed("dont-display" , false);
+				pager.selectAll("div.records").remove();
 				page.text(" "+ curr +" ("+curlen+")");
 				first.text(1 + "..");
 				last.text(".." + len );
@@ -33,11 +36,13 @@ function Table(model , settings){
 			}
 	}
 
-	this.makeTable = function(){
-		this.tableData = this.data;
+	this.makeTable = function(nowData){
+		pane = settings.tablePane;
+
+		this.tableData = nowData;
 		
 		this.groupedData = sliceData(this.tableData, settings.tableSize) ;//spliceData(settings.rightFilteredData(this.data) , settings.tableSize);
-		
+		settings.tableCurrentPage = 1;
 
 		pane.select("*").remove();
 		var table = pane.append("table")
@@ -76,9 +81,10 @@ function Table(model , settings){
 	}
 
 	
-	this.makeTable();
+	this.makeTable(this.data);
 
 	this.slideData = function(t){
+		pane = settings.tablePane;
 
 		len = (this.groupedData).length;
 
@@ -92,7 +98,7 @@ function Table(model , settings){
 		}
 
 		if(t==0) curr = --settings.tableCurrentPage; //previous page
-		else if(t==1) curr = ++settings.tableCurrentPage; //previous page
+		else if(t==1) curr = ++settings.tableCurrentPage; //next page
 
 		var tbody = pane.select("table").select("tbody");
 
