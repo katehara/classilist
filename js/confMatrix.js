@@ -16,7 +16,7 @@ function confMatrix(model , settings , parent){
 	    bottom: 30,
 	    left: 30
 	},
-	height = width = Math.max((classes).length*40 , (w - margin.left - margin.right));
+	height = width = Math.max((classes).length*10 , (w - margin.left - margin.right));
 	var x , y , xAxis , yAxis , color , colord , cells;
 
 	var tipMat = d3.tip()

@@ -53,40 +53,30 @@ $(document).ready(function(){
 	//initialize and setup slider for filtering out high TPs (above 0.5)
 	var tpSlider = document.getElementById('filter-high-tp');
 	noUiSlider.create(tpSlider, {
-	   	start: [1.0],
+	   	start: settings.probtpFilter,
 	   	connect : 'lower',
 	   	tooltips : true,
 
 	   	step: 0.01,
 	   	range: {
-		     'min': 0.5,
-		     'max': 1.0
+		     'min': settings.mintpFilter,
+		     'max': settings.maxtpFilter
 	   	}
 	});
 
 	//initialize and setup slider for filtering out low TNs (below 0.5)
 	var tnSlider = document.getElementById('filter-low-tn');
 	noUiSlider.create(tnSlider, {
-	   	start: [0],
+	   	start: settings.probtnFilter,
 	   	connect : 'upper',
 	   	tooltips : true,
 
 	   	step: 0.01,
 	   	range: {
-		     'min': 0.0,
-		     'max': 0.5
+		     'min': settings.mintnFilter,
+		     'max': settings.maxtnFilter
 	   	}
 	});
-
-	//file upload
-	// d3.select(".check-file").on("click" , function(){
-	//
-	// 	file = $(".input-file")[0].files[0];
-	// 	// console.log(file);
-	// 	data = d3.csv.parse(file)
-	//
-	// 	initInterface(data);
-	// });
 
 	renderVisualizations = function(file){
 

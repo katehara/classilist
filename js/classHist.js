@@ -35,12 +35,12 @@ function classHist(model , settings , parent){
             .html(function(d) {
               return "<span>Class:</span> <span>" + d.name + "</span><br><span>FN:</span> <span>" + d.fn + "</span>";
             })
-  	var tipTN = d3.tip()
-            .attr('class', 'd3-tip')
-            .offset([-10, 0])
-            .html(function(d) {
-              return "<span>Class:</span> <span>" + d.name + "</span><br><span>TN:</span> <span>" + d.tn + "</span>";
-            })
+  	// var tipTN = d3.tip()
+   //          .attr('class', 'd3-tip')
+   //          .offset([-10, 0])
+   //          .html(function(d) {
+   //            return "<span>Class:</span> <span>" + d.name + "</span><br><span>TN:</span> <span>" + d.tn + "</span>";
+   //          })
 
 
 
@@ -50,7 +50,7 @@ function classHist(model , settings , parent){
 
 	        (this.newData).push({
 	          name : classes[i],
-	          tn : 0,
+	          // tn : 0,
 	          tp : 0,
 	          fn : 0,
 	          fp : 0,
@@ -65,7 +65,8 @@ function classHist(model , settings , parent){
         	}
       	}
 
-    	left = d3.max((this.newData) , function(d){return (d.tn+d.fn);} );
+    	// left = d3.max((this.newData) , function(d){return (d.tn+d.fn);} );
+    	left = d3.max((this.newData) , function(d){return (d.fn);} );
       	right = d3.max((this.newData) , function(d){return (d.tp+d.fp);} );
     	this.max = Math.max(left , right);
 	}
@@ -125,7 +126,7 @@ function classHist(model , settings , parent){
 	    svg.call(tipTP);
 	    svg.call(tipFP);
 	    svg.call(tipFN);
-	    svg.call(tipTN);
+	    // svg.call(tipTN);
 
 	    // svg.append("text")
 	    //           .attr("class" , "class-label")
@@ -161,12 +162,12 @@ function classHist(model , settings , parent){
 	              .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
 	              .attr("height" , function(d){return y.rangeBand()});
 
-	    var tn = bars.append("rect")
-	              .attr("class" , "left-bar-tn")
-	              .attr("x" , function(d){return x(-d.fn-d.tn);})
-	              .attr("y" , function(d){return y(d.name);})
-	              .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
-	              .attr("height" , function(d){return y.rangeBand()});
+	    // var tn = bars.append("rect")
+	    //           .attr("class" , "left-bar-tn")
+	    //           .attr("x" , function(d){return x(-d.fn-d.tn);})
+	    //           .attr("y" , function(d){return y(d.name);})
+	    //           .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+	    //           .attr("height" , function(d){return y.rangeBand()});
 
 	    svg.append("g")
 	      .attr("class" , "x axis")
@@ -200,20 +201,20 @@ function classHist(model , settings , parent){
         	}
       	});
 
-      d3.selectAll(".left-bar-tn")
-        .on('mouseover', tipTN.show)
-        .on('mouseout', tipTN.hide)
-        .on("click" , function(){
-        	if(!(d3.select(this).classed("filled-gray"))){
-				fullClass = d3.select(this).data()[0].name;
-	        	settings.oca = fullClass;
-	        	settings.ocp = "all";
-	        	settings.opl = 0.00;
-	        	settings.oph = 1.00;
-	        	settings.ors = "tn";
-	        	parent.overlaps.overlapActivate(1); 
-        	}
-      	});
+    //   d3.selectAll(".left-bar-tn")
+    //     .on('mouseover', tipTN.show)
+    //     .on('mouseout', tipTN.hide)
+    //     .on("click" , function(){
+    //     	if(!(d3.select(this).classed("filled-gray"))){
+				// fullClass = d3.select(this).data()[0].name;
+	   //      	settings.oca = fullClass;
+	   //      	settings.ocp = "all";
+	   //      	settings.opl = 0.00;
+	   //      	settings.oph = 1.00;
+	   //      	settings.ors = "tn";
+	   //      	parent.overlaps.overlapActivate(1); 
+    //     	}
+    //   	});
 
       d3.selectAll(".left-bar-fp")
         .on('mouseover', tipFP.show)
@@ -290,14 +291,14 @@ function classHist(model , settings , parent){
 	              .on('mouseover', tipFN.show)
         		  .on('mouseout', tipFN.hide);
 
-	    var tn = overlapBars.append("rect")
-	              .attr("class" , "overlap-left-bar-tn")
-	              .attr("x" , function(d){return x(-d.fn-d.tn);})
-	              .attr("y" , function(d){return y(d.name);})
-	              .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
-	              .attr("height" , function(d){return y.rangeBand()})
-	              .on('mouseover', tipTN.show)
-        		  .on('mouseout', tipTN.hide);
+	    // var tn = overlapBars.append("rect")
+	    //           .attr("class" , "overlap-left-bar-tn")
+	    //           .attr("x" , function(d){return x(-d.fn-d.tn);})
+	    //           .attr("y" , function(d){return y(d.name);})
+	    //           .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
+	    //           .attr("height" , function(d){return y.rangeBand()})
+	    //           .on('mouseover', tipTN.show)
+     //    		  .on('mouseout', tipTN.hide);
 	}
 
 }

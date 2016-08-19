@@ -21,13 +21,21 @@ function Settings(){
   	this.probLimits = [0.00 , 1.00];
 
   	//tn filter slider value
-  	this.probtnFilter = 0.00;
+  	this.probtnFilter = [0.10];
 
   	//tp filter probability value
-  	this.probtpFilter = 1.00;
+  	this.probtpFilter = [1.00];
 
   	// bins count in probability histograms
   	this.probbins = 10;
+
+    this.mintnFilter = 0.0;
+
+    this.mintpFilter = 0.5;
+
+    this.maxtnFilter = 0.5;
+
+    this.maxtpFilter = 1.0;
 
     // //Apply switches on summary
     // this.switchesOnSummary = true;

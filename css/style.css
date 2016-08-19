@@ -225,7 +225,7 @@ form p {
 	margin-top: 1em;
 	width : 100%;
 	height : 38em;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .probability-histograms svg {
@@ -346,14 +346,14 @@ svg .left-bar-tn , svg .bar-tn , svg .overlap-tn , svg .overlap-left-bar-tn{
 
 #data-samples .data-table{
 	height : 90%;
-	overflow-x: scroll;
-	overflow-y: scroll;
+	overflow-x: auto;
+	overflow-y: auto;
 }
 
 #feature-view , #conf-mat .confusion-matrix {
 	height : 100%;
-	overflow-x: scroll;
-	overflow-y: scroll;
+	overflow-x: auto;
+	overflow-y: auto;
 }
 
 .control-matrix {
