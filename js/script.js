@@ -1,8 +1,11 @@
 $(document).ready(function(){
 
-	
+
 	//activate sidenav on loading window for small and medium sized windows
 	$(".button-collapse").sideNav();
+
+	// file reader
+	var reader = new FileReader();
 
 	//bind container for probability histograms
 	var probabilityPane = d3.select(".central-pane").select(".probability-histograms");
@@ -13,7 +16,7 @@ $(document).ready(function(){
 	//bind container for Data View
 	var dataPane = d3.select("#data-samples");//.select(".data-table");
 
-	//bind container for Feature View 	
+	//bind container for Feature View
 	var featurePane = d3.select("#feature-view");
 
 	//initialize and setup slider for zooming in/out probabilities
@@ -27,7 +30,7 @@ $(document).ready(function(){
 	   range: {
 	     'min': settings.minProb,
 	     'max': settings.maxProb
-	   }	  
+	   }
 	  });
 
 	//initialize and setup slider for increase or decrease in histogram bins
@@ -44,7 +47,7 @@ $(document).ready(function(){
 	   	range: {
 		     'min': settings.minBins,
 		     'max': settings.maxBins
-	   	}	  
+	   	}
 	  });
 
 	//initialize and setup slider for filtering out high TPs (above 0.5)
@@ -53,12 +56,12 @@ $(document).ready(function(){
 	   	start: [1.0],
 	   	connect : 'lower',
 	   	tooltips : true,
-	   	
+
 	   	step: 0.01,
 	   	range: {
 		     'min': 0.5,
 		     'max': 1.0
-	   	}	  
+	   	}
 	});
 
 	//initialize and setup slider for filtering out low TNs (below 0.5)
@@ -67,23 +70,59 @@ $(document).ready(function(){
 	   	start: [0],
 	   	connect : 'upper',
 	   	tooltips : true,
-	   	
+
 	   	step: 0.01,
 	   	range: {
 		     'min': 0.0,
 		     'max': 0.5
-	   	}	  
+	   	}
 	});
-	   
+
+	//file upload
+	// d3.select(".check-file").on("click" , function(){
+	//
+	// 	file = $(".input-file")[0].files[0];
+	// 	// console.log(file);
+	// 	data = d3.csv.parse(file)
+	//
+	// 	initInterface(data);
+	// });
+
+	renderVisualizations = function(file){
+
+		 reader.addEventListener("load", parseFile, false);
+		 if (file) {
+			 reader.readAsText(file);
+		 }
+	}
+
+	function parseFile(){
+		var data = d3.csv.parse(reader.result);
+		initInterface(data);
+	}
+
+	d3.select(".input-file").on("change" , function(){
+		//console.log(this.files);
+		renderVisualizations(this.files[0]);
+	});
+
 	// read data
 	// d3.csv("data/rapidminer.csv", function (error, data) {
 	d3.csv("data/prob.csv", function (error, data) {
+	// d3.csv("data/out.csv", function (error, data) {
+		if(error){
+			 $('#file-modal').openModal();
+		}
+		else initInterface(data);
+	});
+
+	initInterface = function(data){
 
 		_self = this;
 		//prepare data model do all basic calculations about data
 		var model = new Model(data);
-		
-		// initialize data table 
+
+		// initialize data table
 		var table = new Table(model , settings);
 
 		//initialize Features Box Plots
@@ -100,8 +139,6 @@ $(document).ready(function(){
 
 		//initialize selection overlaps
 		this.overlaps = new Overlaps(model , settings, table, boxPlots, probHist, classhist, confmat);
-
-		
 
 		// action listener for TP switch
 		d3.select(".switch-tp").on("change", function(d){
@@ -131,7 +168,7 @@ $(document).ready(function(){
 			if(settings.switchesOnSummary) classHist.applySettings();
 		});
 
-		//reset the probabilty slider and rebin slider 
+		//reset the probabilty slider and rebin slider
 		d3.select(".reset").on("click" , function(){
 			if(!d3.select(this).classed("disabled")){
 				bins = 10;
@@ -197,22 +234,5 @@ $(document).ready(function(){
 			confmat.applySettings();
 		});
 
-
-
-	 	//action listener for High-TP filter
-	   // 	tpSlider.noUiSlider.on("update" , function(values){
-	   // 		value = Number(values);
-	   // 		settings.tpFilter = value;
-	   // 		if(settings.tpFilter < settings.probLimits[1]) probHist.applySettings();
-	  	// });
-
-	   // 	// action listener for low TN filter
-	   // 	tnSlider.noUiSlider.on("update" , function(values){
-	   // 		value = Number(values);
-	   // 		settings.tnFilter = value;
-	   // 		if(settings.tnFilter > settings.probLimits[0])probHist.applySettings();
-	  	// });
-
-	  	
-	});
+	}
 });
