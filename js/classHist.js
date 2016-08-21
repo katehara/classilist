@@ -35,22 +35,13 @@ function classHist(model , settings , parent){
             .html(function(d) {
               return "<span>Class:</span> <span>" + d.name + "</span><br><span>FN:</span> <span>" + d.fn + "</span>";
             })
-  	// var tipTN = d3.tip()
-   //          .attr('class', 'd3-tip')
-   //          .offset([-10, 0])
-   //          .html(function(d) {
-   //            return "<span>Class:</span> <span>" + d.name + "</span><br><span>TN:</span> <span>" + d.tn + "</span>";
-   //          })
-
-
-
+  	
 	this.prepareData = function(nowdata){
 		this.newData = [];
 		for(i=0,len=classes.length; i<len ; i++){
 
 	        (this.newData).push({
 	          name : classes[i],
-	          // tn : 0,
 	          tp : 0,
 	          fn : 0,
 	          fp : 0,
@@ -65,7 +56,6 @@ function classHist(model , settings , parent){
         	}
       	}
 
-    	// left = d3.max((this.newData) , function(d){return (d.tn+d.fn);} );
     	left = d3.max((this.newData) , function(d){return (d.fn);} );
       	right = d3.max((this.newData) , function(d){return (d.tp+d.fp);} );
     	this.max = Math.max(left , right);
@@ -99,10 +89,6 @@ function classHist(model , settings , parent){
 	    yAxis = d3.svg.axis()
 	                .scale(y)
 	                .orient("left")
-	                // .tickValues(y.domain().filter(function(d,i){ 
-	                //   if(i == 0 || i == (settings.bins-1) || i == Math.floor((settings.bins)/2)) return true;
-	                //   return false;
-	                // }))
 	                .tickSize(0)
 	                .tickPadding(3);
 
@@ -113,10 +99,7 @@ function classHist(model , settings , parent){
 	                .tickSize(0.3);
 
 	    var svg = pane
-	    			// .selectAll("svg")
-	       //        .data(this.newData)
-	       //        .enter()
-	              .append("svg")
+	    			.append("svg")
 	              .attr("class" , "svg-classHist")
 	              .attr("width" , width + margin.left + margin.right)
 	              .attr("height" , height + margin.top + margin.bottom)
@@ -126,16 +109,7 @@ function classHist(model , settings , parent){
 	    svg.call(tipTP);
 	    svg.call(tipFP);
 	    svg.call(tipFN);
-	    // svg.call(tipTN);
-
-	    // svg.append("text")
-	    //           .attr("class" , "class-label")
-	    //           .attr("x" , "0")
-	    //           .attr("y" , -12)
-	    //           .attr("dy" , ".5em")
-	    //           .text(function(d , i){return (d[0].name)});
-
-
+	    
 	    var bars = svg.selectAll(".left-bar")
 	    			.data(this.histData , function(d){ return d.name;})
 	    			.enter().append("g")
@@ -161,13 +135,6 @@ function classHist(model , settings , parent){
 	              .attr("y" , function(d){return y(d.name);})
 	              .attr("width" , function(d){return Math.abs(x(d.fn) - x(0));})
 	              .attr("height" , function(d){return y.rangeBand()});
-
-	    // var tn = bars.append("rect")
-	    //           .attr("class" , "left-bar-tn")
-	    //           .attr("x" , function(d){return x(-d.fn-d.tn);})
-	    //           .attr("y" , function(d){return y(d.name);})
-	    //           .attr("width" , function(d){return Math.abs(x(d.tn) - x(0));})
-	    //           .attr("height" , function(d){return y.rangeBand()});
 
 	    svg.append("g")
 	      .attr("class" , "x axis")

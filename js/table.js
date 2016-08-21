@@ -17,23 +17,15 @@ function Table(model , settings){
 		curr = settings.tableCurrentPage;
 		len = (this.groupedData).length;
 		curlen = (this.groupedData)[curr-1].length;
-		if(len <= 1){
-			pager.selectAll("*").classed("dont-display" , true);
-			pager.append("div.records")
-				.text(curlen+" Records Displaying");
-		}
-		else{
-				pager.selectAll("*").classed("dont-display" , false);
-				pager.selectAll("div.records").remove();
-				page.text(" "+ curr +" ("+curlen+")");
-				first.text(1 + "..");
-				last.text(".." + len );
-				if(curr == 1) prev.classed("disabled" , true)
-				else prev.classed("disabled" , false);
-	
-				if(curr == len) next.classed("disabled" , true);
-				else next.classed("disabled" , false);
-			}
+		
+		page.text(" "+ curr +" ("+curlen+")");
+		first.text(1 + "..");
+		last.text(".." + len );
+		if(curr == 1) prev.classed("disabled" , true)
+		else prev.classed("disabled" , false);
+
+		if(curr == len) next.classed("disabled" , true);
+		else next.classed("disabled" , false);
 	}
 
 	this.makeTable = function(nowData){
