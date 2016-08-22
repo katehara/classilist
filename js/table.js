@@ -33,7 +33,7 @@ function Table(model , settings){
 
 		this.tableData = nowData;
 		
-		this.groupedData = sliceData(this.tableData, settings.tableSize) ;//spliceData(settings.rightFilteredData(this.data) , settings.tableSize);
+		this.groupedData = sliceData(this.tableData, settings.tableSize) ;
 		settings.tableCurrentPage = 1;
 
 		pane.select("*").remove();
@@ -50,7 +50,6 @@ function Table(model , settings){
 						.append("th")
 						.text(function(c){
 							if(c == "Predicted") return c+"-"+(model.target).substr(2);
-							// else if(c.substr(0,2) != "P-") return c.substr(2);
 							else return c.substr(2);
 						});		
 

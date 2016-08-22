@@ -137,7 +137,7 @@ function BoxFeatures(model , settings){
 		for(i=0,len=(this.newData).length; i<len ; i++){
 			this.boxData[i] = this.newData[i];
 		}
-		
+		pane = settings.featurePane;
 		pane.select("*").remove();
 
 		height = Math.max(height , (this.boxData).length * 20);
@@ -249,7 +249,7 @@ function BoxFeatures(model , settings){
 
 
 	    featuresSelected.append("line")
-	    		.attr("class" , "center box-stroke box-dasharray")
+	    		.attr("class" , "center box-stroke-light box-dasharray")
 	    		.attr("y1" , function(d){return y1(0)})
 	    		.attr("y2" , function(d){return y1(0)})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
@@ -257,28 +257,28 @@ function BoxFeatures(model , settings){
 	    		.attr("transform" , "translate(0,"+y1.rangeBand()/2+")");
 
 	    featuresSelected.append("line")
-	    		.attr("class" , "whisker upper box-stroke")
+	    		.attr("class" , "whisker upper box-stroke-light")
 	    		.attr("y1" , function(d){return y1(0)})
 	    		.attr("y2" , function(d){return y1.rangeBand() + y1(0);})
 	    		.attr("x1" , function(d){return x(d.whiskers[1])})
 	    		.attr("x2" , function(d){return x(d.whiskers[1])})
 
 	    featuresSelected.append("line")
-	    		.attr("class" , "whisker lower box-stroke")
+	    		.attr("class" , "whisker lower box-stroke-light")
 	    		.attr("y1" , function(d){return y1(0)})
 	    		.attr("y2" , function(d){return y1.rangeBand() + y1(0);})
 	    		.attr("x1" , function(d){return x(d.whiskers[0])})
 	    		.attr("x2" , function(d){return x(d.whiskers[0])})
 
 	    featuresSelected.append("rect")
-	    		.attr("class" , "quartile box-stroke box-fill")
+	    		.attr("class" , "quartile box-stroke-light box-fill")
 	    		.attr("y" , function(d){return y1(0)})
 	    		.attr("x" , function(d){return x(d.quartiles[0])})
 	    		.attr("width" , function(d){return x(d.quartiles[2]) - x(d.quartiles[0])})
 	    		.attr("height" , function(d){return y1.rangeBand()})
 
 	    featuresSelected.append("line")
-	    		.attr("class" , "median box-stroke box-width")
+	    		.attr("class" , "median box-stroke-light box-width")
 	    		.attr("y1" , function(d){return y1(0)})
 	    		.attr("y2" , function(d){return y1.rangeBand() + y1(0);})
 	    		.attr("x1" , function(d){return x(d.quartiles[1])})

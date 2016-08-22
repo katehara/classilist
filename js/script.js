@@ -1,9 +1,5 @@
 $(document).ready(function(){
 
-
-	//activate sidenav on loading window for small and medium sized windows
-	$(".button-collapse").sideNav();
-
 	// file reader
 	var reader = new FileReader();
 
@@ -53,7 +49,7 @@ $(document).ready(function(){
 	//initialize and setup slider for filtering out high TPs (above 0.5)
 	var tpSlider = document.getElementById('filter-high-tp');
 	noUiSlider.create(tpSlider, {
-	   	start: settings.probtpFilter,
+	   	start: settings.probtpDefaultFilter,
 	   	connect : 'lower',
 	   	tooltips : true,
 
@@ -67,7 +63,7 @@ $(document).ready(function(){
 	//initialize and setup slider for filtering out low TNs (below 0.5)
 	var tnSlider = document.getElementById('filter-low-tn');
 	noUiSlider.create(tnSlider, {
-	   	start: settings.probtnFilter,
+	   	start: settings.probtnDefaultFilter,
 	   	connect : 'upper',
 	   	tooltips : true,
 
@@ -91,19 +87,20 @@ $(document).ready(function(){
 		initInterface(data);
 	}
 
-	d3.select(".input-file").on("change" , function(){
-		//console.log(this.files);
+	d3.selectAll(".input-file").on("change" , function(){
 		renderVisualizations(this.files[0]);
 	});
 
 	// read data
-	// d3.csv("data/rapidminer.csv", function (error, data) {
-	d3.csv("data/prob.csv", function (error, data) {
-	// d3.csv("data/out.csv", function (error, data) {
+	d3.csv("data/out.csv", function (error, data) {
 		if(error){
-			 $('#file-modal').openModal();
+			 $('#file-error-modal').openModal();
 		}
 		else initInterface(data);
+	});
+
+	d3.select(".new-data").on("click", function(d){
+		$('#file-upload-modal').openModal();
 	});
 
 	initInterface = function(data){
@@ -165,10 +162,10 @@ $(document).ready(function(){
 				probs = [0.00 , 1.00];
 				binSlider.noUiSlider.set(bins);
 				probabilitySlider.noUiSlider.set(probs);
-				tpSlider.noUiSlider.set(probs[1]);
-				tnSlider.noUiSlider.set(probs[0]);
-				settings.probtpFilter = probs[1]
-				settings.probtnFilter = probs[0]
+				tpSlider.noUiSlider.set(settings.probtpDefaultFilter);
+				tnSlider.noUiSlider.set(settings.probtnDefaultFilter);
+				settings.probtpFilter = settings.probtpDefaultFilter;
+				settings.probtnFilter = settings.probtnDefaultFilter;
 				settings.probbins = bins;
 				settings.probLimits = probs;
 				probHist.applySettings();

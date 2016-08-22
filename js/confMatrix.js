@@ -50,6 +50,8 @@ function confMatrix(model , settings , parent){
 		for(i=0,len=(this.newData).length; i<len ; i++){
 			this.matData[i] = this.newData[i];
 		}
+		pane = settings.confPane;
+		pane.selectAll("*").remove();
 
 		x = d3.scale.ordinal()
             .domain((this.matData).map(function(d){return d.predicted}))
@@ -62,14 +64,14 @@ function confMatrix(model , settings , parent){
 	    color = d3.scale.linear()
 	    		.domain([min , max])
 	    		.interpolate(d3.interpolateLab)
-	    		// .range(["#d1c4e9" , "#311b92"]);
-	    		.range(["#fff" , "#311b92"]);
+	    		// .range(["#d1c4e9" , "#312450"]);
+	    		.range(["#fff" , "#312450"]);
 
 	    colord = d3.scale.linear()
 	    		.domain([mind , maxd])
 	    		.interpolate(d3.interpolateLab)
-	    		// .range(["#d1c4e9" , "#311b92"]);
-	    		.range(["#fff" , "#311b92"]);
+	    		// .range(["#d1c4e9" , "#312450"]);
+	    		.range(["#fff" , "#312450"]);
 
 	    for(i=0, len= (this.matData).length ; i<len ; i++){
 	    	(this.matData)[i].fill = color((this.matData)[i].value);
@@ -108,11 +110,6 @@ function confMatrix(model , settings , parent){
 	      	.call(yAxis)
 
 	    svg.call(tipMat);
-	    // var rows = svg.selectAll(".row")
-	    // 			.data(this.newData)
-	    // 			.enter().append("g")
-	    // 			.attr("class" , "row")
-	    // 			.attr("transform" , function(d , i) {return "translate(0," + y(i) + ")";})
 
 	    cells = svg.selectAll(".cell")
 	    			.data(this.matData)
@@ -124,7 +121,7 @@ function confMatrix(model , settings , parent){
     			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/max)))/2;})
     			.attr("width" , function(d){return x.rangeBand()*d.value/max;})
     			.attr("height" , function(d){return y.rangeBand()*d.value/max;})
-    			.attr("fill" , "#311b92");
+    			.attr("fill" , "#312450");
 	    	}
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 0){
@@ -144,7 +141,7 @@ function confMatrix(model , settings , parent){
     			.attr("height" , function(d){
     				if(d.predicted == d.actual) return 0;
     				else return y.rangeBand()*d.value/maxd;})
-    			.attr("fill" , "#311b92");
+    			.attr("fill" , "#312450");
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 0){
@@ -203,7 +200,7 @@ function confMatrix(model , settings , parent){
     			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/max)))/2;})
     			.attr("width" , function(d){return x.rangeBand()*d.value/max;})
     			.attr("height" , function(d){return y.rangeBand()*d.value/max;})
-    			.attr("fill" , "#311b92");
+    			.attr("fill" , "#312450");
 	    	}
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 0){
@@ -223,7 +220,7 @@ function confMatrix(model , settings , parent){
     			.attr("height" , function(d){
     				if(d.predicted == d.actual) return 0;
     				else return y.rangeBand()*d.value/maxd;})
-    			.attr("fill" , "#311b92");
+    			.attr("fill" , "#312450");
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 0){
@@ -244,14 +241,14 @@ function confMatrix(model , settings , parent){
 		color = d3.scale.linear()
 	    		.domain([min , max])
 	    		.interpolate(d3.interpolateLab)
-	    		// .range(["#d1c4e9" , "#311b92"]);
-	    		.range(["#fff" , "#311b92"]);
+	    		// .range(["#d1c4e9" , "#312450"]);
+	    		.range(["#fff" , "#312450"]);
 
 	    colord = d3.scale.linear()
 	    		.domain([mind , maxd])
 	    		.interpolate(d3.interpolateLab)
-	    		// .range(["#d1c4e9" , "#311b92"]);
-	    		.range(["#fff" , "#311b92"]);
+	    		// .range(["#d1c4e9" , "#312450"]);
+	    		.range(["#fff" , "#312450"]);
 
 		for(i=0, len= (this.newData).length ; i<len ; i++){
 	    	(this.newData)[i].fill = color((this.newData)[i].value);
@@ -276,7 +273,7 @@ function confMatrix(model , settings , parent){
     			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/max)))/2;})
     			.attr("width" , function(d){return x.rangeBand()*d.value/max;})
     			.attr("height" , function(d){return y.rangeBand()*d.value/max;})
-    			.attr("fill" , "#311b92");
+    			.attr("fill" , "#312450");
 	    	}
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 0){
@@ -296,7 +293,7 @@ function confMatrix(model , settings , parent){
     			.attr("height" , function(d){
     				if(d.predicted == d.actual) return 0;
     				else return y.rangeBand()*d.value/maxd;})
-    			.attr("fill" , "#311b92");
+    			.attr("fill" , "#312450");
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 0){

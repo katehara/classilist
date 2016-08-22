@@ -48,8 +48,8 @@ function Overlaps(model, settings, table, box, probs, hist, conf ){
 
 	this.overlapBoxFeatures = function(){
     pane = settings.featurePane;
-    pane.selectAll(".feature-group rect").classed("stroked-gray" , true);
-    pane.selectAll(".feature-group line").classed("stroked-gray" , true);
+    // pane.selectAll(".feature-group rect").classed("stroked-gray" , true);
+    // pane.selectAll(".feature-group line").classed("stroked-gray" , true);
     pane.selectAll(".feature-group-selected").classed("dont-display" , false);
     box.overlap(tableData);
 

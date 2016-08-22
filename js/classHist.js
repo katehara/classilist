@@ -9,13 +9,13 @@ function classHist(model , settings , parent){
 	w=(pane.node().getBoundingClientRect().width);
 	h=(pane.node().getBoundingClientRect().height);
 	var margin = {
-	    top: 30,
-	    right: 20,
+	    top: 5,
+	    right: 10,
 	    bottom: 10,
-	    left: 20
+	    left: 30
 	},
-	width = Math.max(198,w) - margin.left - margin.right,
-  	height = Math.max(200,h) - margin.top - margin.bottom;
+	width = Math.min(180,w) - margin.left - margin.right,
+  	height = Math.max(180,h) - margin.top - margin.bottom;
 
   	var tipTP = d3.tip()
             .attr('class', 'd3-tip')
@@ -67,6 +67,7 @@ function classHist(model , settings , parent){
 			this.histData[i] = this.newData[i];
 		}
 		pane = settings.histPane;
+		pane.selectAll("*").remove();
 	    x = d3.scale.linear()
 	            .domain([-(this.max) , this.max]).nice()
 	            .rangeRound([0, width]);

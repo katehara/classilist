@@ -4,7 +4,7 @@
 	<head>
 
 		<title>Classilist</title>
-		<link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto:100'>
+		<link href="https://fonts.googleapis.com/css?family=Roboto:100|Open+Sans|Poiret+One:400|Alegreya+Sans+SC:100|Raleway:100,400|Josefin+Sans:400|Source+Code+Pro:400" rel="stylesheet">		
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/8.5.1/nouislider.min.css"></link>
 		<link rel="stylesheet" type="text/css" href="css/style.css"></link>
@@ -18,155 +18,149 @@
 	<body>
 	<nav>
 	    <div class="nav-wrapper">
-	      <!-- <a href="#!" class="brand-logo">Logo</a> -->
-	      <a href="#" data-activates="side-menu" class="button-collapse"><i class="material-icons">menu</i></a>
-	      <ul class="right hide-on-med-and-down">
-	        <li><a href="#">About</a></li>
-	        <li><a href="#">How To's</a></li>
-	        <li><a href="#">Documentation</a></li>
-	        <li><a href="#">People</a></li>
-	      </ul>
-	      <ul class="side-nav" id="side-menu">
-	        <li><a href="#">About</a></li>
-	        <li><a href="#">How To's</a></li>
-	        <li><a href="#">Documentation</a></li>
-	        <li><a href="#">People</a></li>
-	      </ul>
+	      <a href="#" class="brand-logo"><img class = "responsive-img" src = "icon-white/icon.png">Classilist</a>
+	      <ul class="right">
+	        <li><a class = "new-data" href="#"><i class="material-icons">insert_drive_file</i></a></li>
+	      </ul>	      
 	    </div>
 	</nav>
+	<main>
+		<div class = "row">
+			<div class = "left-pane col s4 m2">
+				<ul class="collapsible" data-collapsible="expandable">
+				    <li>
+				      	<div class="collapsible-header control active">
+				      		<i class="material-icons">tune</i>
+				      		Controls
+				      	</div>
+				      	<div class="collapsible-body center">
+					      	<form>
+				  					<div class="switch col s12 m6">
+									    <label class = "tooltipped" data-position="top" data-delay="0" data-tooltip="True Negatives">
+									      TN
+									      <input class="switch-tn" type="checkbox" checked>
+									      <span class="lever tn"></span>
+									    </label>
+				  					</div>
+				  					<div class="switch col s12 m6">
+									    <label class = "tooltipped" data-position="top" data-delay="0" data-tooltip="False Negatives">
+									      FN
+									      <input class="switch-fn" type="checkbox" checked>
+									      <span class="lever fn"></span>
+									    </label>
+				  					</div>
+				  					<div class="switch col s12 m6">
+									    <label class = "tooltipped" data-position="top" data-delay="0" data-tooltip="True Positives">
+									      TP
+									      <input class="switch-tp" type="checkbox" checked>
+									      <span class="lever tp"></span>
+									    </label>
+				  					</div>
+				  					<div class="switch col s12 m6">
+									    <label class = "tooltipped" data-position="top" data-delay="0" data-tooltip="False Positives">
+									      FP
+									      <input class="switch-fp" type="checkbox" checked>
+									      <span class="lever fp"></span>
+									    </label>
+				  					</div>
+				  					<div class="divider"></div>
+				  					<label>Filter High TPs</label>
+					      			<div id="filter-high-tp"></div>
+					      			<label>Filter Low TNs</label>
+					      			<div id="filter-low-tn"></div>
+					      			<label>Probability Range</label>
+					      			<div id="probability-zoom"></div>
+					      			<label>Rebin</label>
+					      			<div id="rebin"></div>
+					      			<div class = "apply-axis center">
+						      			<a class="reset tooltipped btn-floating waves-effect waves-light" data-position="top" data-delay="0" data-tooltip="Reset"><i class="material-icons">replay</i></a>
+						      			<a class="apply tooltipped btn-floating waves-effect waves-light " data-position="top" data-delay="0" data-tooltip="Apply"><i class="material-icons">done_all</i></a>
+						      			<a class="clear tooltipped btn-floating waves-effect waves-light " data-position="top" data-delay="0" data-tooltip="Clear Selection"><i class="material-icons">clear</i></a>
+					      			</div>
+			      			</form>
+	  					</div>
+				    </li>
+				    <li>
+				      	<div class="collapsible-header active">
+				      		<i class="material-icons">format_align_left</i>
+				      		Summary
+				      	</div>
+				      	<div class="collapsible-body summary class-histogram">
 
-	<div class = "row">
-		<div class = "left-pane col s4 m2">
-			<ul class="collapsible" data-collapsible="expandable">
-			    <li>
-			      	<div class="collapsible-header active">
-			      		<i class="material-icons">tune</i>
-			      		Controls
-			      	</div>
-			      	<div class="collapsible-body center">
-				      	<!-- <p>Turn off to remove from visualization</p> -->
-				      	<form>
-			  					<div class="switch tooltipped col s12 m6" data-position="top" data-delay="50" data-tooltip="True Negatives">
-								    <label>
-								      TN
-								      <input class="switch-tn" type="checkbox" checked>
-								      <span class="lever tn"></span>
-								    </label>
-			  					</div>
-			  					<div class="switch col s12 m6">
-								    <label>
-								      FN
-								      <input class="switch-fn" type="checkbox" checked>
-								      <span class="lever fn"></span>
-								    </label>
-			  					</div>
-			  					<div class="switch col s12 m6">
-								    <label>
-								      TP
-								      <input class="switch-tp" type="checkbox" checked>
-								      <span class="lever tp"></span>
-								    </label>
-			  					</div>
-			  					<div class="switch col s12 m6">
-								    <label>
-								      FP
-								      <input class="switch-fp" type="checkbox" checked>
-								      <span class="lever fp"></span>
-								    </label>
-			  					</div>
-			  					<div class="divider"></div>
-			  					<label>Filter High TPs</label>
-				      			<div id="filter-high-tp"></div>
-				      			<label>Filter Low TNs</label>
-				      			<div id="filter-low-tn"></div>
-				      			<label>Probability Range</label>
-				      			<div id="probability-zoom"></div>
-				      			<label>Rebin</label>
-				      			<div id="rebin"></div>
-				      			<div class = "apply-axis center">
-					      			<a class="reset tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="" data-delay="10" data-tooltip="Reset"><i class="material-icons">replay</i></a>
-					      			<a class="apply tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="" data-delay="25" data-tooltip="Apply"><i class="material-icons">done_all</i></a>
-					      			<a class="clear tooltipped btn-floating waves-effect waves-light deep-purple darken-1" data-position="" data-delay="25" data-tooltip="Clear Selection"><i class="material-icons">clear</i></a>
-				      			</div>
-		      			</form>
-  					</div>
-			    </li>
-			    <li>
-			      	<div class="collapsible-header active">
-			      		<i class="material-icons">format_align_left</i>
-			      		Summary
-			      	</div>
-			      	<div class="collapsible-body class-histogram">
+	  					</div>
+				    </li>
+				  </ul>
 
-  					</div>
-			    </li>
-			  </ul>
+			</div>
+			<div class="central-pane col s8 m7">
+				<div class="probability-histograms"></div>
+			</div>
+			<div class = "right-pane col s12 m3">
+				<div class="row tabbed-view">
 
-		</div>
-		<div class="central-pane col s8 m7">
-			<div class="probability-histograms"></div>
-		</div>
-		<div class = "right-pane col s12 m3">
-			<div class="row tabbed-view">
-
-			    <div class="col s12">
-			      <ul class="tabs">
-			        <li class="tab col s4"><a class="active" href="#feature-view">Features</a></li>
-			        <li class="tab col s4"><a href="#conf-mat">Matrix</a></li>
-			        <li class="tab col s4"><a href="#data-samples">Data</a></li>
-			      </ul>
-			    </div>
-
-			    <div id="data-samples" class="col s12">
-				    <div class = "pager center">
-				    	<a href="#!"><span class = "first small-text"></span></a>
-				    	<a class="prev tooltipped btn-floating waves-effect waves-light deep-purple darken-1"><i class="material-icons">chevron_left</i></a>
-				    	<span class = "page"></span>
-				      	<a class="next tooltipped btn-floating waves-effect waves-light deep-purple darken-1"><i class="material-icons">chevron_right</i></a>
-				    	<a href="#!"><span class = "last small-text"></span></a>
+				    <div class="col s12">
+				      <ul class="tabs">
+				        <li class="tab col s4"><a class="active" href="#feature-view">Features</a></li>
+				        <li class="tab col s4"><a href="#conf-mat">Matrix</a></li>
+				        <li class="tab col s4"><a href="#data-samples">Data</a></li>
+				      </ul>
 				    </div>
 
-				    <div class = "data-table">
+				    <div id="data-samples" class="col s12">
+					    <div class = "pager center">
+					    	<a href="#!" class = "tooltipped" data-position="top" data-delay="0" data-tooltip="First Page"><span class = "first small-text"></span></a>
+					    	<a class="prev tooltipped btn-floating waves-effect waves-light"data-position="top" data-delay="0" data-tooltip="Previous">
+					    		<i class="material-icons">chevron_left</i>
+					    	</a>
+					    	<span class = "tooltipped page" data-position="top" data-delay="0" data-tooltip="Current Page"></span>
+					      	<a class="next tooltipped btn-floating waves-effect waves-light"data-position="top" data-delay="0" data-tooltip="Next">
+					      		<i class="material-icons">chevron_right</i>
+					      	</a>
+					    	<a href="#!" class = "tooltipped" data-position="top" data-delay="0" data-tooltip="Last Page"><span class = "last small-text"></span></a>
+					    </div>
+
+					    <div class = "data-table">
+					    </div>
 				    </div>
-			    </div>
 
-			    <div id="feature-view" class="col s12">
-				    <div class = "box-plots"> </div>
-			    </div>
+				    <div id="feature-view" class="col s12">
+					    <div class = "box-plots"> </div>
+				    </div>
 
-			    <div id="conf-mat" class="col s12">
-			    	<div class="control-matrix center">
-			    		<form>
-			    			<div class="switch col s6 m6">
-							    <p>
-							      <input class="with-gap" name="mat-mode" type="radio" id="fill-mode" checked="checked" />
-							      <label for="fill-mode">Color Scale</label>
-							    </p>
-						    </div>
-						    <div class="switch col s6 m6">
-						      	<p>
-						        	<input class="with-gap" name="mat-mode" type="radio" id="size-mode" />
-						        	<label for="size-mode">Size Scale</label>
-						    	</p>
-						    </div>
-						    <div class="switch col s12 center">
-				    			<p>
-							      <input type="checkbox" id="diagonal" checked="checked" />
-							      <label for="diagonal">Show Diagonal</label>
-							    </p>
-						    </div>
-						  </form>
-			    	</div>
-				    <div class = "confusion-matrix"> </div>
-			    </div>
+				    <div id="conf-mat" class="col s12">
+				    	<div class="control-matrix center">
+				    		<form>
+				    			<div class="switch col s6 m6">
+								    <p>
+								      <input class="with-gap" name="mat-mode" type="radio" id="fill-mode" checked="checked" />
+								      <label for="fill-mode">Color Scale</label>
+								    </p>
+							    </div>
+							    <div class="switch col s6 m6">
+							      	<p>
+							        	<input class="with-gap" name="mat-mode" type="radio" id="size-mode" />
+							        	<label for="size-mode">Size Scale</label>
+							    	</p>
+							    </div>
+							    <div class="switch col s12 center">
+					    			<p>
+								      <input type="checkbox" id="diagonal" checked="checked" />
+								      <label for="diagonal">Show Diagonal</label>
+								    </p>
+							    </div>
+							  </form>
+				    	</div>
+					    <div class = "confusion-matrix"> </div>
+				    </div>
+				</div>
 			</div>
 		</div>
-	</div>
+	</main>
 
-	<div id="file-modal" class="modal modal-fixed-footer">
-    <div class="modal-content">
-      <h4>Hi!! </h4>
-      <p class="modal-desc">
+	<div id="file-error-modal" class="modal modal-fixed-footer">
+	    <div class="modal-content">
+	      	<h4>Hi!! </h4>
+	      	<p class="modal-desc">
 				Your system seems to be possessive for your data.
 				I have restricted access to the data exported from the previous application.
 			</p>
@@ -175,27 +169,53 @@
 				../classilist-installation-directory/data/out.csv <br>
 			</p>
 			<form>
-		    <div class="file-field input-field">
-		      <div class="btn">
-		        <span><i class=" large material-icons">file_upload</i></span>
-		        <input type="file" class="input-file">
-		      </div>
-		      <div class="file-path-wrapper">
-		        <input class="file-path validate" type="text">
-		      </div>
-		    </div>
-		  </form>
+			    <div class="file-field input-field">
+			      	<div class="btn">
+			        	<span><i class=" large material-icons">file_upload</i></span>
+			        	<input type="file" class="input-file">
+			      	</div>
+			      	<div class="file-path-wrapper">
+			        	<input class="file-path validate" type="text">
+			      	</div>
+			    </div>
+			</form>
 			<p class="modal-error">
 
 			</p>
 			<p class="modal-warn">
 				*To avoid this crash in future, try enabling CORS(Cross Origin Resource Sharing) on your browser, or may be change the default browser to the one that already has this enabled.
 			</p>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="check-file modal-action modal-close waves-effect waves-green btn-flat">Done</a>
-    </div>
-  </div>
+	    </div>
+	    <div class="modal-footer">
+	      <a href="#!" class="check-file modal-action modal-close waves-effect waves-green btn-flat">Done</a>
+	    </div>
+  	</div>
+
+	<div id="file-upload-modal" class="modal modal-fixed-footer">
+	    <div class="modal-content">
+	      	<h4>Hi!! </h4>
+	      	<p class="modal-desc">
+				Please make sure that the file you feed here is in the Standard Classilist Format. 
+			</p>
+			<p>
+				For more, visit : <a href = "https://katehara.github.io/classilist-site" target = "_blank"> Classilist Official Site</a>
+			</p>
+			<form>
+			    <div class="file-field input-field">
+			      	<div class="btn">
+			        	<span><i class=" large material-icons">file_upload</i></span>
+			        	<input type="file" class="input-file">
+			      	</div>
+			      	<div class="file-path-wrapper">
+			        	<input class="file-path validate" type="text">
+			      	</div>
+			    </div>
+			</form>
+	    </div>
+	    <div class="modal-footer">
+	      <a href="#!" class="check-file modal-action modal-close waves-effect waves-green btn-flat">Done</a>
+	    </div>
+  	</div>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>

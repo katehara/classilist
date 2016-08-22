@@ -1,12 +1,12 @@
 function Settings(){
 
-  // define panes
-  this.confPane = d3.select(".confusion-matrix");
-  this.tablePane = d3.select(".data-table");
-  this.pagerPane = d3.select(".pager")
-  this.featurePane = d3.select(".box-plots");
-  this.histPane = d3.select(".class-histogram");
-  this.probPane = d3.select(".probability-histograms");
+    // define panes
+    this.confPane = d3.select(".confusion-matrix");
+    this.tablePane = d3.select(".data-table");
+    this.pagerPane = d3.select(".pager")
+    this.featurePane = d3.select(".box-plots");
+    this.histPane = d3.select(".class-histogram");
+    this.probPane = d3.select(".probability-histograms");
 
 
 	// state of data switches
@@ -25,6 +25,13 @@ function Settings(){
 
   	//tp filter probability value
   	this.probtpFilter = [1.00];
+
+    //tn filter slider value
+    this.probtnDefaultFilter = [0.10];
+
+    //tp filter probability value
+    this.probtpDefaultFilter = [1.00];
+
 
   	// bins count in probability histograms
   	this.probbins = 10;
