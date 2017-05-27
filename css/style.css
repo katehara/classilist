@@ -128,7 +128,7 @@ form p {
 }
 
 .switch label input[type=checkbox]:checked+.lever.tn {
-	background-color: #00b0ff;
+	background-color: #90a4ae;
 }
 
 .switch label .lever{
@@ -195,12 +195,12 @@ form p {
 }
 
 #filter-low-tn.noUi-background .noUi-base .noUi-connect {
-	background: #00b0ff;
+	background: #90a4ae;
 	box-shadow: none;
 }
 
 #filter-low-tn.noUi-target {
-	border-color: #00b0ff;
+	border-color: #90a4ae;
 }
 
 .noUi-horizontal .noUi-handle-lower .noUi-tooltip , .noUi-horizontal .noUi-handle-upper .noUi-tooltip{
@@ -293,7 +293,7 @@ svg .left-bar-fn , svg .bar-fn , svg .overlap-fn , svg .overlap-left-bar-fn{
 }
 
 svg .left-bar-tn , svg .bar-tn , svg .overlap-tn , svg .overlap-left-bar-tn{
-	fill : #00b0ff;
+	fill : #90a4ae;
 }
 
 .d3-tip{
