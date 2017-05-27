@@ -33,7 +33,7 @@ function BoxFeatures(model , settings){
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .html(function(d) {
-              return "<span>First Quartile:</span> <span>" + d.quartiles[0] + "<br><span>Second Quartile:</span> <span>" + d.quartiles[2];
+              return "<span>First Quartile:</span> <span>" + d.quartiles[0] + "<br><span>Third Quartile:</span> <span>" + d.quartiles[2];
             })
 
   	var tipWhiskerUpper = d3.tip()
