@@ -74,6 +74,8 @@ $(document).ready(function(){
 	   	}
 	});
 
+	d3.selectAll(".collapsible-body").selectAll(".clear").attr("disabled", "disabled");
+
 	renderVisualizations = function(file){
 
 		 reader.addEventListener("load", parseFile, false);

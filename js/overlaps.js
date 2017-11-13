@@ -91,6 +91,7 @@ function Overlaps(model, settings, table, box, probs, hist, conf ){
 	this.overlapDeactivate = function(){
     table.makeTable(table.data);
     d3.selectAll(".collapsible-body").selectAll("*").attr("disabled" , null);
+    d3.selectAll(".collapsible-body").selectAll(".clear").attr("disabled", "disabled");
     d3.selectAll(".control-matrix").selectAll("*").attr("disabled" , null);
     d3.selectAll(".filled-gray").classed("filled-gray" , false);
     d3.selectAll(".stroked-gray").classed("stroked-gray" , false);
