@@ -49,7 +49,7 @@ function Table(model , settings){
 						.enter()
 						.append("th")
 						.text(function(c){
-							if(c == "Predicted") return c+"-"+(model.target).substr(2);
+							if(c == "Predicted") return c;
 							else return c.substr(2);
 						});		
 
