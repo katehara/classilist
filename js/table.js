@@ -50,6 +50,7 @@ function Table(model , settings){
 						.append("th")
 						.text(function(c){
 							if(c == "Predicted") return c;
+							else if(c.substr(0,2) == "A-") return "True";
 							else return c.substr(2);
 						});		
 
