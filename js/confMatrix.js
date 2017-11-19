@@ -277,15 +277,40 @@ function confMatrix(model , settings , parent){
 	    colord = d3.scale.linear()
 	    		.domain([mind , maxd])
 	    		.interpolate(d3.interpolateLab)
-	    		// .range(["#d1c4e9" , "#312450"]);
-	    		.range(["#fff" , "#312450"]);
+	    		.range(["#fff" , "#59a954"]);
+	    		// .range(["#dbecd7" , "#59a954"]);
 
-		for(i=0, len= (this.newData).length ; i<len ; i++){
-	    	(this.newData)[i].fill = color((this.newData)[i].value);
-
-	    	if((this.newData)[i].actual != (this.newData)[i].predicted) 
-	    		(this.newData)[i].filld = colord((this.newData)[i].value);
+	    for(i=0, len= (this.newData).length ; i<len ; i++){
+	    	if((this.newData)[i].actual == (this.newData)[i].predicted){
+	    		(this.newData)[i].fill = colord((this.newData)[i].value);
+	    		(this.newData)[i].max = maxd;
+	    		(this.newData)[i].min = mind;
+	    	}
+	    	else{
+	    		(this.newData)[i].fill = color((this.newData)[i].value);
+	    		(this.newData)[i].max = max;
+	    		(this.newData)[i].min = min;
+	    	}
 	    }
+
+		// color = d3.scale.linear()
+	 //    		.domain([min , max])
+	 //    		.interpolate(d3.interpolateLab)
+	 //    		// .range(["#d1c4e9" , "#312450"]);
+	 //    		.range(["#fff" , "#312450"]);
+
+	 //    colord = d3.scale.linear()
+	 //    		.domain([mind , maxd])
+	 //    		.interpolate(d3.interpolateLab)
+	 //    		// .range(["#d1c4e9" , "#312450"]);
+	 //    		.range(["#fff" , "#312450"]);
+
+		// for(i=0, len= (this.newData).length ; i<len ; i++){
+	 //    	(this.newData)[i].fill = color((this.newData)[i].value);
+
+	 //    	if((this.newData)[i].actual != (this.newData)[i].predicted) 
+	 //    		(this.newData)[i].filld = colord((this.newData)[i].value);
+	 //    }
 		svg = pane.select("svg").select("g");
 
 		// console.log(this.newData);
@@ -299,7 +324,7 @@ function confMatrix(model , settings , parent){
 	    	
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 1){
-	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
+	    	overlapcells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
     			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/d.max)))/2;})
     			.attr("width" , function(d){return x.rangeBand()*d.value/d.max;})
     			.attr("height" , function(d){return y.rangeBand()*d.value/d.max;})
@@ -311,7 +336,7 @@ function confMatrix(model , settings , parent){
 	    	}
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 0){
-	    	cells.attr("x" , function(d){ return x(d.predicted);})
+	    	overlapcells.attr("x" , function(d){ return x(d.predicted);})
     			.attr("y" , function(d){ return y(d.actual);})
     			.attr("width" , function(d){return x.rangeBand();})
     			.attr("height" , function(d){return y.rangeBand();})
@@ -319,7 +344,7 @@ function confMatrix(model , settings , parent){
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 1){
-	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
+	    	overlapcells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
     			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/d.max)))/2;})
     			.attr("width" , function(d){
     				if(d.predicted == d.actual) return 0;
@@ -334,8 +359,8 @@ function confMatrix(model , settings , parent){
     			);
 	    	}
 
-	    if(settings.matrixDiagonals == false && settings.matrixMode == 0){
-	    	cells.attr("x" , function(d){ return x(d.predicted);})
+	    if(overlapcells.matrixDiagonals == false && settings.matrixMode == 0){
+	    	overlapcells.attr("x" , function(d){ return x(d.predicted);})
     			.attr("y" , function(d){ return y(d.actual);})
     			.attr("width" , function(d){return x.rangeBand();})
     			.attr("height" , function(d){return y.rangeBand();})
