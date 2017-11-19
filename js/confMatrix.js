@@ -71,13 +71,19 @@ function confMatrix(model , settings , parent){
 	    		.domain([mind , maxd])
 	    		.interpolate(d3.interpolateLab)
 	    		// .range(["#d1c4e9" , "#312450"]);
-	    		.range(["#fff" , "#59a954"]);
+	    		.range(["#dbecd7" , "#59a954"]);
 
 	    for(i=0, len= (this.matData).length ; i<len ; i++){
-	    	if((this.matData)[i].actual == (this.matData)[i].predicted)
+	    	if((this.matData)[i].actual == (this.matData)[i].predicted){
 	    		(this.matData)[i].fill = colord((this.matData)[i].value);
-	    	else
+	    		(this.matData)[i].max = maxd;
+	    		(this.matData)[i].min = mind;
+	    	}
+	    	else{
 	    		(this.matData)[i].fill = color((this.matData)[i].value);
+	    		(this.matData)[i].max = max;
+	    		(this.matData)[i].min = min;
+	    	}
 	    }
 
 
@@ -117,10 +123,10 @@ function confMatrix(model , settings , parent){
 	    			.attr("class" , "cell")
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 1){
-	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/max)))/2;})
-    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/max)))/2;})
-    			.attr("width" , function(d){return x.rangeBand()*d.value/max;})
-    			.attr("height" , function(d){return y.rangeBand()*d.value/max;})
+	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
+    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/d.max)))/2;})
+    			.attr("width" , function(d){return x.rangeBand()*d.value/d.max;})
+    			.attr("height" , function(d){return y.rangeBand()*d.value/d.max;})
     			.attr("fill" , function(d){
     				if(d.predicted == d.actual) return '#59a954'
     				else return '#312450';
@@ -137,14 +143,14 @@ function confMatrix(model , settings , parent){
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 1){
-	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/maxd)))/2;})
-    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/maxd)))/2;})
+	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
+    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/d.max)))/2;})
     			.attr("width" , function(d){
     				if(d.predicted == d.actual) return 0;
-    				else return x.rangeBand()*d.value/maxd;})
+    				else return x.rangeBand()*d.value/d.max;})
     			.attr("height" , function(d){
     				if(d.predicted == d.actual) return 0;
-    				else return y.rangeBand()*d.value/maxd;})
+    				else return y.rangeBand()*d.value/d.max;})
     			.attr("fill" , function(d){
     				if(d.predicted == d.actual) return '#59a954'
     				else return '#312450';
@@ -208,10 +214,10 @@ function confMatrix(model , settings , parent){
 	this.applySettings = function(){
 
 		if(settings.matrixDiagonals == true && settings.matrixMode == 1){
-	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/max)))/2;})
-    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/max)))/2;})
-    			.attr("width" , function(d){return x.rangeBand()*d.value/max;})
-    			.attr("height" , function(d){return y.rangeBand()*d.value/max;})
+	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
+    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/d.max)))/2;})
+    			.attr("width" , function(d){return x.rangeBand()*d.value/d.max;})
+    			.attr("height" , function(d){return y.rangeBand()*d.value/d.max;})
     			.attr("fill" , function(d){
     				if(d.predicted == d.actual) return '#59a954'
     				else return '#312450';
@@ -228,14 +234,14 @@ function confMatrix(model , settings , parent){
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 1){
-	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/maxd)))/2;})
-    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/maxd)))/2;})
+	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
+    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/d.max)))/2;})
     			.attr("width" , function(d){
     				if(d.predicted == d.actual) return 0;
-    				else return x.rangeBand()*d.value/maxd;})
+    				else return x.rangeBand()*d.value/d.max;})
     			.attr("height" , function(d){
     				if(d.predicted == d.actual) return 0;
-    				else return y.rangeBand()*d.value/maxd;})
+    				else return y.rangeBand()*d.value/d.max;})
     			.attr("fill" , function(d){
     				if(d.predicted == d.actual) return '#59a954'
     				else return '#312450';
@@ -293,15 +299,19 @@ function confMatrix(model , settings , parent){
 	    	
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 1){
-	    	overlapcells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/max)))/2;})
-    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/max)))/2;})
-    			.attr("width" , function(d){return x.rangeBand()*d.value/max;})
-    			.attr("height" , function(d){return y.rangeBand()*d.value/max;})
-    			.attr("fill" , "#312450");
+	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
+    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/d.max)))/2;})
+    			.attr("width" , function(d){return x.rangeBand()*d.value/d.max;})
+    			.attr("height" , function(d){return y.rangeBand()*d.value/d.max;})
+    			.attr("fill" , function(d){
+    				if(d.predicted == d.actual) return '#59a954'
+    				else return '#312450';
+    				}
+    			);
 	    	}
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 0){
-	    	overlapcells.attr("x" , function(d){ return x(d.predicted);})
+	    	cells.attr("x" , function(d){ return x(d.predicted);})
     			.attr("y" , function(d){ return y(d.actual);})
     			.attr("width" , function(d){return x.rangeBand();})
     			.attr("height" , function(d){return y.rangeBand();})
@@ -309,24 +319,31 @@ function confMatrix(model , settings , parent){
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 1){
-	    	overlapcells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/maxd)))/2;})
-    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/maxd)))/2;})
+	    	cells.attr("x" , function(d){ return x(d.predicted) + (x.rangeBand()*(1-(d.value/d.max)))/2;})
+    			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/d.max)))/2;})
     			.attr("width" , function(d){
     				if(d.predicted == d.actual) return 0;
-    				else return x.rangeBand()*d.value/maxd;})
+    				else return x.rangeBand()*d.value/d.max;})
     			.attr("height" , function(d){
     				if(d.predicted == d.actual) return 0;
-    				else return y.rangeBand()*d.value/maxd;})
-    			.attr("fill" , "#312450");
+    				else return y.rangeBand()*d.value/d.max;})
+    			.attr("fill" , function(d){
+    				if(d.predicted == d.actual) return '#59a954'
+    				else return '#312450';
+    				}
+    			);
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 0){
-	    	overlapcells.attr("x" , function(d){ return x(d.predicted);})
+	    	cells.attr("x" , function(d){ return x(d.predicted);})
     			.attr("y" , function(d){ return y(d.actual);})
     			.attr("width" , function(d){return x.rangeBand();})
     			.attr("height" , function(d){return y.rangeBand();})
-    			.attr("fill" , function(d){return d.filld;});
+    			.attr("fill" , function(d){
+    				if(d.predicted == d.actual) return '#fff'
+    				else return d.fill;
+    				}
+    			);
 	    	}
-	}
-
+	    }
 }
