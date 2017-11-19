@@ -153,7 +153,7 @@ function ProbHist(model , settings , parent){
                 .scale(y)
                 .orient("left")
                 .tickValues(y.domain().filter(function(d,i){ 
-                  if(i == 0 || i == (settings.probbins-1) || i == Math.floor((settings.probbins)/2)) return true;
+                  if(i == 0 || i == (settings.probbins-1)) return true;
                   return false;
                 }))
                 .tickSize(0)
@@ -333,7 +333,7 @@ function ProbHist(model , settings , parent){
                 .scale(y)
                 .orient("left")
                 .tickValues(y.domain().filter(function(d,i){
-                  if(i == 0 || i == (settings.probbins-1) || i == Math.floor((settings.probbins)/2)) return true;
+                  if(i == 0 || i == (settings.probbins-1)) return true;
                   return false;
                 }))
                 .tickSize(0)
