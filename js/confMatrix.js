@@ -38,10 +38,10 @@ function confMatrix(model , settings , parent){
 					fill : "#000",
 					filld : "#fff"
 				});
-				if(c < min) min = c;
-				if(c > max) max = c;
-				if(classes[i] != classes[j] && c < mind) mind = c;
-				if(classes[i] != classes[j] && c > maxd) maxd = c;
+				if(classes[i] != classes[j] && c < min) min = c;
+				if(classes[i] != classes[j] && c > max) max = c;
+				if(classes[i] == classes[j] && c < mind) mind = c;
+				if(classes[i] == classes[j] && c > maxd) maxd = c;
 			}
 		}
     }
@@ -71,13 +71,13 @@ function confMatrix(model , settings , parent){
 	    		.domain([mind , maxd])
 	    		.interpolate(d3.interpolateLab)
 	    		// .range(["#d1c4e9" , "#312450"]);
-	    		.range(["#fff" , "#312450"]);
+	    		.range(["#fff" , "#59a954"]);
 
 	    for(i=0, len= (this.matData).length ; i<len ; i++){
-	    	(this.matData)[i].fill = color((this.matData)[i].value);
-
-	    	if((this.matData)[i].actual != (this.matData)[i].predicted) 
-	    		(this.matData)[i].filld = colord((this.matData)[i].value);
+	    	if((this.matData)[i].actual == (this.matData)[i].predicted)
+	    		(this.matData)[i].fill = colord((this.matData)[i].value);
+	    	else
+	    		(this.matData)[i].fill = color((this.matData)[i].value);
 	    }
 
 
@@ -121,7 +121,11 @@ function confMatrix(model , settings , parent){
     			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/max)))/2;})
     			.attr("width" , function(d){return x.rangeBand()*d.value/max;})
     			.attr("height" , function(d){return y.rangeBand()*d.value/max;})
-    			.attr("fill" , "#312450");
+    			.attr("fill" , function(d){
+    				if(d.predicted == d.actual) return '#59a954'
+    				else return '#312450';
+    				}
+    			);
 	    	}
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 0){
@@ -141,7 +145,11 @@ function confMatrix(model , settings , parent){
     			.attr("height" , function(d){
     				if(d.predicted == d.actual) return 0;
     				else return y.rangeBand()*d.value/maxd;})
-    			.attr("fill" , "#312450");
+    			.attr("fill" , function(d){
+    				if(d.predicted == d.actual) return '#59a954'
+    				else return '#312450';
+    				}
+    			);
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 0){
@@ -149,7 +157,11 @@ function confMatrix(model , settings , parent){
     			.attr("y" , function(d){ return y(d.actual);})
     			.attr("width" , function(d){return x.rangeBand();})
     			.attr("height" , function(d){return y.rangeBand();})
-    			.attr("fill" , function(d){return d.filld;});
+    			.attr("fill" , function(d){
+    				if(d.predicted == d.actual) return '#fff'
+    				else return d.fill;
+    				}
+    			);
 	    	}
 
 	    // var texts = svg.selectAll(".text")
@@ -200,7 +212,11 @@ function confMatrix(model , settings , parent){
     			.attr("y" , function(d){ return y(d.actual) + (y.rangeBand()*(1-(d.value/max)))/2;})
     			.attr("width" , function(d){return x.rangeBand()*d.value/max;})
     			.attr("height" , function(d){return y.rangeBand()*d.value/max;})
-    			.attr("fill" , "#312450");
+    			.attr("fill" , function(d){
+    				if(d.predicted == d.actual) return '#59a954'
+    				else return '#312450';
+    				}
+    			);
 	    	}
 
 	    if(settings.matrixDiagonals == true && settings.matrixMode == 0){
@@ -220,7 +236,11 @@ function confMatrix(model , settings , parent){
     			.attr("height" , function(d){
     				if(d.predicted == d.actual) return 0;
     				else return y.rangeBand()*d.value/maxd;})
-    			.attr("fill" , "#312450");
+    			.attr("fill" , function(d){
+    				if(d.predicted == d.actual) return '#59a954'
+    				else return '#312450';
+    				}
+    			);
 	    	}
 
 	    if(settings.matrixDiagonals == false && settings.matrixMode == 0){
@@ -228,7 +248,11 @@ function confMatrix(model , settings , parent){
     			.attr("y" , function(d){ return y(d.actual);})
     			.attr("width" , function(d){return x.rangeBand();})
     			.attr("height" , function(d){return y.rangeBand();})
-    			.attr("fill" , function(d){return d.filld;});
+    			.attr("fill" , function(d){
+    				if(d.predicted == d.actual) return '#fff'
+    				else return d.fill;
+    				}
+    			);
 	    	}
 	    
 	}
