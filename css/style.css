@@ -350,13 +350,15 @@ svg .left-bar-tn , svg .bar-tn , svg .overlap-tn , svg .overlap-left-bar-tn{
 	font-size: 1em;
 }
 
-.tabbed-view .tabs .tab a:hover {
-	color : #2e2e2e;
-	font-size: 0.9em;
-}
-
 .tabbed-view li.tab.col {
 	background-color: #aaaaaa;
+	border : 2px solid #ede7f6;
+	border-bottom: 0;
+	border-radius: 10px 10px 0 0;
+}
+
+.tabbed-view li.tab.col:hover {
+	background-color: #d3d3d3;
 	border : 2px solid #ede7f6;
 	border-bottom: 0;
 	border-radius: 10px 10px 0 0;
