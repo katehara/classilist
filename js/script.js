@@ -94,7 +94,7 @@ $(document).ready(function(){
 	});
 
 	// read data
-	d3.csv("data/img.csv", function (error, data) {
+	d3.csv("data/out.csv", function (error, data) {
 		if(error){
 			 $('#file-error-modal').openModal();
 		}
