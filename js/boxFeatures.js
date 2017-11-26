@@ -10,9 +10,9 @@ function BoxFeatures(model , settings){
 	this.newData = [];
 	var x , y0 , y1 , xAxis, yAxis;
 	pane = settings.featurePane;
-
-	w = (pane.node().getBoundingClientRect().width);
-	h = (pane.node().getBoundingClientRect().height)*9.5/10;
+	
+	w = (settings.confPane.node().getBoundingClientRect().width);
+	h = (settings.confPane.node().getBoundingClientRect().height)*9.5/10;
 	var margin = {
 	    top: 20,
 	    right: 10,

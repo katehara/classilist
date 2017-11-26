@@ -111,6 +111,47 @@ $(document).ready(function(){
 		//prepare data model do all basic calculations about data
 		var model = new Model(data);
 
+		tabs = d3.select("ul.tabs")
+
+		tabs.append("li")
+	      	.attr("class" , "tab col s4")
+	      		.append("a")
+	      		.attr("href" , "#conf-mat")
+	      		.text("Matrix")
+
+	    if (model.features.length > 0){
+			tabs.append("li")
+		      	.attr("class" , "tab col s4")
+		      		.append("a")
+		      		.attr("href" , "#feature-view")
+		      		.text("Features")
+		    d3.select("#feature-view").classed("dont-display", false)
+	    }
+	    else{
+	    	d3.select("#feature-view").classed("dont-display", true)
+	    }
+
+	    tabs.append("li")
+	      	.attr("class" , "tab col s4")
+	      		.append("a")
+	      		.attr("href" , "#data-samples")
+	      		.text("Samples")
+
+		if (model.images){    
+		    tabs.append("li")
+		      	.attr("class" , "tab col s4")
+		      		.append("a")
+		      		.attr("href" , "#image-browser")
+		      		.text("Images")
+		    d3.select("#image-browser").classed("dont-display", false)
+		}
+		else{
+	    	d3.select("#image-browser").classed("dont-display", true)
+	    }
+	      		
+
+		$('ul.tabs').tabs();
+
 		// initialize data table
 		var table = new Table(model , settings);
 

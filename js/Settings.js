@@ -7,15 +7,16 @@ function Settings(){
     this.featurePane = d3.select(".box-plots");
     this.histPane = d3.select(".class-histogram");
     this.probPane = d3.select(".probability-histograms");
+    this.imgPane = d3.select(".browser");
 
 
-	// state of data switches
-	this.probDataOptions = {
-	    tp : true,
-	    tn : true,
-	    fp : true,
-	    fn : true
-	}
+  	// state of data switches
+  	this.probDataOptions = {
+  	    tp : true,
+  	    tn : true,
+  	    fp : true,
+  	    fn : true
+  	}
 
 	//probability limits
   	this.probLimits = [0.00 , 1.00];

@@ -4,6 +4,7 @@ function Model (data){
 	this.data = data;
 	this.headers = getColumns(this.data);
 	this.nCols = getNCols(this.headers);
+	this.images = getImages(this.headers, this.nCols);
 	this.features = getFeatures(this.headers , this.nCols);
 	this.probs = getProbs(this.headers , this.nCols);
 	this.target = getTarget(this.headers , this.nCols);
@@ -41,8 +42,17 @@ function labelData(data, classNames, target, predicted){
 
 // get all column names
 function getColumns(data){
-	  var names = d3.keys(data[0]);
-	  return names;
+	var names = d3.keys(data[0]);
+	return names;
+}
+
+// get all column names
+function getImages(names, n){
+	a = false
+	for(i=0;i<n;i++){
+		if(names=="image_url") a = true;
+	}
+	return a
 }
 
 //get no. of columns

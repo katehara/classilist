@@ -9,7 +9,7 @@ function confMatrix(model , settings , parent){
 	classes = model.classNames;
 	pane = settings.confPane;
 	// w = (pane).node().getBoundingClientRect().width;
-	w = (settings.featurePane).node().getBoundingClientRect().width;
+	w = pane.node().getBoundingClientRect().width;
 	var margin = {
 	    top: 20,
 	    right: 10,

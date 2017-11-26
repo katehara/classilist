@@ -59,15 +59,12 @@ function Overlaps(model, settings, table, box, probs, hist, conf ){
     pane = settings.histPane;
     pane.selectAll("rect").classed("filled-gray" , true);
     hist.overlap(tableData);
-
-
-	}
+  }
 
 	this.overlapConfMat = function(){
     pane = settings.confPane;
     pane.selectAll("rect").classed("filled-gray" , true);
     conf.overlap(tableData);
-
 	}
 
 	this.overlapTable = function(){
