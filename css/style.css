@@ -373,7 +373,7 @@ svg .left-bar-tn , svg .bar-tn , svg .overlap-tn , svg .overlap-left-bar-tn{
 	height: 100%;
 }
 
-#data-samples .btn-floating {
+#data-samples .btn-floating, #image-browser .btn-floating {
 	margin : 0.5em 0.5em;
 	background-color: #4B4966 ;
 }
@@ -388,6 +388,11 @@ svg .left-bar-tn , svg .bar-tn , svg .overlap-tn , svg .overlap-left-bar-tn{
 	height : 100%;
 	overflow-x: auto;
 	overflow-y: auto;
+}
+
+#image-browser .browser-img {
+	width : 100px;
+	height : 100px;
 }
 
 .control-matrix {

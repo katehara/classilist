@@ -8,6 +8,7 @@ function Settings(){
     this.histPane = d3.select(".class-histogram");
     this.probPane = d3.select(".probability-histograms");
     this.imgPane = d3.select(".browser");
+    this.imgPagerPane = d3.select(".img-pager")
 
 
   	// state of data switches
@@ -52,9 +53,9 @@ function Settings(){
     // this.filtersOnSummary = true;
 
     
+    this.imgSize = 15;
 
-
-
+    this.imgCurrentPage = 1;
 
 
 

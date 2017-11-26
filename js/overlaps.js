@@ -1,4 +1,4 @@
-function Overlaps(model, settings, table, box, probs, hist, conf ){
+function Overlaps(model, settings, table, box, probs, hist, conf, img ){
 
 
 	data = model.data;
@@ -72,6 +72,11 @@ function Overlaps(model, settings, table, box, probs, hist, conf ){
     table.makeTable(tableData);
 	}
 
+  this.overlapImages = function(){
+    pane = settings.imgPane;
+    img.makeBrowser(tableData);
+  }
+
 	this.overlapActivate = function(from){
     status = from;
     d3.selectAll(".collapsible-body").selectAll("*").attr("disabled" , "disabled");
@@ -79,6 +84,7 @@ function Overlaps(model, settings, table, box, probs, hist, conf ){
     d3.selectAll(".control-matrix").selectAll("*").attr("disabled" , "disabled");
     this.prepareData();
     this.overlapTable();
+    this.overlapImages();
     this.overlapProbHist();
     this.overlapBoxFeatures();
     this.overlapConfMat();
@@ -87,6 +93,7 @@ function Overlaps(model, settings, table, box, probs, hist, conf ){
 
 	this.overlapDeactivate = function(){
     table.makeTable(table.data);
+    img.makeBrowser(table.data);
     d3.selectAll(".collapsible-body").selectAll("*").attr("disabled" , null);
     d3.selectAll(".collapsible-body").selectAll(".clear").attr("disabled", "disabled");
     d3.selectAll(".control-matrix").selectAll("*").attr("disabled" , null);

@@ -48,9 +48,9 @@ function getColumns(data){
 
 // get all column names
 function getImages(names, n){
-	a = false
+	a = -1
 	for(i=0;i<n;i++){
-		if(names=="image_url") a = true;
+		if(names[i]=="image_url") a = i;
 	}
 	return a
 }
