@@ -8,7 +8,8 @@ function Settings(){
     this.histPane = d3.select(".class-histogram");
     this.probPane = d3.select(".probability-histograms");
     this.imgPane = d3.select(".browser");
-    this.imgPagerPane = d3.select(".img-pager")
+    this.imgPagerPane = d3.select(".img-pager");
+    this.tabbedPane = d3.select(".tabbed-view");
 
 
   	// state of data switches

@@ -93,13 +93,17 @@ $(document).ready(function(){
 		renderVisualizations(this.files[0]);
 	});
 
-	// read data
-	d3.csv("data/out.csv", function (error, data) {
-		if(error){
-			 $('#file-error-modal').openModal();
-		}
-		else initInterface(data);
-	});
+	// read data and init again
+	changeDataset = function(){
+		d3.csv("data/out.csv", function (error, data) {
+			if(error){
+				 $('#file-error-modal').openModal();
+			}
+			else initInterface(data);
+		});
+	}
+
+	changeDataset()
 
 	d3.select(".new-data").on("click", function(d){
 		$('#file-upload-modal').openModal();
@@ -151,8 +155,8 @@ $(document).ready(function(){
 	    	d3.select("#image-browser").classed("dont-display", true)
 	    }
 	      		
-
 		$('ul.tabs').tabs();
+		d3.select("#conf-mat").style("display", "initial")
 
 		// initialize data table
 		var table = new Table(model , settings);
