@@ -6,6 +6,7 @@ function classHist(model , settings , parent){
 	this.max = 0;
 	var left, right , x , y , xAxis , yAxis , yAxis2;
 	pane = settings.histPane;
+	pane.selectAll("*").remove();
 	w=(pane.node().getBoundingClientRect().width);
 	h=(pane.node().getBoundingClientRect().height);
 	var margin = {
