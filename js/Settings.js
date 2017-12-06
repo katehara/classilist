@@ -24,16 +24,16 @@ function Settings(){
   	this.probLimits = [0.00 , 1.00];
 
   	//tn filter slider value
-  	this.probtnFilter = [0.10];
+  	this.probtnFilter = 0.10;
 
   	//tp filter probability value
-  	this.probtpFilter = [1.00];
+  	this.probtpFilter = 1.00;
 
     //tn filter slider value
-    this.probtnDefaultFilter = [0.10];
+    this.probtnDefaultFilter = 0.10;
 
     //tp filter probability value
-    this.probtpDefaultFilter = [1.00];
+    this.probtpDefaultFilter = 1.00;
 
 
   	// bins count in probability histograms
